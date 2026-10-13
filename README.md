@@ -29,5 +29,6 @@ No GitHub, use **Add file → Upload files** para substituir o `index.html`. A V
 ## Bom saber
 
 - Qualquer pessoa com o link consegue ver o treino e as cargas. Só quem tem o código do treino consegue gravar.
-- Se a internet cair na academia, a anotação fica guardada no celular. Quando a conexão voltar, aparece um botão para enviar.
+- Anote a carga e as repetições de cada série. É pelas repetições que o app avisa quando dá para subir a carga.
+- Se a internet cair na academia, a anotação fica guardada no celular e vai sozinha para a nuvem quando a conexão voltar, mesmo que o site seja fechado antes.
 - Para trocar o código, mude a variável `TREINO_PIN` na Vercel e faça **Redeploy**.

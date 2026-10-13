@@ -198,12 +198,16 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .log h4{margin-bottom:0}
 .kg-row{display:flex;align-items:center;gap:10px}
 .kg-row label{font-size:14px;font-weight:700}
+.reps-lab{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin:2px 0 -4px;font-size:14px;font-weight:700}
+.reps-lab span{font-size:13px;font-weight:400;color:var(--muted)}
 .reps-row{display:grid;gap:8px;max-width:330px}
+.reps-row.need input{border-color:var(--warn-ink);box-shadow:inset 0 0 0 1px var(--warn-ink)}
 .field{display:grid;gap:3px;min-width:0;font-size:12px;font-weight:700;color:var(--muted);text-align:center}
 .log input{width:100%;height:46px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
 .log input::placeholder{color:var(--muted);opacity:.6}
 .kg-row input{width:92px}
 .hint{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:var(--ok-bg);color:var(--ok-ink);font-size:14px;font-weight:700}
+.hint-reps{background:var(--warn-bg);color:var(--warn-ink);font-weight:400}
 .saved{min-height:1.2em;font-size:13px;color:var(--muted)}
 .hist{margin:0;padding:0;list-style:none;display:grid;gap:2px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
 .end-note{padding-top:2px}
@@ -797,7 +801,7 @@ const FIG = (function () {
   if (!localLogs || typeof localLogs !== 'object' || Array.isArray(localLogs)) localLogs = {};
   let logs = localLogs;
   /* onde as cargas estão: 'local' (só neste aparelho), 'cloud' (nuvem, pode anotar) ou 'cloud-ro' (nuvem, só leitura) */
-  const sync = { mode: 'local', kind: null, offline: false, db: null, unsub: null, queue: {}, unsent: new Set(), dirty: false, sig: '' };
+  const sync = { mode: 'local', kind: null, offline: false, db: null, unsub: null, queue: {}, dirty: false, sig: '', mut: 0, keyMut: {}, keyAt: {}, adopted: false, flushing: false };
   function savePrefs() { lsSet(LS_PREFS, prefs); }
 
   const hashPerson = () => { const h = (location.hash || '').slice(1).toLowerCase(); return h === 'haniere' || h === 'joao' ? h : null; };
@@ -829,6 +833,8 @@ const FIG = (function () {
   function rxFor(p, it, ph) { const ex = EX[it.ex]; const arr = it.rx || ex.rx || RX[p][it.k] || RX[p].comp; return arr[ph]; }
   function setsOf(rx) { const m = /^(\d+)\s*×/.exec(rx); return m ? Math.min(6, +m[1]) : 3; }
   function topOf(rx) { const m = /×\s*(\d+)(?:–(\d+))?/.exec(rx); return m ? +(m[2] || m[1]) : null; }
+  function goalOf(rx) { const m = /×\s*(.+)$/.exec(rx || ''); return m ? m[1].trim() : ''; }
+  const hasReps = (e) => !!e && Array.isArray(e.reps) && e.reps.some((r) => Number.isFinite(r));
   function rrText(p, k, ph) { if (k === 'core') return ''; if (ph === 0) return 'sobram 3–4'; if (ph === 1) return 'sobram 2–3'; return p === 'joao' ? 'sobram 1–2' : 'sobram 2–3'; }
 
   /* ---------- registro ---------- */
@@ -1061,7 +1067,7 @@ const FIG = (function () {
   }
 
   function renderLog(key, rx, p, D, i) {
-    const sets = setsOf(rx), top = topOf(rx), ro = sync.mode === 'cloud-ro';
+    const sets = setsOf(rx), top = topOf(rx), goal = goalOf(rx), ro = sync.mode === 'cloud-ro';
     const e = (logs[key] || {})[TODAY] || { kg: null, reps: [] };
     const prev = prevEntries(key);
     const last = prev[0] ? prev[0][1] : null;
@@ -1072,19 +1078,24 @@ const FIG = (function () {
         hint = '<p class="hint">' + ICON.up + '<span>' + (p === 'haniere' ? 'Pode subir a carga hoje, se a dor ficou em até 3 no último treino.' : 'Pode subir a carga hoje.') + '</span></p>';
       }
     }
+    if (!hint && !ro && last && !hasReps(last) && !hasReps(e)) {
+      hint = '<p class="hint hint-reps"><span>No último treino faltaram as repetições. Anote quantas você fez em cada série: é com elas que o app avisa quando dá para subir a carga.</span></p>';
+    }
+    const need = !ro && Number.isFinite(e.kg) && !hasReps(e);
     const base = 'lg-' + p + '-' + D.id + '-' + i;
     const kgPh = last && Number.isFinite(last.kg) ? fmtKg(last.kg) : '';
     const reps = Array.from({ length: sets }, (_, k) => {
       const v = e.reps && Number.isFinite(e.reps[k]) ? e.reps[k] : '';
       const ph = last && last.reps && Number.isFinite(last.reps[k]) ? last.reps[k] : '';
-      return '<label class="field" for="' + base + '-r' + k + '">S' + (k + 1) + '<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" enterkeyhint="next" id="' + base + '-r' + k + '" data-log="rep" data-k="' + k + '" value="' + v + '" placeholder="' + ph + '"' + (ro ? ' disabled' : '') + '></label>';
+      return '<label class="field" for="' + base + '-r' + k + '">Série ' + (k + 1) + '<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" enterkeyhint="next" id="' + base + '-r' + k + '" data-log="rep" data-k="' + k + '" value="' + v + '" placeholder="' + ph + '"' + (ro ? ' disabled' : '') + '></label>';
     }).join('');
     const hist = prev.slice(0, 3).map(([d, en]) => '<li>' + dshort(d) + ' · ' + esc(fmtEntry(en)) + '</li>').join('');
     return '<div class="log" data-key="' + esc(key) + '">' +
       '<h4>Registro de hoje · ' + dshort(TODAY) + '</h4>' + hint +
       '<div class="kg-row"><label for="' + base + '-kg">Carga (kg)</label><input type="text" inputmode="decimal" maxlength="6" autocomplete="off" enterkeyhint="next" id="' + base + '-kg" data-log="kg" value="' + (Number.isFinite(e.kg) ? fmtKg(e.kg) : '') + '" placeholder="' + kgPh + '"' + (ro ? ' disabled' : '') + '></div>' +
-      '<div class="reps-row" style="grid-template-columns:repeat(' + sets + ',minmax(0,1fr))" role="group" aria-label="Repetições por série">' + reps + '</div>' +
-      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver: para anotar daqui, o João precisa te convidar como editor.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
+      '<p class="reps-lab" id="' + base + '-rl">Repetições em cada série' + (goal ? '<span>meta: ' + esc(goal) + '</span>' : '') + '</p>' +
+      '<div class="reps-row' + (need ? ' need' : '') + '" style="grid-template-columns:repeat(' + sets + ',minmax(0,1fr))" role="group" aria-labelledby="' + base + '-rl">' + reps + '</div>' +
+      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver: para anotar daqui, o João precisa te convidar como editor.' : need ? 'Falta anotar as repetições de cada série.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
       (hist ? '<div><h4>Últimos treinos</h4><ul class="hist">' + hist + '</ul></div>' : '<p class="saved">Ainda sem registros anteriores deste exercício.</p>') +
       '</div>';
   }
@@ -1204,25 +1215,35 @@ const FIG = (function () {
     if (!Number.isFinite(kg) || kg < 0 || kg > 1000) kg = null;
     const reps = $$('[data-log="rep"]', box).map((inp) => { const v = parseInt(inp.value, 10); return Number.isFinite(v) && v >= 0 && v <= 300 ? v : null; });
     const has = kg !== null || reps.some((r) => r !== null);
-    if (has) { if (!logs[key]) logs[key] = {}; logs[key][TODAY] = { kg: kg, reps: reps }; }
+    const entry = has ? { kg: kg, reps: reps } : null;
+    /* só a carga, sem nenhuma repetição: destaca os campos e lembra de anotar */
+    const noReps = kg !== null && reps.length > 0 && reps.every((r) => r === null);
+    const row = $('.reps-row', box);
+    if (row) row.classList.toggle('need', noReps);
+    const tipReps = noReps ? ' Agora anote as repetições de cada série.' : '';
+    if (has) { if (!logs[key]) logs[key] = {}; logs[key][TODAY] = entry; }
     else if (logs[key]) { delete logs[key][TODAY]; if (!Object.keys(logs[key]).length) delete logs[key]; }
+    touch(key);
+    sync.sig = daySig();
     const msg = quiet ? null : $('[data-saved]', box);
-    if (sync.mode === 'cloud') {
-      sync.sig = daySig();
-      if (msg) msg.textContent = 'Salvando na nuvem…';
-      cloudWrite(key).then((ok) => {
-        if (msg && msg.isConnected) msg.textContent = ok ? (has ? 'Salvo na nuvem: já aparece nos outros aparelhos.' : 'Registro de hoje apagado.') : 'Não deu para salvar na nuvem agora. A anotação ficou guardada neste aparelho.';
-      });
-    } else if (sync.mode === 'pin') {
-      if (has) localLogs[key] = Object.assign({}, localLogs[key] || {}, { [TODAY]: logs[key][TODAY] });
-      else if (localLogs[key]) { delete localLogs[key][TODAY]; if (!Object.keys(localLogs[key]).length) delete localLogs[key]; }
-      lsSet(LS_LOGS, localLogs);
-      if (has) sync.unsent.add(key);
-      if (msg) msg.textContent = has ? 'Guardado neste aparelho. Digite o código do treino lá em cima para mandar para a nuvem.' : 'Registro de hoje apagado.';
-      renderSync();
-    } else {
+    if (!sync.kind) {
       const ok = lsSet(LS_LOGS, logs);
-      if (msg) msg.textContent = !ok ? 'Este navegador não está guardando os dados. Use Copiar backup no fim do treino.' : has ? 'Salvo neste aparelho.' : 'Registro de hoje apagado.';
+      if (msg) msg.textContent = !ok ? 'Este navegador não está guardando os dados. Use Copiar backup no fim do treino.' : has ? 'Salvo neste aparelho.' + tipReps : 'Registro de hoje apagado.';
+    } else {
+      /* a anotação fica guardada no aparelho até a nuvem confirmar que recebeu */
+      obPut(key, TODAY, entry);
+      if (sync.mode === 'cloud') {
+        if (msg) msg.textContent = 'Salvando na nuvem…';
+        cloudWrite(key).then((ok) => {
+          if (!msg || !msg.isConnected) return;
+          if (ok) msg.textContent = !has ? 'Registro de hoje apagado.' : noReps ? 'Carga salva na nuvem. Agora anote as repetições de cada série.' : 'Salvo na nuvem: já aparece nos outros aparelhos.';
+          else if (sync.mode === 'pin') msg.textContent = 'Guardado neste aparelho. Digite o código do treino lá em cima para mandar para a nuvem.';
+          else msg.textContent = 'Sem conexão agora. A anotação ficou guardada neste aparelho e vai para a nuvem quando a conexão voltar.';
+        });
+      } else {
+        if (msg) msg.textContent = !has ? 'Registro de hoje apagado.' : (sync.mode === 'pin' ? 'Guardado neste aparelho. Digite o código do treino lá em cima para mandar para a nuvem.' : 'Guardado neste aparelho. Vai para a nuvem quando a conexão voltar.') + tipReps;
+        renderSync();
+      }
     }
     if (quiet) return;
     $$('[data-last]').forEach((x) => { if (x.dataset.last === key) x.textContent = lastText(key); });
@@ -1230,20 +1251,130 @@ const FIG = (function () {
     if (li && has && reps.length && reps.every((r) => r !== null) && !li.classList.contains('done')) setDone(li, true);
   }
 
-  /* ---------- nuvem: cargas compartilhadas entre aparelhos ---------- */
+  /* ---------- nuvem: cargas compartilhadas entre aparelhos ----------
+     outbox: anotações deste aparelho que a nuvem ainda não confirmou, no formato
+     { "joao|leg45": { "2026-10-12": { kg, reps } | null } } (null = apagar o registro daquele dia).
+     Ficam guardadas no aparelho até a nuvem confirmar e valem mais que a cópia da nuvem. */
   const KEY_RE = /^(joao|haniere)\|[a-z0-9-]+$/;
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const LS_OUT = 'jh-treino.outbox.v1';
+  const LS_CACHE = 'jh-treino.cloud.v1';
+  let outbox = {};
+  let serverLogs = null;
+  const clone = (o) => JSON.parse(JSON.stringify(o || {}));
+  const validKey = (k) => KEY_RE.test(k) && !!EX[k.split('|')[1]];
+  const nReg = (n) => n + (n === 1 ? ' registro' : ' registros');
   function cleanEntries(src) {
     const out = {};
     if (!src || typeof src !== 'object') return out;
     Object.keys(src).forEach((d) => {
       const e = src[d];
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(d) || !e || typeof e !== 'object') return;
+      if (!DATE_RE.test(d) || !e || typeof e !== 'object') return;
       const kg = Number.isFinite(e.kg) && e.kg >= 0 && e.kg <= 1000 ? e.kg : null;
       const reps = Array.isArray(e.reps) ? e.reps.slice(0, 6).map((r) => (Number.isFinite(r) && r >= 0 && r <= 300 ? Math.round(r) : null)) : [];
       if (kg === null && !reps.some((r) => r !== null)) return;
       out[d] = { kg: kg, reps: reps };
     });
     return out;
+  }
+  function cleanLogs(src) {
+    const out = {};
+    if (!src || typeof src !== 'object' || Array.isArray(src)) return out;
+    Object.keys(src).forEach((k) => {
+      if (!validKey(k)) return;
+      const ce = cleanEntries(src[k]);
+      if (Object.keys(ce).length) out[k] = ce;
+    });
+    return out;
+  }
+  function mergeLogs(a, b) {
+    const out = {};
+    [a, b].forEach((src) => Object.keys(src || {}).forEach((k) => { out[k] = Object.assign(out[k] || {}, src[k]); }));
+    return out;
+  }
+  function obLoad() {
+    const raw = lsGet(LS_OUT, {}), out = {};
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+    Object.keys(raw).forEach((k) => {
+      const src = raw[k];
+      if (!validKey(k) || !src || typeof src !== 'object') return;
+      const o = {};
+      Object.keys(src).forEach((d) => {
+        if (!DATE_RE.test(d)) return;
+        if (src[d] === null) { o[d] = null; return; }
+        const ce = cleanEntries({ [d]: src[d] });
+        if (ce[d]) o[d] = ce[d];
+      });
+      if (Object.keys(o).length) out[k] = o;
+    });
+    return out;
+  }
+  function obSave() { return lsSet(LS_OUT, outbox); }
+  function obPut(key, d, e) { (outbox[key] || (outbox[key] = {}))[d] = e ? { kg: e.kg, reps: e.reps.slice() } : null; obSave(); }
+  function obCount() { let n = 0; Object.keys(outbox).forEach((k) => { n += Object.keys(outbox[k]).length; }); return n; }
+  const sameEntry = (a, b) => !!a && !!b && a.kg === b.kg && JSON.stringify(a.reps || []) === JSON.stringify(b.reps || []);
+  /* o que aparece na tela: a cópia da nuvem com as anotações ainda não confirmadas por cima */
+  function overlay(base) {
+    const out = {};
+    Object.keys(base || {}).forEach((k) => { out[k] = Object.assign({}, base[k]); });
+    Object.keys(outbox).forEach((k) => {
+      const o = outbox[k];
+      Object.keys(o).forEach((d) => {
+        if (o[d] === null) { if (out[k]) delete out[k][d]; } else (out[k] || (out[k] = {}))[d] = o[d];
+      });
+      if (out[k] && !Object.keys(out[k]).length) delete out[k];
+    });
+    return out;
+  }
+  /* cada mudança local e cada gravação confirmada ganham um número: uma resposta da nuvem
+     que saiu antes delas não vale para aquele exercício (era a corrida que podia apagar uma anotação recente) */
+  function touch(key) { sync.mut += 1; sync.keyMut[key] = sync.mut; }
+  function confirmSent(key, sent) {
+    touch(key);
+    sync.keyAt[key] = Date.now();
+    const o = outbox[key];
+    if (!o) return;
+    Object.keys(o).forEach((d) => { if (o[d] === null ? !sent[d] : sameEntry(o[d], sent[d])) delete o[d]; });
+    if (!Object.keys(o).length) delete outbox[key];
+    obSave();
+  }
+  function keepRecent(next, mark) {
+    const now = Date.now();
+    Object.keys(Object.assign({}, sync.queue, sync.keyMut)).forEach((k) => {
+      const q = sync.queue[k];
+      const recent = mark === null ? now - (sync.keyAt[k] || 0) < 4000 : (sync.keyMut[k] || 0) > mark;
+      if (!(q && q.busy) && !recent) return;
+      if (logs[k] && Object.keys(logs[k]).length) next[k] = clone(logs[k]); else delete next[k];
+    });
+  }
+  /* anotações que a versão anterior deixou só neste aparelho: entram na fila os dias que a nuvem não tem */
+  function adoptLegacy(server) {
+    if (sync.adopted) return;
+    sync.adopted = true;
+    const L = cleanLogs(localLogs);
+    let n = 0;
+    Object.keys(L).forEach((k) => {
+      const S = server[k] || {};
+      Object.keys(L[k]).forEach((d) => {
+        if (S[d] || (outbox[k] && d in outbox[k])) return;
+        (outbox[k] || (outbox[k] = {}))[d] = L[k][d];
+        n += 1;
+      });
+    });
+    const saved = n ? obSave() : true;
+    if (saved && Object.keys(localLogs).length && lsSet(LS_LOGS, {})) localLogs = {};
+  }
+  /* sem nuvem nesta página: tudo passa a ficar só neste aparelho */
+  function goLocal() {
+    if (sync.unsub) { try { sync.unsub(); } catch (e) { /* ok */ } sync.unsub = null; }
+    sync.kind = null; sync.db = null; sync.offline = false;
+    localLogs = overlay(mergeLogs(cleanLogs(localLogs), serverLogs || {}));
+    outbox = {}; obSave();
+    lsSet(LS_LOGS, localLogs);
+    logs = localLogs;
+    sync.mode = 'local';
+    sync.sig = '';
+    refreshData();
   }
   function daySig() {
     const D = curDay();
@@ -1263,12 +1394,15 @@ const FIG = (function () {
   }
   async function writeDoc(key) {
     if (sync.kind === 'api') return apiWrite(key);
-    const parts = key.split('|'), e = logs[key] || {};
+    if (!sync.db) return false;
+    const parts = key.split('|');
     const ref = sync.db.doc('logs/' + parts[0] + '__' + parts[1]);
     for (let attempt = 0; attempt < 2; attempt++) {
+      const sent = clone(logs[key]);
       try {
-        if (Object.keys(e).length) await ref.set({ p: parts[0], ex: parts[1], e: e });
+        if (Object.keys(sent).length) await ref.set({ p: parts[0], ex: parts[1], e: sent });
         else await ref.delete();
+        confirmSent(key, sent);
         return true;
       } catch (err) {
         const code = err && err.code;
@@ -1287,83 +1421,73 @@ const FIG = (function () {
       let ok = await writeDoc(key);
       while (ok && q.again) { q.again = false; ok = await writeDoc(key); }
       q.busy = null; q.again = false;
-      if (!ok && logs[key]) {
-        localLogs[key] = Object.assign({}, localLogs[key] || {}, logs[key]);
-        lsSet(LS_LOGS, localLogs);
-        sync.unsent.add(key);
-        renderSync();
-      }
-      if (ok) sync.unsent.delete(key);
+      renderSync();
       return ok;
     })();
     return q.busy;
   }
-  function pendingLocal() {
-    let n = 0;
-    Object.keys(localLogs).forEach((k) => {
-      if (!KEY_RE.test(k)) return;
-      const L = cleanEntries(localLogs[k]), C = logs[k] || {};
-      n += Object.keys(L).filter((d) => !C[d] || sync.unsent.has(k)).length;
-    });
-    return n;
-  }
-  async function doImport() {
-    if (sync.mode !== 'cloud') return;
+  /* manda para a nuvem o que ficou guardado neste aparelho: sozinho, quando a conexão volta, ou pelo botão */
+  async function flushOutbox(manual) {
+    if (sync.mode !== 'cloud' || !sync.kind || sync.flushing) return;
     flushSaves();
-    const keys = [];
-    Object.keys(localLogs).forEach((k) => {
-      if (!KEY_RE.test(k)) return;
-      const L = cleanEntries(localLogs[k]), C = logs[k] || {};
-      const add = Object.keys(L).filter((d) => !C[d] || sync.unsent.has(k));
-      if (!add.length) return;
-      const merged = Object.assign({}, C);
-      add.forEach((d) => { merged[d] = L[d]; });
-      logs[k] = merged; keys.push(k);
-    });
+    const keys = Object.keys(outbox);
     if (!keys.length) { renderSync(); return; }
-    status('Enviando…');
-    let ok = 0;
-    for (const k of keys) { if (await cloudWrite(k)) ok++; }
-    status(ok === keys.length ? 'Pronto: os registros deste aparelho agora estão na nuvem.' : 'Parte dos registros não foi enviada. Tente de novo mais tarde.');
-    sync.sig = '';
-    refreshData();
+    sync.flushing = true;
+    renderSync();
+    if (manual) status('Enviando…');
+    let fail = 0;
+    for (const k of keys) {
+      if (sync.mode !== 'cloud') { fail += 1; break; }
+      const q = sync.queue[k];
+      if (q && q.busy) await q.busy;
+      if (!outbox[k]) continue;
+      if (!(await cloudWrite(k))) { fail += 1; if (sync.offline) break; }
+    }
+    sync.flushing = false;
+    if (manual) status(fail ? 'Parte dos registros não foi enviada. O aparelho tenta de novo sozinho quando a conexão voltar.' : 'Pronto: os registros deste aparelho estão na nuvem.');
+    renderSync();
   }
   function renderSync() {
     const line = $('#sync-line'), txt = $('#sync-text'), msg = $('#store-msg'), imp = $('#btn-import'), rest = $('#btn-restore'), pinf = $('#pin-form');
-    const m = sync.mode, web = sync.kind === 'api';
+    const m = sync.mode, web = sync.kind === 'api', n = sync.kind ? obCount() : 0;
+    const vai = n === 1 ? 'vai' : 'vão';
     line.dataset.mode = m;
-    line.dataset.off = sync.offline && m === 'cloud' ? '1' : '0';
+    line.dataset.off = (m === 'cloud' && (sync.offline || n > 0)) || (m === 'local' && !!sync.kind && sync.offline) ? '1' : '0';
     pinf.hidden = m !== 'pin';
     if (m === 'cloud') {
-      txt.textContent = sync.offline ? 'Sem conexão agora: o que você anotar fica guardado neste aparelho.' : 'Cargas na nuvem: aparecem em todos os aparelhos.';
-      msg.textContent = web
+      if (sync.offline) txt.textContent = n ? 'Sem conexão agora: ' + nReg(n) + ' deste aparelho ' + vai + ' para a nuvem quando a conexão voltar.' : 'Sem conexão agora: o que você anotar fica guardado neste aparelho e vai para a nuvem quando a conexão voltar.';
+      else if (n) txt.textContent = sync.flushing ? 'Enviando ' + nReg(n) + ' para a nuvem…' : nReg(n) + ' deste aparelho ainda não ' + (n === 1 ? 'foi' : 'foram') + ' para a nuvem.';
+      else txt.textContent = 'Cargas na nuvem: aparecem em todos os aparelhos.';
+      msg.textContent = (web
         ? 'As cargas funcionam como respostas de um formulário: tudo o que for anotado vai para a nuvem e aparece em qualquer celular que abrir este site.'
-        : 'As cargas funcionam como respostas de um formulário: tudo o que for anotado vai para a nuvem e aparece em qualquer aparelho que abrir esta página com acesso de editor.';
+        : 'As cargas funcionam como respostas de um formulário: tudo o que for anotado vai para a nuvem e aparece em qualquer aparelho que abrir esta página com acesso de editor.') +
+        ' Se faltar sinal na academia, a anotação fica guardada no celular e vai sozinha para a nuvem quando a conexão voltar.';
     } else if (m === 'pin') {
-      txt.textContent = api.badPin ? 'Código incorreto. Digite de novo para salvar na nuvem.' : 'Digite o código do treino para salvar as cargas na nuvem.';
+      txt.textContent = api.badPin ? 'Código incorreto. Digite de novo para salvar na nuvem.' : n ? 'Digite o código do treino: ' + nReg(n) + ' deste aparelho ' + vai + ' para a nuvem.' : 'Digite o código do treino para salvar as cargas na nuvem.';
       msg.textContent = 'O site pede um código para gravar cargas. Até lá, o que você anotar fica guardado neste aparelho e vai para a nuvem quando o código for digitado.';
     } else if (m === 'cloud-ro') {
       txt.textContent = 'Cargas na nuvem, só para ver.';
       msg.textContent = 'Você vê as cargas salvas na nuvem, mas não pode anotar deste aparelho. Para anotar, o João precisa te convidar como editor da página.';
+    } else if (sync.kind) {
+      txt.textContent = sync.offline ? 'Sem conexão agora: o que você anotar fica guardado neste aparelho e vai para a nuvem quando a conexão voltar.' : 'Conectando à nuvem…';
+      msg.textContent = 'Enquanto a nuvem não responde, as cargas ficam guardadas neste aparelho e vão sozinhas para a nuvem quando a conexão voltar.';
     } else {
       txt.textContent = 'Cargas salvas só neste aparelho.';
       msg.textContent = !storageOK
         ? 'Este navegador não está guardando dados desta página, então as cargas somem ao fechar. No fim de cada treino, use Copiar backup.'
-        : web
-          ? 'Não foi possível falar com o servidor agora, então as cargas ficam guardadas neste aparelho. Quando a conexão voltar, aparece um botão para enviá-las.'
-          : 'Este aparelho não está ligado à nuvem, então as cargas ficam salvas só aqui. Para sincronizar, abra a página entrando numa conta do Claude com acesso de editor.';
+        : window.claude
+          ? 'Este aparelho não está ligado à nuvem, então as cargas ficam salvas só aqui. Para sincronizar, abra a página entrando numa conta do Claude com acesso de editor.'
+          : 'Este aparelho não está ligado à nuvem, então as cargas ficam salvas só aqui. Faça um backup de vez em quando.';
     }
-    const n = m === 'cloud' ? pendingLocal() : 0;
-    imp.hidden = !n;
-    if (n) imp.textContent = 'Enviar para a nuvem ' + n + (n === 1 ? ' registro' : ' registros') + ' deste aparelho';
+    imp.hidden = !(m === 'cloud' && n > 0 && !sync.flushing);
+    if (!imp.hidden) imp.textContent = 'Enviar agora ' + nReg(n) + ' deste aparelho';
     rest.hidden = m === 'cloud-ro' || m === 'pin';
   }
   async function connectCloud() {
     const C = window.claude;
-    if (!C || typeof C.use !== 'function') return;
     let db = null;
-    try { db = await C.use('db'); } catch (e) { db = null; }
-    if (!db) return;
+    try { db = C && typeof C.use === 'function' ? await C.use('db') : null; } catch (e) { db = null; }
+    if (!db) { goLocal(); return; }
     let canWrite = null;
     try { const u = await C.use('user'); if (u) canWrite = await u.can('data.write'); } catch (e) { canWrite = null; }
     sync.db = db;
@@ -1377,12 +1501,15 @@ const FIG = (function () {
           const ce = cleanEntries(v.e);
           if (Object.keys(ce).length) next[v.p + '|' + v.ex] = ce;
         });
-        Object.keys(sync.queue).forEach((k) => { if (sync.queue[k].busy) { if (logs[k]) next[k] = logs[k]; else delete next[k]; } });
-        logs = next;
+        keepRecent(next, null);
+        serverLogs = next;
         if (first) { first = false; sync.mode = canWrite === false ? 'cloud-ro' : 'cloud'; }
+        if (sync.mode === 'cloud') adoptLegacy(next);
+        logs = sync.mode === 'cloud-ro' ? clone(serverLogs) : overlay(serverLogs);
         refreshData();
-      }, () => { sync.db = null; logs = localLogs; setMode('local'); });
-    } catch (e) { sync.db = null; }
+        if (sync.mode === 'cloud' && obCount()) flushOutbox();
+      }, () => { goLocal(); });
+    } catch (e) { goLocal(); }
   }
 
   /* ---------- site próprio (Vercel): /api/logs ---------- */
@@ -1397,9 +1524,10 @@ const FIG = (function () {
   }
   async function apiWrite(key) {
     for (let attempt = 0; attempt < 2; attempt++) {
+      const sent = clone(logs[key]);
       let st = 0;
-      try { st = await apiPost({ key: key, e: logs[key] || {}, pin: getPin() }); } catch (e) { st = 0; }
-      if (st >= 200 && st < 300) { sync.offline = false; return true; }
+      try { st = await apiPost({ key: key, e: sent, pin: getPin() }); } catch (e) { st = 0; }
+      if (st >= 200 && st < 300) { sync.offline = false; confirmSent(key, sent); return true; }
       if (st === 401) { setPin(''); api.badPin = true; setMode('pin'); return false; }
       if (attempt === 0 && (st === 0 || st >= 500)) { await wait(700 + Math.random() * 800); continue; }
       sync.offline = st === 0;
@@ -1408,24 +1536,25 @@ const FIG = (function () {
     return false;
   }
   async function pullApi() {
-    if (api.busy) return;
+    if (api.busy || sync.kind !== 'api') return;
     api.busy = true;
+    const mark = sync.mut;
     try {
       const r = await fetch('/api/logs', { cache: 'no-store', headers: { Accept: 'application/json' } });
+      if (r.status === 404) { goLocal(); return; }
       if (!r.ok) throw new Error('http ' + r.status);
       const j = await r.json();
-      const next = {};
-      Object.keys((j && j.logs) || {}).forEach((k) => {
-        if (!KEY_RE.test(k) || !EX[k.split('|')[1]]) return;
-        const ce = cleanEntries(j.logs[k]);
-        if (Object.keys(ce).length) next[k] = ce;
-      });
-      Object.keys(sync.queue).forEach((k) => { if (sync.queue[k].busy) { if (logs[k]) next[k] = logs[k]; else delete next[k]; } });
+      const next = cleanLogs(j && j.logs);
+      keepRecent(next, mark);
       api.needsPin = !!(j && j.needsPin);
       sync.offline = false;
-      logs = next;
+      serverLogs = next;
+      lsSet(LS_CACHE, next);
       sync.mode = api.needsPin && !getPin() ? 'pin' : 'cloud';
+      if (sync.mode === 'cloud') adoptLegacy(next);
+      logs = overlay(serverLogs);
       refreshData();
+      if (sync.mode === 'cloud' && obCount()) flushOutbox();
     } catch (e) {
       sync.offline = true;
       renderSync();
@@ -1440,20 +1569,32 @@ const FIG = (function () {
     if (st < 200 || st >= 300) { status('Não deu para falar com o servidor agora. Tente de novo em instantes.'); return; }
     setPin(v); api.badPin = false;
     $('#pin-in').value = '';
-    setMode('cloud');
-    doImport();
+    sync.mode = 'cloud';
+    adoptLegacy(serverLogs || {});
+    logs = overlay(serverLogs || {});
+    sync.sig = '';
+    refreshData();
+    flushOutbox(obCount() > 0);
   }
   function connectApi() {
-    sync.kind = 'api';
     pullApi();
     setInterval(() => { if (document.visibilityState === 'visible' && !editing()) pullApi(); }, 20000);
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') pullApi(); });
     window.addEventListener('online', pullApi);
   }
-  function startSync() {
+  /* escolhe onde as cargas ficam e monta o que aparece antes da primeira resposta da nuvem */
+  function initStore() {
     const C = window.claude;
-    if (C && typeof C.use === 'function') { sync.kind = 'artifact'; connectCloud(); return; }
-    if (/^https?:$/.test(location.protocol)) connectApi();
+    if (C && typeof C.use === 'function') sync.kind = 'artifact';
+    else if (/^https?:$/.test(location.protocol)) sync.kind = 'api';
+    if (!sync.kind) { logs = localLogs; return; }
+    outbox = obLoad();
+    const base = sync.kind === 'api' ? mergeLogs(cleanLogs(localLogs), cleanLogs(lsGet(LS_CACHE, {}))) : cleanLogs(localLogs);
+    logs = overlay(base);
+  }
+  function startSync() {
+    if (sync.kind === 'artifact') connectCloud();
+    else if (sync.kind === 'api') connectApi();
   }
 
   /* ---------- cronômetro de descanso ---------- */
@@ -1545,21 +1686,27 @@ const FIG = (function () {
     if (!src || typeof src !== 'object') { status('Não reconheci esse texto. Cole o backup inteiro, do jeito que o botão Copiar backup gerou.'); return; }
     if (sync.mode === 'cloud-ro') return;
     let n = 0;
-    const changed = [];
     Object.keys(src).forEach((k) => {
-      if (!KEY_RE.test(k)) return;
+      if (!validKey(k)) return;
       const clean = cleanEntries(src[k]), ds = Object.keys(clean);
       if (!ds.length) return;
       logs[k] = Object.assign({}, logs[k] || {}, clean);
-      n += ds.length; changed.push(k);
+      if (sync.kind) { const o = outbox[k] || (outbox[k] = {}); ds.forEach((d) => { o[d] = clean[d]; }); }
+      touch(k);
+      n += ds.length;
     });
     closeRestore(); $('#restore-text').value = '';
-    if (sync.mode === 'cloud') {
-      changed.forEach((k) => cloudWrite(k));
-      status(n ? n + ' registros restaurados na nuvem.' : 'O backup não tinha registros válidos.');
-    } else {
+    const rr = n === 1 ? '1 registro restaurado' : n + ' registros restaurados';
+    if (!n) status('O backup não tinha registros válidos.');
+    else if (!sync.kind) {
       const ok = lsSet(LS_LOGS, logs);
-      status(n ? n + ' registros restaurados' + (ok ? '.' : ', mas este navegador não está guardando os dados.') : 'O backup não tinha registros válidos.');
+      status(rr + (ok ? '.' : ', mas este navegador não está guardando os dados.'));
+    } else {
+      const ok = obSave();
+      if (sync.mode === 'cloud') {
+        status(rr + '. Enviando para a nuvem…');
+        flushOutbox().then(() => { status(obCount() ? rr + ', mas parte ainda não foi para a nuvem. O aparelho tenta de novo sozinho quando a conexão voltar.' : rr + ' na nuvem.'); });
+      } else status(rr + (ok ? ' neste aparelho. Eles vão para a nuvem quando a conexão voltar.' : ', mas este navegador não está guardando os dados.'));
     }
     sync.sig = '';
     renderDay();
@@ -1586,7 +1733,7 @@ const FIG = (function () {
     else if (act === 't-plus') adjust(15);
     else if (act === 't-stop') stopTimer();
     else if (act === 'copy') doCopy();
-    else if (act === 'import') doImport();
+    else if (act === 'import') flushOutbox(true);
     else if (act === 'restore-open') {
       const r = $('#restore'); r.hidden = !r.hidden; a.setAttribute('aria-expanded', String(!r.hidden));
       if (!r.hidden) $('#restore-text').focus();
@@ -1626,7 +1773,9 @@ const FIG = (function () {
     if (h && h !== state.person) { flushSaves(); state.person = h; prefs.person = h; savePrefs(); state.day = defaultDay(h); renderAll(); }
   });
   window.addEventListener('pagehide', flushSaves);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushSaves(); });
 
+  initStore();
   renderAll();
   renderSync();
   startSync();
