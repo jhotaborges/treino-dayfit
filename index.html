@@ -121,7 +121,6 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .phase b{font-size:14px;font-variant-numeric:tabular-nums}
 .phase span{font-size:12.5px;color:var(--muted)}
 .phase button[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:var(--shadow)}
-.wk-tog{grid-template-columns:repeat(2,minmax(0,1fr))}
 
 /* sincronização */
 .sync{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
@@ -306,8 +305,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 
 <main class="app">
   <section class="plan-top" aria-label="Semana e fase do plano">
-    <p class="lede" id="lede">Hipertrofia para iniciantes · 4 treinos por semana, alternando semana A e semana B · 12 semanas</p>
-    <div class="phase wk-tog" id="wk-tog" role="group" aria-label="Semana A ou semana B"></div>
+    <p class="lede" id="lede">Hipertrofia para iniciantes · 4 treinos por semana · 12 semanas</p>
     <div class="week" id="week" role="group" aria-label="Dias da semana"></div>
     <div class="phase-wrap">
       <p class="eyebrow" id="phase-label">Fase do plano</p>
@@ -339,8 +337,8 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
     <p>Fez o número máximo da faixa em todas as séries? No treino seguinte, suba o menor passo possível (1 placa na máquina ou 1–2 kg no halter) e volte para o início da faixa. A página avisa quando o registro mostra que chegou a hora.</p>
     <h3>Descanso e ritmo</h3>
     <p>2 min nos exercícios principais, 90 s nos compostos e 60–90 s nos isolados. Desçam em 2–3 s, subam com controle e soltem o ar na fase de força, sem prender a respiração. Nos treinos juntos, revezem cada aparelho respeitando o descanso.</p>
-    <h3>Semana A e semana B</h3>
-    <p>Os treinos de cada dia trocam toda semana. Na semana A: segunda Inferior A, terça Superior frente e, só para o João, quarta Inferior B e sábado Superior atrás. Na semana B é o contrário: segunda Inferior B, terça Superior atrás, quarta Inferior A e sábado Superior frente. A página já abre na semana certa, e os botões acima dos dias mostram a outra.</p>
+    <h3>A semana</h3>
+    <p>Segunda, Inferior A, e terça, Superior frente (peito, ombros e bíceps): os dois juntos. Quarta: o João faz o Inferior B e o Haniere, spinning. Quinta: o Haniere faz o Superior atrás (costas, ombro de trás e tríceps) e o João descansa. Sexta: vôlei do João e descanso do Haniere. Sábado: o João faz o Superior atrás e o Haniere, spinning.</p>
     <h3>Primeiras semanas</h3>
     <p>Peçam ao professor da DAY FIT para conferir a regulagem dos aparelhos e a execução.</p>
   </section>
@@ -357,8 +355,8 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
     </dl>
     <p>Acordou no dia seguinte com mais dor que o normal? Diminua a carga na próxima sessão.</p>
     <h3>Treinando junto com o João</h3>
-    <p>Sem dor na coluna e no joelho, o Haniere passa a fazer os mesmos treinos do João. Stiff, afundo, agachamento goblet e hack pedem mais do joelho e da lombar: neles, comece com carga leve e amplitude menor, como indicado em cada exercício. Aumente aos poucos, só se a dor ficar em 0–3 durante o treino e no dia seguinte. Se passar disso, use a alternativa indicada.</p>
-    <p>Em três exercícios ele faz uma versão própria, no mesmo aparelho ou ao lado: leg press com descida curta, cadeira extensora até a metade e curl-up no lugar do abdominal na máquina.</p>
+    <p>Sem dor na coluna e no joelho, o Haniere faz os mesmos treinos do João na segunda e na terça e repete o Superior atrás na quinta. O agachamento goblet pede mais do joelho e da lombar: comece com carga leve e descida curta e aumente aos poucos, só se a dor ficar em 0–3 durante o treino e no dia seguinte.</p>
+    <p>Em dois exercícios ele faz uma versão própria, no mesmo aparelho: leg press com descida curta e cadeira extensora até a metade.</p>
     <h3>Fica fora do treino dele</h3>
     <ul class="avoid">
       <li><b>Impacto:</b> corrida, saltos, pular corda, burpee e step. Das aulas da DAY FIT: Jump, HIIT, Zumba e FitDance.</li>
@@ -386,7 +384,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
   <section class="guide" id="porque" aria-labelledby="h-porque">
     <h2 id="h-porque">Por que o treino é assim</h2>
     <ul class="refs">
-      <li><span><b>Frente e atrás em dias separados.</b> Treinar um músculo duas vezes por semana gera um pouco mais de hipertrofia do que uma vez. O João faz pernas duas vezes por semana, e a parte de cima fica dividida em frente e atrás. Assim o Haniere nunca junta peito e costas, e os dois treinam juntos, com mais exercícios para cada músculo em cada treino.</span><span class="src"><a href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2016 · Sports Medicine</a></span></li>
+      <li><span><b>Frente e atrás em dias separados.</b> Treinar um músculo duas vezes por semana gera um pouco mais de hipertrofia do que uma vez. O João faz pernas duas vezes por semana, e a parte de cima fica dividida em frente e atrás. Assim o Haniere nunca junta peito e costas, e os dois treinam juntos na segunda e na terça, com mais exercícios para cada músculo em cada treino.</span><span class="src"><a href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2016 · Sports Medicine</a></span></li>
       <li><span><b>Volume que sobe aos poucos.</b> Mais séries por semana geram mais crescimento muscular. Por isso o plano começa com 2 séries e chega a 3–4.</span><span class="src"><a href="https://doi.org/10.1080/02640414.2016.1210197" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2017 · Journal of Sports Sciences</a></span></li>
       <li><span><b>Amplitudes do joelho do Haniere.</b> Leg press e agachamento entre 45° e 0°, e cadeira extensora entre 90° e 45°, reduzem a pressão sobre a patela.</span><span class="src"><a href="https://doi.org/10.2519/jospt.2014.4936" target="_blank" rel="noopener">Powers et al., 2014 · JOSPT</a> · <a href="https://doi.org/10.1177/036354659302100319" target="_blank" rel="noopener">Steinkamp et al., 1993 · AJSM</a></span></li>
       <li><span><b>Músculo alongado também cresce.</b> Na cadeira extensora, a amplitude parcial com o joelho mais dobrado gerou hipertrofia igual ou maior que a amplitude completa.</span><span class="src"><a href="https://doi.org/10.1080/17461391.2021.1927199" target="_blank" rel="noopener">Pedrosa et al., 2022 · European Journal of Sport Science</a></span></li>
@@ -562,7 +560,7 @@ const EX = {
 /* ---------- Plano semanal ----------
    k: main (principal do João) · comp (composto) · iso (isolado) · reab (perna/quadril do Haniere) · core
    Na segunda e na terça os dois fazem o mesmo treino, juntos. jo / ha: o que muda só no do João ou só no do
-   Haniere (avisos e, em três exercícios, a versão que protege o joelho ou a lombar dele). */
+   Haniere (avisos e, em alguns exercícios, a versão que protege o joelho ou a lombar dele). */
 const WARM_J = 'Aquecimento: 8 min de bike ou esteira + 1 série leve (12 reps) do primeiro exercício.';
 const WARM_H = 'Aquecimento: 8–10 min de bike com o banco alto (joelho quase estendido com o pedal embaixo) + 1 série leve do primeiro exercício.';
 const CARDIO_J = 'Cardio opcional: 15–20 min de bike ou esteira em ritmo moderado.';
@@ -599,7 +597,6 @@ const WORKOUTS = {
         ha: { warn: 'Halteres leves, pegos no suporte, e costas retas o tempo todo. Desça só até a altura dos joelhos.' } },
       { ex: 'elev-pelvica', k: 'main', ha: { why: 'Trabalha glúteo e posterior de coxa sem carregar a coluna.' } },
       { ex: 'hack', k: 'comp',
-        jo: { tip: 'Coloque e tire as anilhas para o Haniere.' },
         ha: { warn: 'No hack o peso apoia nos ombros e pressiona a coluna: carga leve, costas coladas no encosto e descida só até o joelho formar 90°.',
           sub: 'Leg press 45° com descida curta, se a lombar ou o joelho incomodarem.' } },
       { ex: 'afundo', k: 'comp',
@@ -638,27 +635,28 @@ const WORKOUTS = {
     ] }
 };
 
-/* w: [treino da semana A, treino da semana B]. As semanas se alternam; a primeira semana A começou na segunda, 12/10/2026. */
-const WEEK_A = [2026, 9, 12];
+/* w: o treino de cada dia, igual toda semana */
 const PLAN = {
   joao: {
-    lede: 'Hipertrofia para iniciantes · 4 treinos por semana, alternando semana A e semana B · 12 semanas',
+    lede: 'Hipertrofia para iniciantes · 4 treinos por semana · 12 semanas',
     other: { 5: 'vôlei' },
     slots: [
-      { dow: 1, w: ['IA', 'IB'], together: true, warm: WARM_J },
-      { dow: 2, w: ['SF', 'SA'], together: true, warm: WARM_J, end: CARDIO_J },
-      { dow: 3, w: ['IB', 'IA'], keep: true, warm: WARM_J, solo: 'Treino só seu: na quarta o Haniere faz spinning.',
+      { dow: 1, w: 'IA', together: true, warm: WARM_J },
+      { dow: 2, w: 'SF', together: true, warm: WARM_J, end: CARDIO_J },
+      { dow: 3, w: 'IB', keep: true, warm: WARM_J, solo: 'Treino só seu: na quarta o Haniere faz spinning.',
         extra: 'Sexta tem vôlei: neste treino, termine cada série com 2–3 repetições sobrando, mesmo na fase de progressão, para chegar ao jogo com as pernas inteiras.' },
-      { dow: 6, w: ['SA', 'SF'], warm: WARM_J, end: CARDIO_J, solo: 'Musculação só sua: no sábado o Haniere faz a aula de spinning.',
+      { dow: 6, w: 'SA', warm: WARM_J, end: CARDIO_J, solo: 'Musculação só sua: no sábado o Haniere faz a aula de spinning.',
         extra: ['É o dia seguinte ao vôlei. Se os ombros ou os braços estiverem cansados, use cargas um pouco menores.', SAT_HOURS] }
     ]
   },
   haniere: {
-    lede: 'Hipertrofia junto com o João · os mesmos treinos de segunda e terça, alternando semana A e semana B, e 2 aulas de spinning · 12 semanas',
-    other: { 3: 'spinning', 6: 'spinning' },
+    lede: 'Hipertrofia sem impacto · 3 treinos de musculação, 2 deles junto com o João, e 2 aulas de spinning por semana · 12 semanas',
+    /* nome curto na faixa da semana: "spinning" não cabe na coluna do celular */
+    other: { 3: 'bike', 6: 'bike' },
     slots: [
-      { dow: 1, w: ['IA', 'IB'], together: true, warm: WARM_H },
-      { dow: 2, w: ['SF', 'SA'], together: true, warm: WARM_H }
+      { dow: 1, w: 'IA', together: true, warm: WARM_H },
+      { dow: 2, w: 'SF', together: true, warm: WARM_H },
+      { dow: 4, w: 'SA', warm: WARM_H, solo: 'Treino só seu: na quinta o João descansa. Sem ninguém para revezar, use o cronômetro para respeitar o descanso entre as séries.' }
     ]
   }
 };
@@ -843,18 +841,9 @@ const FIG = (function () {
   })();
 
   /* ---------- estado ---------- */
-  /* ---------- semanas A e B: os treinos de cada dia se alternam toda semana ---------- */
-  function parityOf(d) {
-    const m = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    m.setDate(m.getDate() - ((m.getDay() + 6) % 7));
-    const w = Math.round((m - new Date(WEEK_A[0], WEEK_A[1], WEEK_A[2])) / (7 * 864e5));
-    return ((w % 2) + 2) % 2;
-  }
-  const CUR_WEEK = parityOf(new Date());
-  const WK_NAME = ['A', 'B'];
-  function buildDays(p, wk) {
+  function buildDays(p) {
     return PLAN[p].slots.map((s) => {
-      const code = s.w[wk], W = WORKOUTS[code];
+      const code = s.w, W = WORKOUTS[code];
       return {
         id: code + '-' + s.dow, code: code, dow: s.dow, c: W.c, title: W.title, short: W.short, focus: W.focus,
         together: !!s.together, solo: s.solo, warm: s.warm, extra: s.extra, end: s.end, keep: !!s.keep,
@@ -862,20 +851,16 @@ const FIG = (function () {
       };
     });
   }
-  const DAYS = { joao: [buildDays('joao', 0), buildDays('joao', 1)], haniere: [buildDays('haniere', 0), buildDays('haniere', 1)] };
+  const DAYS = { joao: buildDays('joao'), haniere: buildDays('haniere') };
 
-  const state = { person: prefs.person, day: null, week: CUR_WEEK };
+  const state = { person: prefs.person, day: null };
   const openSet = new Set();
-  const daysOf = (p, wk) => DAYS[p][wk === undefined ? state.week : wk];
-  /* o próximo treino a partir de hoje, que pode cair na semana seguinte */
+  const daysOf = (p) => DAYS[p];
+  /* abre no próximo treino a partir de hoje */
   function goDefault(p) {
-    const now = new Date();
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
-      const wk = parityOf(d), f = daysOf(p, wk).find((x) => x.dow === d.getDay());
-      if (f) { state.week = wk; state.day = f.id; return; }
-    }
-    state.week = CUR_WEEK; state.day = daysOf(p, CUR_WEEK)[0].id;
+    const days = daysOf(p);
+    for (let i = 0; i < 7; i++) { const dow = (TODAY_DOW + i) % 7; const f = days.find((d) => d.dow === dow); if (f) { state.day = f.id; return; } }
+    state.day = days[0].id;
   }
   const curDay = () => daysOf(state.person).find((d) => d.id === state.day) || daysOf(state.person)[0];
   goDefault(state.person);
@@ -1114,13 +1099,13 @@ const FIG = (function () {
   }
 
   function renderWeek() {
-    const days = daysOf(state.person), thisWeek = state.week === CUR_WEEK;
-    $('#wk-tog').innerHTML = WK_NAME.map((L, i) => '<button type="button" id="wk-' + L + '" data-act="wk" data-v="' + i + '" aria-pressed="' + (i === state.week) + '"><b>Semana ' + L + '</b><span>' + (i === CUR_WEEK ? 'esta semana' : 'próxima semana') + '</span></button>').join('');
+    const days = daysOf(state.person);
     $('#week').innerHTML = WEEK.map(([dow, ab]) => {
       const d = days.find((x) => x.dow === dow);
-      const today = thisWeek && dow === TODAY_DOW ? ' today' : '';
+      const today = dow === TODAY_DOW ? ' today' : '';
       const other = (PLAN[state.person].other || {})[dow];
-      if (!d) return '<span class="wd rest' + (other ? ' act' : '') + today + '"><span class="ab">' + ab + '</span><span class="pl off"></span><span class="lb">' + (other || 'livre') + '</span></span>';
+      const full = other === 'bike' ? 'spinning' : (other || 'descanso');
+      if (!d) return '<span class="wd rest' + (other ? ' act' : '') + today + '" aria-label="' + DOW_NAME[dow] + ': ' + full + '"><span class="ab" aria-hidden="true">' + ab + '</span><span class="pl off"></span><span class="lb" aria-hidden="true">' + (other || 'livre') + '</span></span>';
       const sel = d.id === state.day;
       return '<button type="button" class="wd' + today + '" id="wd-' + d.id + '" data-act="day" data-v="' + d.id + '" data-day="' + d.c + '" aria-pressed="' + sel + '" aria-label="' + DOW_NAME[dow] + ': ' + esc(d.title) + '"><span class="ab">' + ab + '</span><span class="pl"></span><span class="lb">' + esc(d.short) + '</span></button>';
     }).join('');
@@ -1229,7 +1214,7 @@ const FIG = (function () {
     flushSaves();
     running.clear();
     const D = curDay(), p = state.person, other = p === 'joao' ? 'Haniere' : 'João';
-    const isToday = state.week === CUR_WEEK && D.dow === TODAY_DOW;
+    const isToday = D.dow === TODAY_DOW;
     const ds = doneSet(D);
     const el = $('#day');
     el.dataset.day = String(D.c);
@@ -1243,7 +1228,7 @@ const FIG = (function () {
       '<div class="day-head">' +
         '<svg class="plate" viewBox="0 0 58 58" aria-hidden="true"><circle class="p-body" cx="29" cy="29" r="28"/><circle class="p-lip" cx="29" cy="29" r="20"/><circle class="p-hole" cx="29" cy="29" r="7.5"/></svg>' +
         '<div>' +
-          '<p class="day-eyebrow"><span class="eyebrow">Semana ' + WK_NAME[state.week] + ' · ' + DOW_NAME[D.dow] + '</span>' + (isToday ? '<span class="today-pill">Hoje</span>' : '') + '</p>' +
+          '<p class="day-eyebrow"><span class="eyebrow">' + DOW_NAME[D.dow] + (D.together ? ' · juntos' : '') + '</span>' + (isToday ? '<span class="today-pill">Hoje</span>' : '') + '</p>' +
           '<h2 class="day-title">' + esc(D.title) + '</h2>' +
           '<p class="day-focus">' + esc(D.focus) + ' · cerca de 60 min</p>' +
         '</div>' +
@@ -1844,16 +1829,6 @@ const FIG = (function () {
       state.person = a.dataset.v; prefs.person = state.person; savePrefs();
       goDefault(state.person); renderAll();
     } else if (act === 'day') { state.day = a.dataset.v; renderWeek(); renderDay(); }
-    else if (act === 'wk') {
-      const wk = +a.dataset.v;
-      if (wk === state.week) return;
-      flushSaves();
-      const dow = curDay().dow;
-      state.week = wk;
-      const days = daysOf(state.person);
-      state.day = (days.find((d) => d.dow === dow) || days[0]).id;
-      renderWeek(); renderDay();
-    }
     else if (act === 'phase') { prefs.phase = +a.dataset.v; savePrefs(); renderPhase(); renderDay(); }
     else if (act === 'alt') { flushSaves(); setAlt(a.dataset.key, a.dataset.v === '1'); sync.sig = ''; renderDay(); }
     else if (act === 'move') moveEntry(a.dataset.from, a.dataset.to, a.dataset.d);
