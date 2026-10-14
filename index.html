@@ -211,6 +211,14 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .hint-reps{background:var(--warn-bg);color:var(--warn-ink);font-weight:400}
 .saved{min-height:1.2em;font-size:13px;color:var(--muted)}
 .hist{margin:0;padding:0;list-style:none;display:grid;gap:2px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hist li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 12px}
+.alt-tog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-width:330px}
+.alt-tog button{min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:14px;font-weight:700}
+.alt-tog button[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:var(--shadow)}
+.alt-name{font-size:14.5px}
+.mv{min-height:36px;padding:4px 0;border:0;background:none;color:var(--focus);font-size:13.5px;font-weight:700;text-align:left;text-decoration:underline;text-underline-offset:3px}
+.mv-today{justify-self:start}
+.chip-alt{border-color:var(--warn-ink);background:var(--warn-bg);color:var(--warn-ink)}
 .end-note{padding-top:2px}
 
 /* animação do exercício */
@@ -407,6 +415,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
       </div>
     </div>
     <p class="status" id="reg-status" role="status" aria-live="polite"></p>
+    <p class="tip">Fez a alternativa de um exercício? No registro dele, toque em <b>Alternativa</b> antes de anotar: a alternativa tem o próprio histórico de cargas. Se anotou no lugar errado, toque em <b>Foi a alternativa</b> ao lado do registro, em Últimos treinos.</p>
     <p class="tip">Para o link abrir direto no treino do Haniere, acrescente <code>#haniere</code> no final.</p>
   </section>
 
@@ -570,7 +579,8 @@ const WORKOUTS = {
         jo: { tip: 'Revezem o aparelho. Coloque e tire as anilhas para o Haniere: levantar anilha do chão força a lombar dele.' },
         ha: { ex: 'leg45-curto', k: 'reab', flag: 'Descida curta, lombar colada',
           warn: 'Peça ao João para colocar e tirar as anilhas: levantar anilha do chão força a lombar.',
-          why: 'Com o joelho pouco dobrado, a pressão sobre a patela é menor. A amplitude só aumenta se não houver dor.' } },
+          why: 'Com o joelho pouco dobrado, a pressão sobre a patela é menor. A amplitude só aumenta se não houver dor.',
+          sub: 'Se incomodar o joelho ou a lombar, pule o leg press e faça 2 séries a mais da cadeira extensora até a metade.' } },
       { ex: 'goblet', k: 'main',
         ha: { warn: 'Halter leve e descida só até onde o joelho não doer e as costas continuam retas.',
           sub: 'Se incomodar o joelho ou a lombar, faça 2 séries a mais do leg press com descida curta.' } },
@@ -615,15 +625,15 @@ const WORKOUTS = {
     ] },
   SA: { title: 'Superior atrás', short: 'Atrás', c: 3, focus: 'Costas, ombro de trás e tríceps',
     items: [
-      { ex: 'puxada-aberta', k: 'main', ha: { warn: W_PUXADA } },
+      { ex: 'puxada-aberta', k: 'main', sub: 'Puxada na polia alta com uma mão de cada vez, sentado no banco', ha: { warn: W_PUXADA } },
       { ex: 'remada-apoio', k: 'main', ha: { why: 'É a remada que menos exige da lombar: o apoio no peito segura a coluna.' } },
-      { ex: 'puxada-neutra', k: 'comp', ha: { warn: W_PUXADA } },
+      { ex: 'puxada-neutra', k: 'comp', sub: 'Pulldown com braços estendidos na polia alta', ha: { warn: W_PUXADA } },
       { ex: 'remada-unilateral', k: 'comp',
         ha: { warn: 'Mão e joelho bem apoiados no banco e costas retas, sem girar o tronco.',
           sub: 'Se a lombar incomodar, faça 2 séries a mais da remada com apoio no peito.' } },
       { ex: 'crucifixo-inv', k: 'iso' },
-      { ex: 'triceps-corda', k: 'iso', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o corpo sobre a corda.' } },
-      { ex: 'triceps-barra', k: 'iso' },
+      { ex: 'triceps-corda', k: 'iso', sub: 'Tríceps francês sentado com halter, em banco com encosto', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o corpo sobre a corda.' } },
+      { ex: 'triceps-barra', k: 'iso', sub: 'Tríceps na polia com uma mão de cada vez' },
       { ex: 'prancha-lat', k: 'core', ha: { why: 'Fortalece a lateral do tronco sem carregar a coluna.' } }
     ] }
 };
@@ -808,13 +818,15 @@ const FIG = (function () {
   const prefs = {
     person: rawPrefs.person === 'haniere' ? 'haniere' : 'joao',
     phase: [0, 1, 2].indexOf(rawPrefs.phase) >= 0 ? rawPrefs.phase : 0,
-    done: rawPrefs.done && typeof rawPrefs.done === 'object' && !Array.isArray(rawPrefs.done) ? rawPrefs.done : {}
+    done: rawPrefs.done && typeof rawPrefs.done === 'object' && !Array.isArray(rawPrefs.done) ? rawPrefs.done : {},
+    /* escolha de hoje entre principal e alternativa: { "joao|leg45": { v: 1, d: "2026-10-15" } } */
+    alt: rawPrefs.alt && typeof rawPrefs.alt === 'object' && !Array.isArray(rawPrefs.alt) ? rawPrefs.alt : {}
   };
   let localLogs = lsGet(LS_LOGS, {});
   if (!localLogs || typeof localLogs !== 'object' || Array.isArray(localLogs)) localLogs = {};
   let logs = localLogs;
   /* onde as cargas estão: 'local' (só neste aparelho), 'cloud' (nuvem, pode anotar) ou 'cloud-ro' (nuvem, só leitura) */
-  const sync = { mode: 'local', kind: null, offline: false, db: null, unsub: null, queue: {}, dirty: false, sig: '', mut: 0, keyMut: {}, keyAt: {}, adopted: false, flushing: false };
+  const sync = { mode: 'local', kind: null, offline: false, db: null, unsub: null, queue: {}, dirty: false, sig: '', mut: 0, keyMut: {}, keyAt: {}, adopted: false, flushing: false, flash: null };
   function savePrefs() { lsSet(LS_PREFS, prefs); }
 
   const hashPerson = () => { const h = (location.hash || '').slice(1).toLowerCase(); return h === 'haniere' || h === 'joao' ? h : null; };
@@ -846,7 +858,7 @@ const FIG = (function () {
       return {
         id: code + '-' + s.dow, code: code, dow: s.dow, c: W.c, title: W.title, short: W.short, focus: W.focus,
         together: !!s.together, solo: s.solo, warm: s.warm, extra: s.extra, end: s.end, keep: !!s.keep,
-        items: W.items.map((it) => Object.assign({ ex: it.ex, k: it.k }, p === 'joao' ? it.jo : it.ha))
+        items: W.items.map((it) => { const o = Object.assign({}, it); delete o.jo; delete o.ha; return Object.assign(o, p === 'joao' ? it.jo : it.ha); })
       };
     });
   }
@@ -884,11 +896,29 @@ const FIG = (function () {
     return reps.length ? kg + ' · ' + reps.join('/') : kg;
   }
   function prevEntries(key) { const m = logs[key] || {}; return Object.keys(m).filter((d) => d !== TODAY).sort().reverse().map((d) => [d, m[d]]); }
-  function lastText(key) {
-    const t = (logs[key] || {})[TODAY];
-    if (t) return 'Hoje: ' + fmtEntry(t);
-    const p = prevEntries(key)[0];
-    return p ? 'Última (' + dshort(p[0]) + '): ' + fmtEntry(p[1]) : '';
+  /* a alternativa de cada exercício tem o próprio histórico, guardado em "pessoa|exercício--alt" */
+  const ALT = '--alt';
+  const baseOf = (k) => (k.slice(-ALT.length) === ALT ? k.slice(0, -ALT.length) : k);
+  function lastText(base) {
+    const tm = (logs[base] || {})[TODAY], ta = (logs[base + ALT] || {})[TODAY];
+    if (tm || ta) return 'Hoje' + (tm ? '' : ', alternativa') + ': ' + fmtEntry(tm || ta);
+    const pm = prevEntries(base)[0], pa = prevEntries(base + ALT)[0];
+    const p = pa && (!pm || pa[0] > pm[0]) ? pa : pm;
+    return p ? 'Última (' + dshort(p[0]) + (p === pa ? ', alternativa' : '') + '): ' + fmtEntry(p[1]) : '';
+  }
+  /* abre na escolha feita hoje; sem escolha, no que foi anotado hoje ou no que foi feito da última vez */
+  function altOn(base) {
+    const c = prefs.alt[base];
+    if (c && c.d === TODAY) return c.v === 1;
+    const tm = (logs[base] || {})[TODAY], ta = (logs[base + ALT] || {})[TODAY];
+    if (tm || ta) return !tm;
+    const pm = prevEntries(base)[0], pa = prevEntries(base + ALT)[0];
+    return !!pa && (!pm || pa[0] > pm[0]);
+  }
+  function setAlt(base, v) {
+    Object.keys(prefs.alt).forEach((k) => { if (!prefs.alt[k] || prefs.alt[k].d !== TODAY) delete prefs.alt[k]; });
+    prefs.alt[base] = { v: v ? 1 : 0, d: TODAY };
+    savePrefs();
   }
   const doneKey = (D) => state.person + '|' + TODAY + '|' + D.id;
   const doneSet = (D) => new Set(prefs.done[doneKey(D)] || []);
@@ -1106,9 +1136,22 @@ const FIG = (function () {
     return '<div class="callout c-' + kind + '"><h4>' + mark + label + '</h4><p>' + esc(text) + '</p></div>';
   }
 
-  function renderLog(key, rx, p, D, i) {
+  function renderLog(key, rx, p, D, i, alt) {
     const sets = setsOf(rx), top = topOf(rx), goal = goalOf(rx), ro = sync.mode === 'cloud-ro';
+    const bk = alt.base, other = alt.on ? bk : bk + ALT;
     const e = (logs[key] || {})[TODAY] || { kg: null, reps: [] };
+    const hasToday = !!(logs[key] || {})[TODAY];
+    const flash = sync.flash && sync.flash.base === bk ? sync.flash.text : '';
+    if (flash) sync.flash = null;
+    const altBox = alt.has
+      ? '<div class="alt-tog" role="group" aria-label="Qual você fez hoje">' +
+          '<button type="button" data-act="alt" data-key="' + esc(bk) + '" data-v="0" aria-pressed="' + !alt.on + '"' + (ro ? ' disabled' : '') + '>Principal</button>' +
+          '<button type="button" data-act="alt" data-key="' + esc(bk) + '" data-v="1" aria-pressed="' + alt.on + '"' + (ro ? ' disabled' : '') + '>Alternativa</button>' +
+        '</div>' +
+        (alt.on ? '<p class="alt-name"><b>Alternativa:</b> ' + esc(alt.text) + '</p>' : '')
+      : '';
+    const mvLabel = alt.on ? 'Foi a principal' : 'Foi a alternativa';
+    const mvBtn = (d, label, cls) => '<button type="button" class="mv' + (cls || '') + '" data-act="move" data-from="' + esc(key) + '" data-to="' + esc(other) + '" data-d="' + d + '"' + (cls && !hasToday ? ' hidden' : '') + '>' + label + '</button>';
     const prev = prevEntries(key);
     const last = prev[0] ? prev[0][1] : null;
     let hint = '';
@@ -1129,14 +1172,16 @@ const FIG = (function () {
       const ph = last && last.reps && Number.isFinite(last.reps[k]) ? last.reps[k] : '';
       return '<label class="field" for="' + base + '-r' + k + '">Série ' + (k + 1) + '<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" enterkeyhint="next" id="' + base + '-r' + k + '" data-log="rep" data-k="' + k + '" value="' + v + '" placeholder="' + ph + '"' + (ro ? ' disabled' : '') + '></label>';
     }).join('');
-    const hist = prev.slice(0, 3).map(([d, en]) => '<li>' + dshort(d) + ' · ' + esc(fmtEntry(en)) + '</li>').join('');
+    const hist = prev.slice(0, 3).map(([d, en]) => '<li><span>' + dshort(d) + ' · ' + esc(fmtEntry(en)) + '</span>' + (alt.has && !ro ? mvBtn(d, mvLabel) : '') + '</li>').join('');
+    const what = alt.on ? 'da alternativa' : 'deste exercício';
     return '<div class="log" data-key="' + esc(key) + '">' +
-      '<h4>Registro de hoje · ' + dshort(TODAY) + '</h4>' + hint +
+      '<h4>Registro de hoje · ' + dshort(TODAY) + '</h4>' + altBox + hint +
       '<div class="kg-row"><label for="' + base + '-kg">Carga (kg)</label><input type="text" inputmode="decimal" maxlength="6" autocomplete="off" enterkeyhint="next" id="' + base + '-kg" data-log="kg" value="' + (Number.isFinite(e.kg) ? fmtKg(e.kg) : '') + '" placeholder="' + kgPh + '"' + (ro ? ' disabled' : '') + '></div>' +
       '<p class="reps-lab" id="' + base + '-rl">Repetições em cada série' + (goal ? '<span>meta: ' + esc(goal) + '</span>' : '') + '</p>' +
       '<div class="reps-row' + (need ? ' need' : '') + '" style="grid-template-columns:repeat(' + sets + ',minmax(0,1fr))" role="group" aria-labelledby="' + base + '-rl">' + reps + '</div>' +
-      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver: para anotar daqui, o João precisa te convidar como editor.' : need ? 'Falta anotar as repetições de cada série.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
-      (hist ? '<div><h4>Últimos treinos</h4><ul class="hist">' + hist + '</ul></div>' : '<p class="saved">Ainda sem registros anteriores deste exercício.</p>') +
+      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver: para anotar daqui, o João precisa te convidar como editor.' : flash ? esc(flash) : need ? 'Falta anotar as repetições de cada série.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
+      (alt.has && !ro ? mvBtn(TODAY, alt.on ? 'Anotou aqui por engano? Passar o registro de hoje para a principal' : 'Fez a alternativa? Passar o registro de hoje para ela', ' mv-today') : '') +
+      (hist ? '<div><h4>Últimos treinos' + (alt.on ? ' da alternativa' : '') + '</h4><ul class="hist">' + hist + '</ul></div>' : '<p class="saved">Ainda sem registros anteriores ' + what + '.</p>') +
       '</div>';
   }
 
@@ -1147,14 +1192,19 @@ const FIG = (function () {
     const rxMain = rxm ? rxm[1] : rx;
     const rxMore = rxm ? rxm[2].replace(' (', ' · ').replace(/[()]/g, '').replace(/^·\s*/, '') : '';
     const rest = REST[it.k] || REST.comp;
-    const key = p + '|' + it.ex;
+    const bk = p + '|' + it.ex;
     const done = ds.has(it.ex);
     const loggable = it.k !== 'core';
+    const altText = it.sub || ex.sub || '';
+    const alt = { base: bk, has: loggable && !!altText, text: altText, on: false };
+    alt.on = alt.has && altOn(bk);
+    const key = alt.on ? bk + ALT : bk;
     const uid = p + '-' + D.id + '-' + i;
     const flag = it.flag ? '<p class="flag"><span class="tape" aria-hidden="true"></span>' + esc(it.flag) + '</p>' : '';
     const chips = (it.j ? '<span class="chip" title="Mesmo aparelho, na mesma hora">' + ICON.pair + 'Juntos</span>' : '') +
+      (alt.on ? '<span class="chip chip-alt">Alternativa</span>' : '') +
       '<button type="button" class="chip rest-btn" id="rest-' + uid + '" data-act="rest" data-sec="' + rest[0] + '" data-name="' + esc(ex.n) + '" aria-label="Iniciar descanso de ' + rest[1] + '">' + ICON.clock + rest[1] + '</button>' +
-      (loggable ? '<span class="last" data-last="' + esc(key) + '">' + esc(lastText(key)) + '</span>' : '');
+      (loggable ? '<span class="last" data-last="' + esc(bk) + '">' + esc(lastText(bk)) + '</span>' : '');
     const how = (it.how || ex.how).map((h) => '<li>' + esc(h) + '</li>').join('');
     const calls = (it.warn ? callout('warn', it.warn) : '') + (it.tip ? callout('tip', it.tip) : '') + (it.why ? callout('why', it.why) : '') +
       ((it.prog || ex.prog) ? callout('prog', it.prog || ex.prog) : '') + ((it.sub || ex.sub) ? callout('sub', it.sub || ex.sub) : '');
@@ -1170,7 +1220,7 @@ const FIG = (function () {
       '<div class="ex-sub">' + flag + '<div class="chips">' + chips + '</div></div>' +
       '<div class="ex-detail" id="det-' + uid + '" hidden>' + figHtml(it.ex, ex.n) +
         '<div><h4>Como fazer</h4><ul class="how">' + how + '</ul></div>' + calls +
-        (loggable ? renderLog(key, rx, p, D, i) : '') +
+        (loggable ? renderLog(key, rx, p, D, i, alt) : '') +
       '</div>' +
     '</li>';
   }
@@ -1285,10 +1335,39 @@ const FIG = (function () {
         renderSync();
       }
     }
+    const mt = $('.mv-today', box);
+    if (mt) mt.hidden = !has;
     if (quiet) return;
-    $$('[data-last]').forEach((x) => { if (x.dataset.last === key) x.textContent = lastText(key); });
+    $$('[data-last]').forEach((x) => { if (x.dataset.last === baseOf(key)) x.textContent = lastText(baseOf(key)); });
     const li = box.closest('.ex');
     if (li && has && reps.length && reps.every((r) => r !== null) && !li.classList.contains('done')) setDone(li, true);
+  }
+
+  /* passa um registro da principal para a alternativa, ou o contrário */
+  function moveEntry(from, to, d) {
+    if (sync.mode === 'cloud-ro' || !validKey(from) || !validKey(to) || baseOf(from) !== baseOf(to) || from === to) return;
+    flushSaves();
+    const e = (logs[from] || {})[d];
+    if (!e) return;
+    const base = baseOf(from), toAlt = to !== base;
+    const quando = d === TODAY ? 'hoje' : dshort(d), para = toAlt ? 'alternativa' : 'principal';
+    if ((logs[to] || {})[d]) {
+      sync.flash = { base: base, text: 'Já existe um registro de ' + quando + ' na ' + para + '. Apague um dos dois antes de passar.' };
+      sync.sig = ''; renderDay(); return;
+    }
+    logs[to] = Object.assign({}, logs[to] || {}, { [d]: e });
+    delete logs[from][d];
+    if (!Object.keys(logs[from]).length) delete logs[from];
+    touch(from); touch(to);
+    /* hoje: a tela acompanha o registro; dias anteriores: continua na mesma opção, para corrigir outros registros */
+    setAlt(base, d === TODAY ? toAlt : from !== base);
+    if (!sync.kind) lsSet(LS_LOGS, logs);
+    else {
+      obPut(to, d, e); obPut(from, d, null);
+      if (sync.mode === 'cloud') { cloudWrite(to); cloudWrite(from); } else renderSync();
+    }
+    sync.flash = { base: base, text: 'O registro de ' + quando + ' passou para a ' + para + '.' };
+    sync.sig = ''; renderDay();
   }
 
   /* ---------- nuvem: cargas compartilhadas entre aparelhos ----------
@@ -1302,7 +1381,7 @@ const FIG = (function () {
   let outbox = {};
   let serverLogs = null;
   const clone = (o) => JSON.parse(JSON.stringify(o || {}));
-  const validKey = (k) => KEY_RE.test(k) && !!EX[k.split('|')[1]];
+  const validKey = (k) => KEY_RE.test(k) && !!EX[baseOf(k).split('|')[1]];
   const nReg = (n) => n + (n === 1 ? ' registro' : ' registros');
   function cleanEntries(src) {
     const out = {};
@@ -1418,7 +1497,7 @@ const FIG = (function () {
   }
   function daySig() {
     const D = curDay();
-    return sync.mode + '|' + D.items.map((it) => JSON.stringify(logs[state.person + '|' + it.ex] || {})).join('#');
+    return sync.mode + '|' + D.items.map((it) => { const k = state.person + '|' + it.ex; return JSON.stringify(logs[k] || {}) + JSON.stringify(logs[k + ALT] || {}); }).join('#');
   }
   function editing() { const a = document.activeElement; return !!(a && a.closest && a.closest('.log')); }
   function refreshData() {
@@ -1537,7 +1616,7 @@ const FIG = (function () {
         const next = {};
         snap.docs.forEach((d) => {
           const v = d.data();
-          if (!v || !/^(joao|haniere)$/.test(v.p) || typeof v.ex !== 'string' || !EX[v.ex]) return;
+          if (!v || !/^(joao|haniere)$/.test(v.p) || typeof v.ex !== 'string' || !EX[baseOf(v.ex)]) return;
           const ce = cleanEntries(v.e);
           if (Object.keys(ce).length) next[v.p + '|' + v.ex] = ce;
         });
@@ -1776,6 +1855,8 @@ const FIG = (function () {
       renderWeek(); renderDay();
     }
     else if (act === 'phase') { prefs.phase = +a.dataset.v; savePrefs(); renderPhase(); renderDay(); }
+    else if (act === 'alt') { flushSaves(); setAlt(a.dataset.key, a.dataset.v === '1'); sync.sig = ''; renderDay(); }
+    else if (act === 'move') moveEntry(a.dataset.from, a.dataset.to, a.dataset.d);
     else if (act === 'done') setDone(a.closest('.ex'), a.getAttribute('aria-pressed') !== 'true');
     else if (act === 'rest') startTimer(+a.dataset.sec || 60, a.dataset.name || '');
     else if (act === 'fig-pause') figPause(a.closest('.demo'), a);
