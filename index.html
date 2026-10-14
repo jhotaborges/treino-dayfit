@@ -338,7 +338,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
     <h3>Descanso e ritmo</h3>
     <p>2 min nos exercícios principais, 90 s nos compostos e 60–90 s nos isolados. Desçam em 2–3 s, subam com controle e soltem o ar na fase de força, sem prender a respiração. Nos treinos juntos, revezem cada aparelho respeitando o descanso.</p>
     <h3>A semana</h3>
-    <p>Segunda, Inferior A, e terça, Superior frente (peito, ombros e bíceps): os dois juntos. Quarta: o João faz o Inferior B e o Haniere, spinning. Quinta: o Haniere faz o Superior atrás (costas, ombro de trás e tríceps) e o João descansa. Sexta: vôlei do João e descanso do Haniere. Sábado: o João faz o Superior atrás e o Haniere, spinning.</p>
+    <p>Segunda, Inferior B, e terça, Superior frente (peito, ombros e bíceps): os dois juntos. Quarta: o João faz o Inferior A e o Haniere, spinning. Quinta: o Haniere faz o Superior atrás (costas, ombro de trás e tríceps) e o João descansa. Sexta: vôlei do João e descanso do Haniere. Sábado: o João faz o Superior atrás e o Haniere, spinning.</p>
     <h3>Primeiras semanas</h3>
     <p>Peçam ao professor da DAY FIT para conferir a regulagem dos aparelhos e a execução.</p>
   </section>
@@ -355,8 +355,8 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
     </dl>
     <p>Acordou no dia seguinte com mais dor que o normal? Diminua a carga na próxima sessão.</p>
     <h3>Treinando junto com o João</h3>
-    <p>Sem dor na coluna e no joelho, o Haniere faz os mesmos treinos do João na segunda e na terça e repete o Superior atrás na quinta. O agachamento goblet pede mais do joelho e da lombar: comece com carga leve e descida curta e aumente aos poucos, só se a dor ficar em 0–3 durante o treino e no dia seguinte.</p>
-    <p>Em dois exercícios ele faz uma versão própria, no mesmo aparelho: leg press com descida curta e cadeira extensora até a metade.</p>
+    <p>Sem dor na coluna e no joelho, o Haniere faz os mesmos treinos do João na segunda e na terça e repete o Superior atrás na quinta. Stiff, hack e afundo pedem mais do joelho e da lombar: neles, comece com carga leve e amplitude menor, como indicado em cada exercício. Aumente aos poucos, só se a dor ficar em 0–3 durante o treino e no dia seguinte. Se passar disso, use a alternativa indicada.</p>
+    <p>No lugar do abdominal na máquina ele faz o curl-up, que trabalha o abdômen sem dobrar a coluna com carga.</p>
     <h3>Fica fora do treino dele</h3>
     <ul class="avoid">
       <li><b>Impacto:</b> corrida, saltos, pular corda, burpee e step. Das aulas da DAY FIT: Jump, HIIT, Zumba e FitDance.</li>
@@ -574,7 +574,6 @@ const WORKOUTS = {
   IA: { title: 'Inferior A', short: 'Inf A', c: 2, focus: 'Quadríceps, posteriores, glúteos e panturrilha',
     items: [
       { ex: 'leg45', k: 'main',
-        jo: { tip: 'Revezem o aparelho. Coloque e tire as anilhas para o Haniere: levantar anilha do chão força a lombar dele.' },
         ha: { ex: 'leg45-curto', k: 'reab', flag: 'Descida curta, lombar colada',
           warn: 'Peça ao João para colocar e tirar as anilhas: levantar anilha do chão força a lombar.',
           why: 'Com o joelho pouco dobrado, a pressão sobre a patela é menor. A amplitude só aumenta se não houver dor.',
@@ -597,7 +596,8 @@ const WORKOUTS = {
         ha: { warn: 'Halteres leves, pegos no suporte, e costas retas o tempo todo. Desça só até a altura dos joelhos.' } },
       { ex: 'elev-pelvica', k: 'main', ha: { why: 'Trabalha glúteo e posterior de coxa sem carregar a coluna.' } },
       { ex: 'hack', k: 'comp',
-        ha: { warn: 'No hack o peso apoia nos ombros e pressiona a coluna: carga leve, costas coladas no encosto e descida só até o joelho formar 90°.',
+        jo: { tip: 'Revezem o aparelho. Coloque e tire as anilhas para o Haniere: levantar anilha do chão força a lombar dele.' },
+        ha: { warn: 'No hack o peso apoia nos ombros e pressiona a coluna: carga leve, costas coladas no encosto e descida só até o joelho formar 90°. Peça ao João para colocar e tirar as anilhas.',
           sub: 'Leg press 45° com descida curta, se a lombar ou o joelho incomodarem.' } },
       { ex: 'afundo', k: 'comp',
         ha: { warn: 'Halteres leves e descida só até a metade, sem o joelho de trás chegar perto do chão. Se precisar, apoie uma mão no suporte para se equilibrar.' } },
@@ -641,9 +641,9 @@ const PLAN = {
     lede: 'Hipertrofia para iniciantes · 4 treinos por semana · 12 semanas',
     other: { 5: 'vôlei' },
     slots: [
-      { dow: 1, w: 'IA', together: true, warm: WARM_J },
+      { dow: 1, w: 'IB', together: true, warm: WARM_J },
       { dow: 2, w: 'SF', together: true, warm: WARM_J, end: CARDIO_J },
-      { dow: 3, w: 'IB', keep: true, warm: WARM_J, solo: 'Treino só seu: na quarta o Haniere faz spinning.',
+      { dow: 3, w: 'IA', keep: true, warm: WARM_J, solo: 'Treino só seu: na quarta o Haniere faz spinning.',
         extra: 'Sexta tem vôlei: neste treino, termine cada série com 2–3 repetições sobrando, mesmo na fase de progressão, para chegar ao jogo com as pernas inteiras.' },
       { dow: 6, w: 'SA', warm: WARM_J, end: CARDIO_J, solo: 'Musculação só sua: no sábado o Haniere faz a aula de spinning.',
         extra: ['É o dia seguinte ao vôlei. Se os ombros ou os braços estiverem cansados, use cargas um pouco menores.', SAT_HOURS] }
@@ -654,7 +654,7 @@ const PLAN = {
     /* nome curto na faixa da semana: "spinning" não cabe na coluna do celular */
     other: { 3: 'bike', 6: 'bike' },
     slots: [
-      { dow: 1, w: 'IA', together: true, warm: WARM_H },
+      { dow: 1, w: 'IB', together: true, warm: WARM_H },
       { dow: 2, w: 'SF', together: true, warm: WARM_H },
       { dow: 4, w: 'SA', warm: WARM_H, solo: 'Treino só seu: na quinta o João descansa. Sem ninguém para revezar, use o cronômetro para respeitar o descanso entre as séries.' }
     ]
