@@ -121,6 +121,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .phase b{font-size:14px;font-variant-numeric:tabular-nums}
 .phase span{font-size:12.5px;color:var(--muted)}
 .phase button[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:var(--shadow)}
+.wk-tog{grid-template-columns:repeat(2,minmax(0,1fr))}
 
 /* sincronização */
 .sync{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
@@ -297,7 +298,8 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 
 <main class="app">
   <section class="plan-top" aria-label="Semana e fase do plano">
-    <p class="lede" id="lede">Hipertrofia para iniciantes · 4 treinos por semana · 12 semanas</p>
+    <p class="lede" id="lede">Hipertrofia para iniciantes · 4 treinos por semana, alternando semana A e semana B · 12 semanas</p>
+    <div class="phase wk-tog" id="wk-tog" role="group" aria-label="Semana A ou semana B"></div>
     <div class="week" id="week" role="group" aria-label="Dias da semana"></div>
     <div class="phase-wrap">
       <p class="eyebrow" id="phase-label">Fase do plano</p>
@@ -328,7 +330,9 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
     <h3>Quando subir a carga</h3>
     <p>Fez o número máximo da faixa em todas as séries? No treino seguinte, suba o menor passo possível (1 placa na máquina ou 1–2 kg no halter) e volte para o início da faixa. A página avisa quando o registro mostra que chegou a hora.</p>
     <h3>Descanso e ritmo</h3>
-    <p>2 min nos exercícios principais, 90 s nos compostos e 60–90 s nos isolados. Desçam em 2–3 s, subam com controle e soltem o ar na fase de força, sem prender a respiração. Nos exercícios marcados <b>Juntos</b>, revezem o aparelho respeitando o descanso.</p>
+    <p>2 min nos exercícios principais, 90 s nos compostos e 60–90 s nos isolados. Desçam em 2–3 s, subam com controle e soltem o ar na fase de força, sem prender a respiração. Nos treinos juntos, revezem cada aparelho respeitando o descanso.</p>
+    <h3>Semana A e semana B</h3>
+    <p>Os treinos de cada dia trocam toda semana. Na semana A: segunda Inferior A, terça Superior frente e, só para o João, quarta Inferior B e sábado Superior atrás. Na semana B é o contrário: segunda Inferior B, terça Superior atrás, quarta Inferior A e sábado Superior frente. A página já abre na semana certa, e os botões acima dos dias mostram a outra.</p>
     <h3>Primeiras semanas</h3>
     <p>Peçam ao professor da DAY FIT para conferir a regulagem dos aparelhos e a execução.</p>
   </section>
@@ -344,12 +348,15 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
       <div><dt class="pz-stop">6+ · Pare</dt><dd>Pare também se sentir pontada, falseio, travamento, formigamento ou dor que desce pela perna. Troque pelo substituto indicado e fale com o fisioterapeuta.</dd></div>
     </dl>
     <p>Acordou no dia seguinte com mais dor que o normal? Diminua a carga na próxima sessão.</p>
+    <h3>Treinando junto com o João</h3>
+    <p>Sem dor na coluna e no joelho, o Haniere passa a fazer os mesmos treinos do João. Stiff, afundo, agachamento goblet e hack pedem mais do joelho e da lombar: neles, comece com carga leve e amplitude menor, como indicado em cada exercício. Aumente aos poucos, só se a dor ficar em 0–3 durante o treino e no dia seguinte. Se passar disso, use a alternativa indicada.</p>
+    <p>Em três exercícios ele faz uma versão própria, no mesmo aparelho ou ao lado: leg press com descida curta, cadeira extensora até a metade e curl-up no lugar do abdominal na máquina.</p>
     <h3>Fica fora do treino dele</h3>
     <ul class="avoid">
       <li><b>Impacto:</b> corrida, saltos, pular corda, burpee e step. Das aulas da DAY FIT: Jump, HIIT, Zumba e FitDance.</li>
-      <li><b>Peso sobre a coluna:</b> agachamento com barra, levantamento terra, stiff, remada curvada e desenvolvimento em pé.</li>
-      <li><b>Dobrar ou girar a coluna repetidamente:</b> abdominal tradicional, elevação de pernas, russian twist e hiperextensão lombar.</li>
-      <li><b>Joelho muito dobrado com carga:</b> agachamento profundo, afundo, búlgaro e descidas completas no leg press e no hack.</li>
+      <li><b>Peso sobre a coluna:</b> agachamento com barra, levantamento terra, remada curvada e desenvolvimento em pé.</li>
+      <li><b>Dobrar ou girar a coluna com carga ou repetidamente:</b> abdominal na máquina, abdominal tradicional, elevação de pernas, russian twist e hiperextensão lombar.</li>
+      <li><b>Joelho muito dobrado com carga:</b> agachamento profundo, búlgaro e descidas completas no leg press e no hack.</li>
     </ul>
     <h3>Spinning (quarta e sábado)</h3>
     <ul>
@@ -371,7 +378,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
   <section class="guide" id="porque" aria-labelledby="h-porque">
     <h2 id="h-porque">Por que o treino é assim</h2>
     <ul class="refs">
-      <li><span><b>Cada músculo 2 vezes por semana, quando dá.</b> Treinar um músculo duas vezes por semana gera mais hipertrofia do que uma vez. Por isso o João faz peito e costas nos dois dias de superiores. O Haniere, que não treina peito e costas no mesmo dia, faz cada um num dia, com mais exercícios.</span><span class="src"><a href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2016 · Sports Medicine</a></span></li>
+      <li><span><b>Frente e atrás em dias separados.</b> Treinar um músculo duas vezes por semana gera um pouco mais de hipertrofia do que uma vez. O João faz pernas duas vezes por semana, e a parte de cima fica dividida em frente e atrás. Assim o Haniere nunca junta peito e costas, e os dois treinam juntos, com mais exercícios para cada músculo em cada treino.</span><span class="src"><a href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2016 · Sports Medicine</a></span></li>
       <li><span><b>Volume que sobe aos poucos.</b> Mais séries por semana geram mais crescimento muscular. Por isso o plano começa com 2 séries e chega a 3–4.</span><span class="src"><a href="https://doi.org/10.1080/02640414.2016.1210197" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2017 · Journal of Sports Sciences</a></span></li>
       <li><span><b>Amplitudes do joelho do Haniere.</b> Leg press e agachamento entre 45° e 0°, e cadeira extensora entre 90° e 45°, reduzem a pressão sobre a patela.</span><span class="src"><a href="https://doi.org/10.2519/jospt.2014.4936" target="_blank" rel="noopener">Powers et al., 2014 · JOSPT</a> · <a href="https://doi.org/10.1177/036354659302100319" target="_blank" rel="noopener">Steinkamp et al., 1993 · AJSM</a></span></li>
       <li><span><b>Músculo alongado também cresce.</b> Na cadeira extensora, a amplitude parcial com o joelho mais dobrado gerou hipertrofia igual ou maior que a amplitude completa.</span><span class="src"><a href="https://doi.org/10.1080/17461391.2021.1927199" target="_blank" rel="noopener">Pedrosa et al., 2022 · European Journal of Sport Science</a></span></li>
@@ -404,7 +411,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
   </section>
 
   <footer class="foot">
-    <p>Plano de 12 semanas para iniciantes, montado em setembro de 2026 para a DAY FIT, em Patos de Minas.</p>
+    <p>Plano de 12 semanas para iniciantes, montado em setembro e ajustado em outubro de 2026 para a DAY FIT, em Patos de Minas.</p>
     <p>Não substitui a avaliação de um profissional de educação física ou de um fisioterapeuta.</p>
   </footer>
 </main>
@@ -545,97 +552,103 @@ const EX = {
 
 /* ---------- Plano semanal ----------
    k: main (principal do João) · comp (composto) · iso (isolado) · reab (perna/quadril do Haniere) · core
-   j: 1 = mesmo aparelho, na mesma hora, que o parceiro */
+   Na segunda e na terça os dois fazem o mesmo treino, juntos. jo / ha: o que muda só no do João ou só no do
+   Haniere (avisos e, em três exercícios, a versão que protege o joelho ou a lombar dele). */
 const WARM_J = 'Aquecimento: 8 min de bike ou esteira + 1 série leve (12 reps) do primeiro exercício.';
 const WARM_H = 'Aquecimento: 8–10 min de bike com o banco alto (joelho quase estendido com o pedal embaixo) + 1 série leve do primeiro exercício.';
 const CARDIO_J = 'Cardio opcional: 15–20 min de bike ou esteira em ritmo moderado.';
 const W_PUXADA = 'Tronco quase na vertical: inclinar muito para trás joga peso na lombar.';
+const W_HALTER = 'Pegue e devolva os halteres no suporte, sem se abaixar até o chão com peso.';
 
 const SAT_HOURS = 'No sábado a DAY FIT abre das 8h às 12h. Confirmem o horário na recepção.';
 
-/* c: cor do dia (anilha), igual para os dois quando treinam juntos */
+/* c: cor do treino (anilha) · short: nome curto na faixa da semana */
+const WORKOUTS = {
+  IA: { title: 'Inferior A', short: 'Inf A', c: 2, focus: 'Quadríceps, posteriores, glúteos e panturrilha',
+    items: [
+      { ex: 'leg45', k: 'main',
+        jo: { tip: 'Revezem o aparelho. Coloque e tire as anilhas para o Haniere: levantar anilha do chão força a lombar dele.' },
+        ha: { ex: 'leg45-curto', k: 'reab', flag: 'Descida curta, lombar colada',
+          warn: 'Peça ao João para colocar e tirar as anilhas: levantar anilha do chão força a lombar.',
+          why: 'Com o joelho pouco dobrado, a pressão sobre a patela é menor. A amplitude só aumenta se não houver dor.' } },
+      { ex: 'goblet', k: 'main',
+        ha: { warn: 'Halter leve e descida só até onde o joelho não doer e as costas continuam retas.',
+          sub: 'Se incomodar o joelho ou a lombar, faça 2 séries a mais do leg press com descida curta.' } },
+      { ex: 'extensora', k: 'iso',
+        ha: { ex: 'extensora-90-45', k: 'reab', flag: 'Só até a metade: 90° → 45°',
+          why: 'Nessa faixa a extensora força menos a patela, e trabalhar com o músculo alongado também faz crescer.',
+          sub: 'Se doer: segure parado com o joelho a uns 60°, 5 × 30 s (isometria).' } },
+      { ex: 'flexora-sent', k: 'iso' },
+      { ex: 'abdutora', k: 'iso', ha: { why: 'Fortalece o glúteo médio, que ajuda a manter o joelho alinhado.' } },
+      { ex: 'pant-sent', k: 'iso' },
+      { ex: 'prancha', k: 'core' }
+    ] },
+  IB: { title: 'Inferior B', short: 'Inf B', c: 4, focus: 'Posteriores, glúteos e quadríceps',
+    items: [
+      { ex: 'stiff-halter', k: 'main',
+        ha: { warn: 'Halteres leves, pegos no suporte, e costas retas o tempo todo. Desça só até a altura dos joelhos.' } },
+      { ex: 'elev-pelvica', k: 'main', ha: { why: 'Trabalha glúteo e posterior de coxa sem carregar a coluna.' } },
+      { ex: 'hack', k: 'comp',
+        jo: { tip: 'Coloque e tire as anilhas para o Haniere.' },
+        ha: { warn: 'No hack o peso apoia nos ombros e pressiona a coluna: carga leve, costas coladas no encosto e descida só até o joelho formar 90°.',
+          sub: 'Leg press 45° com descida curta, se a lombar ou o joelho incomodarem.' } },
+      { ex: 'afundo', k: 'comp',
+        ha: { warn: 'Halteres leves e descida só até a metade, sem o joelho de trás chegar perto do chão. Se precisar, apoie uma mão no suporte para se equilibrar.' } },
+      { ex: 'mesa-flexora', k: 'iso',
+        ha: { warn: 'Quadril colado no banco e abdômen firme. Se a lombar arquear, faça na cadeira flexora.' } },
+      { ex: 'pant-pe', k: 'iso',
+        ha: { warn: 'Se a máquina apoia o peso nos ombros, faça a panturrilha sentado: em pé, a carga desce pela coluna.' } },
+      { ex: 'abd-maq', k: 'iso',
+        ha: { ex: 'curlup', k: 'core', flag: 'No lugar do abdominal na máquina',
+          why: 'Dobrar a coluna com carga, como no abdominal na máquina, é o movimento que mais força a lombar. O curl-up trabalha o abdômen sem isso.' } }
+    ] },
+  SF: { title: 'Superior frente', short: 'Frente', c: 1, focus: 'Peito, ombros e bíceps',
+    items: [
+      { ex: 'supino-maq', k: 'main' },
+      { ex: 'supino-incl-halter', k: 'main', ha: { warn: W_HALTER } },
+      { ex: 'desenv-maq', k: 'comp', ha: { warn: 'Se a lombar descolar do encosto, a carga está alta.' } },
+      { ex: 'voador', k: 'iso', ha: { why: 'Sentado e com as costas apoiadas, trabalha o peito sem exigir da lombar.' } },
+      { ex: 'elev-lateral', k: 'iso', ha: { warn: W_HALTER } },
+      { ex: 'rosca-w', k: 'iso', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o tronco para trás: isso força a lombar.' } },
+      { ex: 'rosca-scott', k: 'iso', ha: { why: 'O apoio do banco Scott protege a coluna.' } },
+      { ex: 'birddog', k: 'core', ha: { why: 'Fortalece os músculos que estabilizam a lombar.' } }
+    ] },
+  SA: { title: 'Superior atrás', short: 'Atrás', c: 3, focus: 'Costas, ombro de trás e tríceps',
+    items: [
+      { ex: 'puxada-aberta', k: 'main', ha: { warn: W_PUXADA } },
+      { ex: 'remada-apoio', k: 'main', ha: { why: 'É a remada que menos exige da lombar: o apoio no peito segura a coluna.' } },
+      { ex: 'puxada-neutra', k: 'comp', ha: { warn: W_PUXADA } },
+      { ex: 'remada-unilateral', k: 'comp',
+        ha: { warn: 'Mão e joelho bem apoiados no banco e costas retas, sem girar o tronco.',
+          sub: 'Se a lombar incomodar, faça 2 séries a mais da remada com apoio no peito.' } },
+      { ex: 'crucifixo-inv', k: 'iso' },
+      { ex: 'triceps-corda', k: 'iso', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o corpo sobre a corda.' } },
+      { ex: 'triceps-barra', k: 'iso' },
+      { ex: 'prancha-lat', k: 'core', ha: { why: 'Fortalece a lateral do tronco sem carregar a coluna.' } }
+    ] }
+};
+
+/* w: [treino da semana A, treino da semana B]. As semanas se alternam; a primeira semana A começou na segunda, 12/10/2026. */
+const WEEK_A = [2026, 9, 12];
 const PLAN = {
   joao: {
-    lede: 'Hipertrofia para iniciantes · 4 treinos por semana · 12 semanas',
+    lede: 'Hipertrofia para iniciantes · 4 treinos por semana, alternando semana A e semana B · 12 semanas',
     other: { 5: 'vôlei' },
-    days: [
-      { id: 't1', n: 1, c: 2, dow: 1, title: 'Inferior A', focus: 'Quadríceps, posteriores, glúteos e panturrilha', together: true, warm: WARM_J,
-        items: [
-          { ex: 'leg45', k: 'main', j: 1, tip: 'Revezem o aparelho e ajude o Haniere com as anilhas: ele usa carga menor e descida curta.' },
-          { ex: 'goblet', k: 'main' },
-          { ex: 'extensora', k: 'iso', j: 1 },
-          { ex: 'flexora-sent', k: 'iso', j: 1 },
-          { ex: 'abdutora', k: 'iso', j: 1 },
-          { ex: 'pant-sent', k: 'iso' },
-          { ex: 'prancha', k: 'core' }
-        ] },
-      { id: 't2', n: 2, c: 1, dow: 2, title: 'Superior A', focus: 'Peito, ombros e tríceps, com costas no final', together: true, warm: WARM_J, end: CARDIO_J,
-        items: [
-          { ex: 'supino-maq', k: 'main', j: 1 },
-          { ex: 'desenv-maq', k: 'main', j: 1 },
-          { ex: 'voador', k: 'iso', j: 1 },
-          { ex: 'elev-lateral', k: 'iso', j: 1 },
-          { ex: 'triceps-corda', k: 'iso', j: 1 },
-          { ex: 'puxada-aberta', k: 'comp', tip: 'As costas ficam para o fim: enquanto você faz estes dois, o Haniere faz glúteo e abdômen.' },
-          { ex: 'remada-unilateral', k: 'comp' }
-        ] },
-      { id: 't3', n: 3, c: 4, dow: 3, title: 'Inferior B', focus: 'Posteriores, glúteos e quadríceps', together: false, keep: true,
-        solo: 'Treino só seu: é o dia dos exercícios que ficam fora do treino do Haniere, como stiff, afundo e hack.', warm: WARM_J,
-        extra: 'Sexta tem vôlei: neste treino, termine cada série com 2–3 repetições sobrando, mesmo na fase de progressão, para chegar ao jogo com as pernas inteiras.',
-        items: [
-          { ex: 'stiff-halter', k: 'main' },
-          { ex: 'elev-pelvica', k: 'main' },
-          { ex: 'hack', k: 'comp' },
-          { ex: 'afundo', k: 'comp' },
-          { ex: 'mesa-flexora', k: 'iso' },
-          { ex: 'pant-pe', k: 'iso' },
-          { ex: 'abd-maq', k: 'iso' }
-        ] },
-      { id: 't4', n: 4, c: 3, dow: 6, title: 'Superior B', focus: 'Costas e bíceps, com peito e tríceps de complemento', together: false, warm: WARM_J, end: CARDIO_J,
-        solo: 'Musculação só sua: no sábado o Haniere faz a aula de spinning.',
-        extra: ['É o dia seguinte ao vôlei. Se os ombros ou os braços estiverem cansados, use cargas um pouco menores.', SAT_HOURS],
-        items: [
-          { ex: 'puxada-neutra', k: 'main' },
-          { ex: 'remada-apoio', k: 'main' },
-          { ex: 'supino-incl-halter', k: 'comp' },
-          { ex: 'crucifixo-inv', k: 'iso' },
-          { ex: 'rosca-w', k: 'iso' },
-          { ex: 'rosca-scott', k: 'iso' },
-          { ex: 'triceps-barra', k: 'iso' }
-        ] }
+    slots: [
+      { dow: 1, w: ['IA', 'IB'], together: true, warm: WARM_J },
+      { dow: 2, w: ['SF', 'SA'], together: true, warm: WARM_J, end: CARDIO_J },
+      { dow: 3, w: ['IB', 'IA'], keep: true, warm: WARM_J, solo: 'Treino só seu: na quarta o Haniere faz spinning.',
+        extra: 'Sexta tem vôlei: neste treino, termine cada série com 2–3 repetições sobrando, mesmo na fase de progressão, para chegar ao jogo com as pernas inteiras.' },
+      { dow: 6, w: ['SA', 'SF'], warm: WARM_J, end: CARDIO_J, solo: 'Musculação só sua: no sábado o Haniere faz a aula de spinning.',
+        extra: ['É o dia seguinte ao vôlei. Se os ombros ou os braços estiverem cansados, use cargas um pouco menores.', SAT_HOURS] }
     ]
   },
   haniere: {
-    lede: 'Hipertrofia sem impacto e sem peso na coluna · 2 treinos de musculação e 2 de spinning por semana · 12 semanas',
+    lede: 'Hipertrofia junto com o João · os mesmos treinos de segunda e terça, alternando semana A e semana B, e 2 aulas de spinning · 12 semanas',
     other: { 3: 'spinning', 6: 'spinning' },
-    days: [
-      { id: 't1', n: 1, c: 2, dow: 1, title: 'Pernas e costas', focus: 'Coxas, glúteos, costas, bíceps e abdômen, sem impacto. Peito só na terça', together: true, warm: WARM_H,
-        items: [
-          { ex: 'leg45-curto', k: 'reab', j: 1, flag: 'Descida curta, lombar colada',
-            warn: 'Peça ao João para colocar e tirar as anilhas: levantar anilha do chão força a lombar.',
-            why: 'Com o joelho pouco dobrado, a pressão sobre a patela é menor. A amplitude só aumenta se não houver dor.',
-            sub: 'Se incomodar o joelho ou a lombar, pule o leg press e faça 2 séries a mais de extensora até a metade.' },
-          { ex: 'puxada-neutra', k: 'comp', warn: W_PUXADA, tip: 'Enquanto o João faz o agachamento, você faz a puxada.' },
-          { ex: 'extensora-90-45', k: 'reab', j: 1, flag: 'Só até a metade: 90° → 45°',
-            why: 'Nessa faixa a extensora força menos a patela, e trabalhar com o músculo alongado também faz crescer.',
-            sub: 'Se doer: segure parado com o joelho a uns 60°, 5 × 30 s (isometria).' },
-          { ex: 'flexora-sent', k: 'reab', j: 1, warn: 'Use a cadeira sentada, não a mesa flexora: deitado de bruços, a lombar tende a arquear.', sub: 'Flexora em pé, uma perna de cada vez' },
-          { ex: 'abdutora', k: 'reab', j: 1, why: 'Fortalece o glúteo médio, que ajuda a manter o joelho alinhado.' },
-          { ex: 'remada-apoio', k: 'comp', why: 'É a remada que menos exige da lombar: o apoio no peito segura a coluna.' },
-          { ex: 'rosca-scott', k: 'iso', why: 'O apoio do banco Scott protege a coluna.' },
-          { ex: 'curlup', k: 'core', why: 'Trabalha o abdômen sem dobrar a coluna.' }
-        ] },
-      { id: 't2', n: 2, c: 1, dow: 2, title: 'Peito e ombros', focus: 'Peito, ombros, tríceps, glúteos e abdômen. Costas só na segunda', together: true, warm: WARM_H,
-        items: [
-          { ex: 'supino-maq', k: 'comp', j: 1 },
-          { ex: 'desenv-maq', k: 'comp', j: 1, warn: 'Se a lombar descolar do encosto, a carga está alta.', sub: 'Elevação lateral sentado, com 1 série a mais' },
-          { ex: 'voador', k: 'iso', j: 1, why: 'Sentado e com as costas apoiadas, trabalha o peito sem exigir da lombar.' },
-          { ex: 'elev-lateral-sent', k: 'iso', j: 1, warn: 'Pegue e devolva os halteres no suporte, sem se abaixar até o chão.' },
-          { ex: 'triceps-corda', k: 'iso', j: 1, warn: 'Joelhos destravados e abdômen firme, sem jogar o corpo sobre a corda.' },
-          { ex: 'ponte', k: 'reab', why: 'Trabalha glúteo e posterior de coxa sem peso na coluna nem nos joelhos.' },
-          { ex: 'birddog', k: 'core', why: 'Fortalece os músculos que estabilizam a lombar.' },
-          { ex: 'prancha-lat', k: 'core', why: 'Fortalece a lateral do tronco sem carregar a coluna.' }
-        ] }
+    slots: [
+      { dow: 1, w: ['IA', 'IB'], together: true, warm: WARM_H },
+      { dow: 2, w: ['SF', 'SA'], together: true, warm: WARM_H }
     ]
   }
 };
@@ -818,16 +831,42 @@ const FIG = (function () {
   })();
 
   /* ---------- estado ---------- */
-  const state = { person: prefs.person, day: null };
+  /* ---------- semanas A e B: os treinos de cada dia se alternam toda semana ---------- */
+  function parityOf(d) {
+    const m = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    m.setDate(m.getDate() - ((m.getDay() + 6) % 7));
+    const w = Math.round((m - new Date(WEEK_A[0], WEEK_A[1], WEEK_A[2])) / (7 * 864e5));
+    return ((w % 2) + 2) % 2;
+  }
+  const CUR_WEEK = parityOf(new Date());
+  const WK_NAME = ['A', 'B'];
+  function buildDays(p, wk) {
+    return PLAN[p].slots.map((s) => {
+      const code = s.w[wk], W = WORKOUTS[code];
+      return {
+        id: code + '-' + s.dow, code: code, dow: s.dow, c: W.c, title: W.title, short: W.short, focus: W.focus,
+        together: !!s.together, solo: s.solo, warm: s.warm, extra: s.extra, end: s.end, keep: !!s.keep,
+        items: W.items.map((it) => Object.assign({ ex: it.ex, k: it.k }, p === 'joao' ? it.jo : it.ha))
+      };
+    });
+  }
+  const DAYS = { joao: [buildDays('joao', 0), buildDays('joao', 1)], haniere: [buildDays('haniere', 0), buildDays('haniere', 1)] };
+
+  const state = { person: prefs.person, day: null, week: CUR_WEEK };
   const openSet = new Set();
-  const daysOf = (p) => PLAN[p].days;
-  function defaultDay(p) {
-    const days = daysOf(p);
-    for (let i = 0; i < 7; i++) { const dow = (TODAY_DOW + i) % 7; const f = days.find((d) => d.dow === dow); if (f) return f.id; }
-    return days[0].id;
+  const daysOf = (p, wk) => DAYS[p][wk === undefined ? state.week : wk];
+  /* o próximo treino a partir de hoje, que pode cair na semana seguinte */
+  function goDefault(p) {
+    const now = new Date();
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+      const wk = parityOf(d), f = daysOf(p, wk).find((x) => x.dow === d.getDay());
+      if (f) { state.week = wk; state.day = f.id; return; }
+    }
+    state.week = CUR_WEEK; state.day = daysOf(p, CUR_WEEK)[0].id;
   }
   const curDay = () => daysOf(state.person).find((d) => d.id === state.day) || daysOf(state.person)[0];
-  state.day = defaultDay(state.person);
+  goDefault(state.person);
 
   /* ---------- prescrição ---------- */
   function rxFor(p, it, ph) { const ex = EX[it.ex]; const arr = it.rx || ex.rx || RX[p][it.k] || RX[p].comp; return arr[ph]; }
@@ -1045,14 +1084,15 @@ const FIG = (function () {
   }
 
   function renderWeek() {
-    const days = daysOf(state.person);
+    const days = daysOf(state.person), thisWeek = state.week === CUR_WEEK;
+    $('#wk-tog').innerHTML = WK_NAME.map((L, i) => '<button type="button" id="wk-' + L + '" data-act="wk" data-v="' + i + '" aria-pressed="' + (i === state.week) + '"><b>Semana ' + L + '</b><span>' + (i === CUR_WEEK ? 'esta semana' : 'próxima semana') + '</span></button>').join('');
     $('#week').innerHTML = WEEK.map(([dow, ab]) => {
       const d = days.find((x) => x.dow === dow);
-      const today = dow === TODAY_DOW ? ' today' : '';
+      const today = thisWeek && dow === TODAY_DOW ? ' today' : '';
       const other = (PLAN[state.person].other || {})[dow];
       if (!d) return '<span class="wd rest' + (other ? ' act' : '') + today + '"><span class="ab">' + ab + '</span><span class="pl off"></span><span class="lb">' + (other || 'livre') + '</span></span>';
       const sel = d.id === state.day;
-      return '<button type="button" class="wd' + today + '" id="wd-' + d.id + '" data-act="day" data-v="' + d.id + '" data-day="' + d.c + '" aria-pressed="' + sel + '" aria-label="' + DOW_NAME[dow] + ': treino ' + d.n + ', ' + esc(d.title) + '"><span class="ab">' + ab + '</span><span class="pl"></span><span class="lb">T' + d.n + '</span></button>';
+      return '<button type="button" class="wd' + today + '" id="wd-' + d.id + '" data-act="day" data-v="' + d.id + '" data-day="' + d.c + '" aria-pressed="' + sel + '" aria-label="' + DOW_NAME[dow] + ': ' + esc(d.title) + '"><span class="ab">' + ab + '</span><span class="pl"></span><span class="lb">' + esc(d.short) + '</span></button>';
     }).join('');
   }
 
@@ -1139,12 +1179,12 @@ const FIG = (function () {
     flushSaves();
     running.clear();
     const D = curDay(), p = state.person, other = p === 'joao' ? 'Haniere' : 'João';
-    const isToday = D.dow === TODAY_DOW;
+    const isToday = state.week === CUR_WEEK && D.dow === TODAY_DOW;
     const ds = doneSet(D);
     const el = $('#day');
     el.dataset.day = String(D.c);
     const withNote = D.together
-      ? '<p class="note">' + ICON.pair + '<span><b>Juntos com o ' + other + '.</b> Nos itens marcados, usem o mesmo aparelho e revezem as séries.</span></p>'
+      ? '<p class="note">' + ICON.pair + '<span><b>Treino todo juntos com o ' + other + '.</b> Revezem cada aparelho: um faz a série enquanto o outro descansa.</span></p>'
       : '<p class="note">' + ICON.solo + '<span>' + esc(D.solo || 'Treino só seu.') + '</span></p>';
     const pain = p === 'haniere'
       ? '<div class="pain"><p class="eyebrow">Escala de dor durante o treino</p><div class="pain-bar"><span class="pz-ok">0–3 siga</span><span class="pz-warn">4–5 alivie</span><span class="pz-stop">6+ pare</span></div></div>'
@@ -1153,7 +1193,7 @@ const FIG = (function () {
       '<div class="day-head">' +
         '<svg class="plate" viewBox="0 0 58 58" aria-hidden="true"><circle class="p-body" cx="29" cy="29" r="28"/><circle class="p-lip" cx="29" cy="29" r="20"/><circle class="p-hole" cx="29" cy="29" r="7.5"/></svg>' +
         '<div>' +
-          '<p class="day-eyebrow"><span class="eyebrow">Treino ' + D.n + ' · ' + DOW_NAME[D.dow] + '</span>' + (isToday ? '<span class="today-pill">Hoje</span>' : '') + '</p>' +
+          '<p class="day-eyebrow"><span class="eyebrow">Semana ' + WK_NAME[state.week] + ' · ' + DOW_NAME[D.dow] + '</span>' + (isToday ? '<span class="today-pill">Hoje</span>' : '') + '</p>' +
           '<h2 class="day-title">' + esc(D.title) + '</h2>' +
           '<p class="day-focus">' + esc(D.focus) + ' · cerca de 60 min</p>' +
         '</div>' +
@@ -1162,7 +1202,7 @@ const FIG = (function () {
       pain +
       '<div class="prog"><div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div><span id="prog-text"></span></div>' +
       '<p class="tap-hint">Toque no nome do exercício para ver como fazer e anotar a carga.</p>' +
-      '<ol class="ex-list" aria-label="Exercícios do treino ' + D.n + '">' + D.items.map((it, i) => renderItem(it, i, D, ds)).join('') + '</ol>' +
+      '<ol class="ex-list" aria-label="Exercícios do treino ' + esc(D.title) + '">' + D.items.map((it, i) => renderItem(it, i, D, ds)).join('') + '</ol>' +
       (D.end ? '<p class="note end-note">' + ICON.end + '<span>' + esc(D.end) + '</span></p>' : '');
     $$('.ex', el).forEach((li) => { if (openSet.has(openKey(li.dataset.ex))) toggleCard(li, true); });
     renderProgress();
@@ -1723,8 +1763,18 @@ const FIG = (function () {
       if (state.person === a.dataset.v) return;
       flushSaves();
       state.person = a.dataset.v; prefs.person = state.person; savePrefs();
-      state.day = defaultDay(state.person); renderAll();
+      goDefault(state.person); renderAll();
     } else if (act === 'day') { state.day = a.dataset.v; renderWeek(); renderDay(); }
+    else if (act === 'wk') {
+      const wk = +a.dataset.v;
+      if (wk === state.week) return;
+      flushSaves();
+      const dow = curDay().dow;
+      state.week = wk;
+      const days = daysOf(state.person);
+      state.day = (days.find((d) => d.dow === dow) || days[0]).id;
+      renderWeek(); renderDay();
+    }
     else if (act === 'phase') { prefs.phase = +a.dataset.v; savePrefs(); renderPhase(); renderDay(); }
     else if (act === 'done') setDone(a.closest('.ex'), a.getAttribute('aria-pressed') !== 'true');
     else if (act === 'rest') startTimer(+a.dataset.sec || 60, a.dataset.name || '');
@@ -1770,7 +1820,7 @@ const FIG = (function () {
   });
   window.addEventListener('hashchange', () => {
     const h = hashPerson();
-    if (h && h !== state.person) { flushSaves(); state.person = h; prefs.person = h; savePrefs(); state.day = defaultDay(h); renderAll(); }
+    if (h && h !== state.person) { flushSaves(); state.person = h; prefs.person = h; savePrefs(); goDefault(h); renderAll(); }
   });
   window.addEventListener('pagehide', flushSaves);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushSaves(); });
