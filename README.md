@@ -4,6 +4,7 @@ Site do treino na DAY FIT: treinos de cada um, bonecos animados, cronômetro de 
 
 - `index.html`: o site
 - `api/logs.js`: guarda as cargas num banco de dados (Redis da Upstash, ligado pela Vercel)
+- `sw.js` e `manifest.webmanifest`: deixam o site abrir sem internet e ser instalado no celular como aplicativo, com os ícones `icon-192.png`, `icon-512.png`, `icon-maskable.png` e `apple-touch-icon.png`
 
 ## Como publicar (uns 10 minutos, tudo pelo navegador)
 
@@ -24,11 +25,14 @@ Site do treino na DAY FIT: treinos de cada um, bonecos animados, cronômetro de 
 
 ## Atualizar o site depois
 
-No GitHub, use **Add file → Upload files** para substituir o `index.html`. A Vercel publica a versão nova sozinha em cerca de um minuto.
+No GitHub, use **Add file → Upload files** para substituir o `index.html`. A Vercel publica a versão nova sozinha em cerca de um minuto. Com internet, o celular sempre abre a versão nova. A cópia guardada só é usada quando não há sinal.
 
 ## Bom saber
 
 - Qualquer pessoa com o link consegue ver o treino e as cargas. Só quem tem o código do treino consegue gravar.
-- Anote a carga e as repetições de cada série. É pelas repetições que o app avisa quando dá para subir a carga.
+- Anote a carga e as repetições de cada série. É pelas repetições que o app avisa quando dá para subir a carga e quando é melhor baixar um pouco.
+- A seção **Seu progresso** mostra os dias de treino das últimas 4 semanas, o que ajustar no próximo treino e a evolução da carga em cada exercício.
+- Em **Registro de cargas**, o botão **Baixar planilha** gera um arquivo com todas as cargas, que abre no Excel e no Google Planilhas.
+- Para usar como aplicativo: no Android, toque em **Instalar** no aviso do site ou, no Chrome, em **⋮ → Instalar app**. No iPhone, abra no Safari, toque em **Compartilhar** e depois em **Adicionar à Tela de Início**.
 - Se a internet cair na academia, a anotação fica guardada no celular e vai sozinha para a nuvem quando a conexão voltar, mesmo que o site seja fechado antes.
 - Para trocar o código, mude a variável `TREINO_PIN` na Vercel e faça **Redeploy**.
