@@ -219,7 +219,9 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .alt-tog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-width:330px}
 .alt-tog button{min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:14px;font-weight:700}
 .alt-tog button[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:var(--shadow)}
+.alt-box{display:grid;gap:6px}
 .alt-name{font-size:14.5px}
+.alt-note{font-size:14px;color:var(--muted)}
 .mv{min-height:36px;padding:4px 0;border:0;background:none;color:var(--focus);font-size:13.5px;font-weight:700;text-align:left;text-decoration:underline;text-underline-offset:3px}
 .mv-today{justify-self:start}
 .chip-alt{border-color:var(--warn-ink);background:var(--warn-bg);color:var(--warn-ink)}
@@ -243,6 +245,8 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .fig .lim{fill:none;stroke:var(--warn-ink);stroke-width:2;stroke-dasharray:4 3}
 .fig .limt{fill:var(--warn-ink);font-family:var(--body);font-size:10px;font-weight:700}
 .fig .gh{opacity:.28}
+.fig .ldf{opacity:.55}
+.fig .pad{fill:var(--eq);stroke:var(--ink);stroke-width:1.2}
 
 /* guias */
 .guide{display:grid;gap:12px}
@@ -465,7 +469,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
       </div>
     </div>
     <p class="status" id="reg-status" role="status" aria-live="polite"></p>
-    <p class="tip">Fez a alternativa de um exercício? No registro dele, toque em <b>Alternativa</b> antes de anotar: a alternativa tem o próprio histórico de cargas. Se anotou no lugar errado, toque em <b>Foi a alternativa</b> ao lado do registro, em Últimos treinos.</p>
+    <p class="tip">Vai fazer a alternativa de um exercício? Abra o exercício e toque em <b>Alternativa</b>: a animação e o passo a passo passam a ser dela, e a carga fica num histórico próprio. Se anotou no lugar errado, toque em <b>Foi a alternativa</b> ao lado do registro, em Últimos treinos.</p>
     <p class="tip">Para o link abrir direto no treino do Haniere, acrescente <code>#haniere</code> no final.</p>
   </section>
 
@@ -494,88 +498,88 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 const EX = {
   'supino-maq': { n: 'Supino reto na máquina',
     how: ['Regule o banco para as pegadas ficarem na linha do meio do peito.', 'Ombros para trás e para baixo, costas apoiadas no encosto.', 'Empurre sem travar os cotovelos e volte em 2–3 s.'],
-    sub: 'Supino reto com halteres' },
-  'puxada-aberta': { n: 'Puxada frente aberta',
-    how: ['Trave as coxas embaixo do apoio e segure a barra um pouco mais aberta que os ombros.', 'Puxe até o alto do peito, levando os cotovelos para baixo.', 'Suba controlando, sem deixar o peso bater.'],
-    sub: 'Puxada frente com triângulo' },
+    alt: 'supino-halter' },
+  'puxada-aberta': { n: 'Puxada frente com barra, pegada aberta',
+    how: ['Use a barra longa. Trave as coxas embaixo do apoio e segure a barra com as mãos um pouco mais abertas que os ombros.', 'Puxe até o alto do peito, levando os cotovelos para baixo.', 'Suba controlando, sem deixar o peso bater.'],
+    alt: 'puxada-neutra' },
   'desenv-maq': { n: 'Desenvolvimento na máquina',
     how: ['Costas e glúteos encostados, abdômen firme.', 'Empurre para cima até quase estender os braços.', 'Desça até as mãos ficarem na altura do queixo.'],
-    sub: 'Desenvolvimento sentado com halteres, em banco com encosto' },
+    alt: 'desenv-halter' },
   'remada-apoio': { n: 'Remada na máquina com apoio no peito',
     how: ['Peito encostado no apoio durante toda a série.', 'Puxe levando os cotovelos para trás e aproxime as escápulas.', 'Estenda os braços devagar, até sentir as costas alongarem.'],
-    sub: 'Remada baixa no triângulo, com o tronco parado' },
+    alt: 'remada-baixa' },
   'voador': { n: 'Voador (peck deck)',
     how: ['Regule o banco para as mãos ficarem na altura do peito.', 'Cotovelos levemente dobrados e fixos: feche os braços como num abraço.', 'Abra até sentir o peito alongar, sem forçar o ombro.'],
-    sub: 'Crucifixo no crossover' },
+    alt: 'crossover' },
   'rosca-w': { n: 'Rosca direta com barra W',
     how: ['Em pé, cotovelos colados ao corpo.', 'Suba sem jogar o tronco para trás.', 'Desça em 2–3 s até quase estender os braços.'],
-    sub: 'Rosca alternada com halteres' },
+    alt: 'rosca-alt' },
   'triceps-corda': { n: 'Tríceps na polia com corda',
-    how: ['Cotovelos fixos ao lado do corpo.', 'Estenda os braços e abra a corda no final.', 'Volte devagar até os cotovelos formarem cerca de 90°.'],
-    sub: 'Tríceps na polia com barra' },
+    how: ['Use a corda. Cotovelos fixos ao lado do corpo.', 'Estenda os braços e abra a corda no final.', 'Volte devagar até os cotovelos formarem cerca de 90°.'],
+    alt: 'triceps-barra' },
   'leg45': { n: 'Leg press 45°',
     how: ['Pés no meio da plataforma, na largura dos ombros.', 'Desça até os joelhos formarem cerca de 90°, sem o quadril sair do banco.', 'Empurre com o pé inteiro, sem travar os joelhos no alto.'],
-    sub: 'Agachamento no hack' },
+    alt: 'hack' },
   'goblet': { n: 'Agachamento goblet com halter',
     how: ['Segure o halter em pé, junto ao peito.', 'Desça como se fosse sentar entre os calcanhares, com os joelhos na direção dos pés.', 'Desça só até onde as costas continuam retas e suba empurrando o chão.'],
-    sub: 'Agachamento no Smith' },
+    alt: 'smith' },
   'extensora': { n: 'Cadeira extensora',
     how: ['Ajuste o encosto para o joelho ficar alinhado com o eixo do aparelho.', 'Estenda em 1 s e segure 1 s em cima.', 'Desça em 2–3 s, sem deixar o peso bater.'] },
   'flexora-sent': { n: 'Cadeira flexora',
     how: ['Joelho alinhado com o eixo do aparelho e coxas travadas pelo apoio.', 'Dobre os joelhos até onde conseguir.', 'Volte em 2–3 s.'],
-    sub: 'Mesa flexora' },
+    alt: 'mesa-flexora' },
   'abdutora': { n: 'Cadeira abdutora',
     how: ['Costas encostadas e quadril no fundo do banco.', 'Abra as pernas em 1 s e segure 1 s.', 'Feche em 2 s, sem deixar as placas baterem.'],
-    sub: 'Abdução de quadril deitado de lado, no colchonete' },
+    alt: 'abd-lado' },
   'pant-sent': { n: 'Panturrilha sentado',
     how: ['Apoio sobre as coxas e pontas dos pés na plataforma.', 'Desça o calcanhar até alongar bem.', 'Suba o máximo que puder e segure 1 s.'],
-    sub: 'Panturrilha no leg press' },
+    alt: 'pant-leg' },
   'prancha': { n: 'Prancha frontal',
     how: ['Cotovelos embaixo dos ombros.', 'Contraia glúteos e abdômen: corpo reto da cabeça aos pés.', 'Não deixe o quadril cair nem subir.'],
     rx: ['2 × 30 s', '3 × 40 s', '3 × 45–60 s'] },
   'supino-incl-halter': { n: 'Supino inclinado com halteres',
     how: ['Banco inclinado a 30°.', 'Desça os halteres até a linha do peito, com os cotovelos a uns 45° do tronco.', 'Empurre para cima aproximando os halteres.'],
-    sub: 'Supino inclinado na máquina' },
+    alt: 'supino-incl-maq' },
   'puxada-neutra': { n: 'Puxada frente com triângulo',
-    how: ['Trave as coxas no apoio e segure o triângulo.', 'Puxe até o alto do peito, com os cotovelos junto ao corpo.', 'Suba devagar até estender os braços.'],
-    sub: 'Puxada frente aberta' },
+    how: ['Use o triângulo (pegador em V). Trave as coxas no apoio e segure com as palmas viradas uma para a outra.', 'Puxe até o alto do peito, com os cotovelos junto ao corpo.', 'Suba devagar até estender os braços.'],
+    alt: 'puxada-aberta' },
   'remada-unilateral': { n: 'Remada unilateral com halter',
     how: ['Mão e joelho do mesmo lado apoiados no banco, costas retas.', 'Puxe o halter em direção ao quadril.', 'Desça estendendo o braço, sem girar o tronco.'],
-    sub: 'Remada baixa no triângulo' },
+    alt: 'remada-baixa' },
   'elev-lateral': { n: 'Elevação lateral com halteres',
     how: ['Cotovelos levemente dobrados.', 'Suba os braços pelas laterais até a altura dos ombros.', 'Desça em 2–3 s, sem balançar o corpo.'],
-    sub: 'Elevação lateral na polia' },
+    alt: 'elev-lateral-polia' },
   'crucifixo-inv': { n: 'Crucifixo invertido na máquina',
     how: ['Peito no apoio e pegadas na altura dos ombros.', 'Abra os braços para trás, aproximando as escápulas.', 'Volte devagar.'],
-    sub: 'Face pull na polia com corda' },
+    alt: 'face-pull' },
   'rosca-scott': { n: 'Rosca Scott',
     how: ['Axilas encostadas no alto do apoio.', 'Suba até o antebraço ficar quase vertical.', 'Desça até quase estender, sem soltar o peso.'],
-    sub: 'Rosca sentado com halteres, em banco com encosto' },
+    alt: 'rosca-sent' },
   'triceps-barra': { n: 'Tríceps na polia com barra',
-    how: ['Cotovelos fixos ao lado do corpo e joelhos destravados.', 'Estenda os braços até o fim.', 'Volte até os cotovelos formarem cerca de 90°.'],
-    sub: 'Tríceps na polia com corda' },
+    how: ['Use a barra reta, com as mãos na largura dos ombros. Cotovelos fixos ao lado do corpo e joelhos destravados.', 'Estenda os braços até o fim.', 'Volte até os cotovelos formarem cerca de 90°.'],
+    alt: 'triceps-corda' },
   'stiff-halter': { n: 'Stiff com halteres',
     how: ['Joelhos levemente dobrados e fixos.', 'Leve o quadril para trás com os halteres rentes às pernas e as costas retas.', 'Desça até sentir o posterior da coxa alongar e suba contraindo o glúteo.'],
-    sub: 'Mesa flexora, com 2 séries a mais' },
+    alt: 'mesa-flexora', altSets: 2, altNote: 'Faça 2 séries a mais da mesa flexora no lugar do stiff.' },
   'elev-pelvica': { n: 'Elevação pélvica com barra',
     how: ['Alto das costas apoiado no banco e barra sobre o quadril, com uma espuma de proteção.', 'Suba até tronco e coxas ficarem alinhados, com o queixo recolhido.', 'Segure 1 s em cima e desça controlando.'],
-    sub: 'Máquina de elevação pélvica' },
+    alt: 'elev-pelvica-maq' },
   'hack': { n: 'Agachamento no hack',
     how: ['Costas coladas no encosto e pés à frente, na largura dos ombros.', 'Desça até cerca de 90° de joelho, ou mais se o quadril continuar colado.', 'Suba empurrando com o pé inteiro.'],
-    sub: 'Agachamento no Smith' },
+    alt: 'smith' },
   'afundo': { n: 'Afundo com halteres',
     how: ['Passo longo, tronco reto e halteres ao lado do corpo.', 'Desça o joelho de trás em direção ao chão.', 'Suba empurrando com o pé da frente. Faça todas as repetições de uma perna e troque.'],
     rx: ['2 × 10 por perna', '3 × 10 por perna', '3 × 8–12 por perna'],
-    sub: 'Leg press com uma perna' },
+    alt: 'leg45-uni' },
   'mesa-flexora': { n: 'Mesa flexora',
     how: ['Deitado, com o quadril colado no banco.', 'Dobre os joelhos até onde conseguir.', 'Desça em 3 s.'],
-    sub: 'Cadeira flexora' },
+    alt: 'flexora-sent' },
   'pant-pe': { n: 'Panturrilha em pé',
     how: ['Pontas dos pés na borda da plataforma.', 'Desça o calcanhar até alongar bem.', 'Suba o máximo e segure 1 s.'],
-    sub: 'Panturrilha no leg press' },
+    alt: 'pant-leg' },
   'abd-maq': { n: 'Abdominal na máquina',
     how: ['Enrole o tronco aproximando as costelas do quadril.', 'Solte o ar ao fechar.', 'Volte devagar, sem soltar o peso.'],
-    sub: 'Abdominal supra no colchonete' },
+    alt: 'abd-supra' },
 
   /* adaptados para o Haniere */
   'leg45-curto': { n: 'Leg press 45° com descida curta',
@@ -585,7 +589,7 @@ const EX = {
   'ponte': { n: 'Ponte de glúteo no colchonete',
     how: ['Deitado de barriga para cima, joelhos dobrados e pés na largura do quadril.', 'Suba o quadril contraindo o glúteo até alinhar ombros, quadril e joelhos.', 'Pare quando o glúteo contrair: arquear a lombar no alto não ajuda.'],
     prog: 'Quando 15 repetições ficarem fáceis, apoie uma anilha sobre o quadril.',
-    sub: 'Máquina de elevação pélvica, com carga leve' },
+    alt: 'elev-pelvica-maq', altNote: 'Com carga leve.' },
   'deadbug': { n: 'Dead bug',
     how: ['Deitado, braços apontando para o teto e joelhos dobrados a 90° no ar.', 'Estenda devagar um braço e a perna oposta, soltando o ar.', 'A lombar fica encostada no chão o tempo todo. Se descolar, diminua o movimento.'],
     rx: ['2 × 6 por lado', '3 × 8 por lado', '3 × 10 por lado'] },
@@ -603,10 +607,51 @@ const EX = {
     rx: ['2 × 8 por lado', '3 × 10 por lado', '3 × 12 por lado'] },
   'supino-incl-maq': { n: 'Supino inclinado na máquina',
     how: ['Costas apoiadas e pegadas na altura do alto do peito.', 'Empurre sem travar os cotovelos.', 'Volte em 2–3 s.'],
-    sub: 'Supino reto na máquina' },
+    alt: 'supino-maq' },
+  /* usados como alternativa */
+  'supino-halter': { n: 'Supino reto com halteres',
+    how: ['Deitado no banco reto, com os pés firmes no chão.', 'Desça os halteres até a linha do peito, com os cotovelos a uns 45° do tronco.', 'Empurre para cima aproximando os halteres, sem travar os cotovelos.'] },
+  'desenv-halter': { n: 'Desenvolvimento sentado com halteres',
+    how: ['Banco com encosto quase na vertical, costas e glúteos apoiados.', 'Comece com os halteres na altura das orelhas, palmas para a frente.', 'Empurre para cima até quase estender os braços e desça devagar.'] },
+  'crossover': { n: 'Crucifixo no crossover',
+    how: ['Polias no alto: dê um passo à frente do aparelho e incline um pouco o tronco.', 'Cotovelos levemente dobrados e fixos: feche os braços até as mãos se encontrarem na frente do corpo.', 'Abra devagar até sentir o peito alongar.'] },
+  'elev-lateral-polia': { n: 'Elevação lateral na polia', per: 'braço',
+    how: ['De lado para a polia baixa, segure o pegador com a mão de fora.', 'Suba o braço pela lateral até a altura do ombro, com o cotovelo levemente dobrado.', 'Desça em 2–3 s. Faça todas as repetições e troque de lado.'] },
+  'rosca-alt': { n: 'Rosca alternada com halteres',
+    how: ['Em pé, halteres ao lado do corpo e cotovelos colados ao tronco.', 'Suba um halter de cada vez, girando a palma para cima.', 'Desça em 2–3 s e troque de braço, sem balançar o tronco.'] },
+  'rosca-sent': { n: 'Rosca sentado com halteres',
+    how: ['Banco com encosto, costas apoiadas e braços ao lado do corpo.', 'Suba os halteres sem tirar os cotovelos do lugar.', 'Desça em 2–3 s até quase estender os braços.'] },
+  'puxada-uni': { n: 'Puxada na polia alta com uma mão', per: 'braço',
+    how: ['Sentado no banco, de frente para a polia, com o pegador acima da cabeça.', 'Puxe até o ombro, levando o cotovelo para baixo ao lado do corpo.', 'Suba devagar até estender o braço. Faça todas as repetições e troque de braço.'] },
+  'pulldown-reto': { n: 'Pulldown com braços estendidos',
+    how: ['Em pé, de frente para a polia alta, com o tronco um pouco inclinado à frente.', 'Com os braços quase esticados, puxe a barra em arco até encostar nas coxas.', 'Volte devagar até os braços ficarem na altura da cabeça.'] },
+  'remada-baixa': { n: 'Remada baixa no triângulo',
+    how: ['Sentado, pés na plataforma e joelhos levemente dobrados.', 'Com o tronco parado e reto, puxe o triângulo até a barriga levando os cotovelos para trás.', 'Estenda os braços devagar, sem curvar as costas para a frente.'] },
+  'face-pull': { n: 'Face pull na polia com corda',
+    how: ['Polia na altura do rosto: segure a corda com as palmas para baixo.', 'Puxe em direção ao rosto, abrindo as mãos e mantendo os cotovelos altos.', 'Aproxime as escápulas no final e volte devagar.'] },
+  'triceps-frances': { n: 'Tríceps francês sentado com halter',
+    how: ['Banco com encosto: segure um halter com as duas mãos acima da cabeça.', 'Com os cotovelos apontando para cima, desça o halter atrás da cabeça.', 'Estenda os braços sem abrir os cotovelos.'] },
+  'triceps-uni': { n: 'Tríceps na polia com uma mão', per: 'braço',
+    how: ['Pegador simples na polia alta, cotovelo colado ao lado do corpo.', 'Estenda o braço até o fim, sem mexer o ombro.', 'Volte devagar até o cotovelo formar cerca de 90°. Faça todas as repetições e troque de braço.'] },
+  'smith': { n: 'Agachamento no Smith',
+    how: ['Barra apoiada no alto das costas e pés um pouco à frente da barra.', 'Desça como se fosse sentar, com os joelhos na direção dos pés.', 'Desça só até onde as costas continuam retas e suba empurrando o chão.'] },
+  'leg45-uni': { n: 'Leg press com uma perna',
+    how: ['Um pé no meio da plataforma; o outro fica apoiado fora dela.', 'Desça até o joelho formar uns 90°, sem o quadril sair do banco.', 'Empurre com o pé inteiro. Faça todas as repetições e troque de perna.'],
+    rx: ['2 × 10 por perna', '3 × 10 por perna', '3 × 8–12 por perna'] },
+  'pant-leg': { n: 'Panturrilha no leg press',
+    how: ['Sentado no leg press, só a ponta dos pés na borda de baixo da plataforma.', 'Joelhos quase esticados e parados: desça os calcanhares até alongar.', 'Empurre com a ponta dos pés o máximo que puder e segure 1 s.'] },
+  'elev-pelvica-maq': { n: 'Máquina de elevação pélvica',
+    how: ['Alto das costas no apoio e o rolo da máquina sobre o quadril.', 'Suba até tronco e coxas ficarem alinhados, com o queixo recolhido.', 'Segure 1 s em cima e desça controlando.'] },
+  'abd-lado': { n: 'Abdução de quadril deitado de lado', per: 'lado',
+    how: ['Deitado de lado no colchonete, pernas estendidas e quadril alinhado, sem rolar para trás.', 'Suba a perna de cima até uns 30°, com o pé apontando para a frente.', 'Segure 1 s e desça em 2 s. Faça todas as repetições e troque de lado.'] },
+  'abd-supra': { n: 'Abdominal supra no colchonete',
+    how: ['Deitado, joelhos dobrados, pés no chão e braços cruzados no peito.', 'Solte o ar e tire só os ombros do chão, aproximando as costelas do quadril.', 'Desça devagar, sem puxar o pescoço.'] },
+  'extensora-iso': { n: 'Extensora parada a 60°',
+    how: ['Na cadeira extensora, com carga leve.', 'Suba até o joelho ficar dobrado a uns 60° e segure parado 30 s, respirando normalmente.', 'Desça devagar e descanse antes da próxima.'],
+    rx: ['5 × 30 s', '5 × 30 s', '5 × 30 s'] },
   'elev-lateral-sent': { n: 'Elevação lateral sentado',
     how: ['Sentado em banco com encosto, costas apoiadas.', 'Suba os braços pelas laterais até a altura dos ombros.', 'Desça em 2–3 s.'],
-    sub: 'Elevação lateral na polia' }
+    alt: 'elev-lateral-polia' }
 };
 
 /* ---------- Plano semanal ----------
@@ -629,14 +674,14 @@ const WORKOUTS = {
         ha: { ex: 'leg45-curto', k: 'reab', flag: 'Descida curta, lombar colada',
           warn: 'Peça ao João para colocar e tirar as anilhas: levantar anilha do chão força a lombar.',
           why: 'Com o joelho pouco dobrado, a pressão sobre a patela é menor. A amplitude só aumenta se não houver dor.',
-          sub: 'Se incomodar o joelho ou a lombar, pule o leg press e faça 2 séries a mais da cadeira extensora até a metade.' } },
+          alt: 'extensora-90-45', altSets: 2, altNote: 'Se incomodar o joelho ou a lombar, pule o leg press e faça 2 séries a mais da cadeira extensora até a metade.' } },
       { ex: 'goblet', k: 'main',
         ha: { warn: 'Halter leve e descida só até onde o joelho não doer e as costas continuam retas.',
-          sub: 'Se incomodar o joelho ou a lombar, faça 2 séries a mais do leg press com descida curta.' } },
+          alt: 'leg45-curto', altSets: 2, altNote: 'Se incomodar o joelho ou a lombar, faça 2 séries a mais do leg press com descida curta no lugar do agachamento.' } },
       { ex: 'extensora', k: 'iso',
         ha: { ex: 'extensora-90-45', k: 'reab', flag: 'Só até a metade: 90° → 45°',
           why: 'Nessa faixa a extensora força menos a patela, e trabalhar com o músculo alongado também faz crescer.',
-          sub: 'Se doer: segure parado com o joelho a uns 60°, 5 × 30 s (isometria).' } },
+          alt: 'extensora-iso', altNote: 'Se doer, troque pela extensora parada: 5 vezes de 30 s com o joelho a uns 60° (isometria).' } },
       { ex: 'flexora-sent', k: 'iso' },
       { ex: 'abdutora', k: 'iso', ha: { why: 'Fortalece o glúteo médio, que ajuda a manter o joelho alinhado.' } },
       { ex: 'pant-sent', k: 'iso' },
@@ -650,7 +695,7 @@ const WORKOUTS = {
       { ex: 'hack', k: 'comp',
         jo: { tip: 'Revezem o aparelho. Coloque e tire as anilhas para o Haniere: levantar anilha do chão força a lombar dele.' },
         ha: { warn: 'No hack o peso apoia nos ombros e pressiona a coluna: carga leve, costas coladas no encosto e descida só até o joelho formar 90°. Peça ao João para colocar e tirar as anilhas.',
-          sub: 'Leg press 45° com descida curta, se a lombar ou o joelho incomodarem.' } },
+          alt: 'leg45-curto', altNote: 'Use se a lombar ou o joelho incomodarem no hack.' } },
       { ex: 'afundo', k: 'comp',
         ha: { warn: 'Halteres leves e descida só até a metade, sem o joelho de trás chegar perto do chão. Se precisar, apoie uma mão no suporte para se equilibrar.' } },
       { ex: 'mesa-flexora', k: 'iso',
@@ -674,15 +719,15 @@ const WORKOUTS = {
     ] },
   SA: { title: 'Superior atrás', short: 'Atrás', c: 3, focus: 'Costas, ombro de trás e tríceps',
     items: [
-      { ex: 'puxada-aberta', k: 'main', sub: 'Puxada na polia alta com uma mão de cada vez, sentado no banco', ha: { warn: W_PUXADA } },
+      { ex: 'puxada-aberta', k: 'main', alt: 'puxada-uni', ha: { warn: W_PUXADA } },
       { ex: 'remada-apoio', k: 'main', ha: { why: 'É a remada que menos exige da lombar: o apoio no peito segura a coluna.' } },
-      { ex: 'puxada-neutra', k: 'comp', sub: 'Pulldown com braços estendidos na polia alta', ha: { warn: W_PUXADA } },
+      { ex: 'puxada-neutra', k: 'comp', alt: 'pulldown-reto', ha: { warn: W_PUXADA } },
       { ex: 'remada-unilateral', k: 'comp',
         ha: { warn: 'Mão e joelho bem apoiados no banco e costas retas, sem girar o tronco.',
-          sub: 'Se a lombar incomodar, faça 2 séries a mais da remada com apoio no peito.' } },
+          alt: 'remada-apoio', altSets: 2, altNote: 'Se a lombar incomodar, faça 2 séries a mais da remada com apoio no peito no lugar desta.' } },
       { ex: 'crucifixo-inv', k: 'iso' },
-      { ex: 'triceps-corda', k: 'iso', sub: 'Tríceps francês sentado com halter, em banco com encosto', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o corpo sobre a corda.' } },
-      { ex: 'triceps-barra', k: 'iso', sub: 'Tríceps na polia com uma mão de cada vez' },
+      { ex: 'triceps-corda', k: 'iso', alt: 'triceps-frances', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o corpo sobre a corda.' } },
+      { ex: 'triceps-barra', k: 'iso', alt: 'triceps-uni' },
       { ex: 'prancha-lat', k: 'core', ha: { why: 'Fortalece a lateral do tronco sem carregar a coluna.' } }
     ] }
 };
@@ -745,16 +790,20 @@ const FIG = (function () {
   const LFS = [93, 90, 100, 1, 1, 0.4];
   const HANDS2 = [['dt', 'W', 4.5, 0, 0], ['dt', 'W2', 4.5, 0, 0]];
   const DB2 = [['dt', 'W', 5.5, 0, 0], ['dt', 'W2', 5.5, 0, 0]];
-  const PULL = [F(168), ...SEAT(96), ['bx', 124, 112, 18, 8], ['cb', 100, 6, 'W'], ['dt', 'W', 4, 0, 0]];
+  /* puxada vista de frente: assento e apoio das coxas, sem encosto */
+  const FPULL = [F(173), ['bx', 96, 122, 48, 6], ['ln', 120, 128, 120, 173, 5], ['bx', 96, 114, 48, 7]];
   const LEGP = [F(168), ['ln', 95, 117, 185, 27, 3], ['bx', 50, 131, 44, 7], ['ln', 62, 138, 62, 167, 4], ['bn', 'P', 'N', 7, 8, 6, 2], ['pl', 'A', 'T', -4, 36, 6]];
   const MAT = ['bx', 20, 164, 200, 4];
   const f = {
     'supino-maq': { v: 's', props: [F(168), ...SEAT(96), BACK, ['dt', 'W', 4.5, 0, 0]],
       poses: [{ P: [96, 124], t: -92, a: [178, -12, 0.95, 1], l: LS }, { P: [96, 124], t: -92, a: [178, -2, -1, 1], l: LS }] },
-    'puxada-aberta': { v: 's', props: PULL,
-      poses: [{ P: [96, 124], t: -100, a: [-78, -80], l: LS }, { P: [96, 124], t: -100, a: [-78, -72, -1, 1], l: LS }] },
-    'puxada-neutra': { v: 's', props: PULL,
-      poses: [{ P: [96, 124], t: -100, a: [-80, -82], l: LS }, { P: [96, 124], t: -100, a: [-80, -76, -1, 1], l: LS }] },
+    'puxada-aberta': { v: 'f', cap: 'Barra longa, mãos mais abertas que os ombros: puxe até o alto do peito',
+      props: [...FPULL, ['bar', 'W', 'W2', 14, 120, -12]],
+      poses: [{ P: [120, 120], t: -90, a: { t: [86, 22], s: 1 }, a2: { t: [154, 22], s: -1 }, l: LF },
+        { P: [120, 120], t: -90, a: { t: [86, 74], s: 1 }, a2: { t: [154, 74], s: -1 }, l: LF }] },
+    'puxada-neutra': { v: 'f', cap: 'Triângulo: mãos juntas e cotovelos descendo rente ao corpo',
+      props: [...FPULL, ['tri', 'W', 'W2', 12, 120, -12]],
+      poses: [{ P: [120, 120], t: -90, a: [-100, -56], l: LF }, { P: [120, 120], t: -90, a: [-95, -64, -0.8, 0.64], l: LF }] },
     'desenv-maq': { v: 'f', props: [F(173), ...FSEAT, ...HANDS2],
       poses: [{ P: [120, 120], t: -90, a: [180, 270], l: LF }, { P: [120, 120], t: -90, a: [256, 265], l: LF }] },
     'remada-apoio': { v: 's', props: [F(168), ...SEAT(90), ['bx', 102, 78, 7, 30], ['dt', 'W', 4.5, 0, 0]],
@@ -765,8 +814,12 @@ const FIG = (function () {
       poses: [{ P: [120, 120], t: -90, a: [180, 180, -0.2, -0.22], l: LF }, { P: [120, 120], t: -90, a: [180, 176], l: LF }] },
     'rosca-w': { v: 's', props: [F(168), ['dt', 'W', 8, 0, 0]],
       poses: [{ P: [110, 84], t: -90, a: [88, 86], l: [90, 90, 0] }, { P: [110, 84], t: -90, a: [86, -62], l: [90, 90, 0] }] },
-    'triceps-corda': { v: 's', props: [F(168), ['cb', 150, 6, 'W'], ['dt', 'W', 3.5, 0, 0]],
-      poses: [{ P: [104, 86], t: -84, a: [97, -25], l: { t: [106, 166] } }, { P: [104, 86], t: -84, a: [97, 92], l: { t: [106, 166] } }] },
+    'triceps-corda': { v: 'f', cap: 'Corda: cotovelos parados ao lado do corpo e mãos se abrindo no final',
+      props: [F(171), ['rope', 'W', 'W2', 20, 120, -12]],
+      poses: [{ P: [120, 84], t: -90, a: [88, 10, 1, 0.38], l: LFS }, { P: [120, 84], t: -90, a: [88, 100], l: LFS }] },
+    'triceps-barra': { v: 'f', cap: 'Barra reta: mãos na largura dos ombros e cotovelos parados',
+      props: [F(171), ['bar', 'W', 'W2', 9, 120, -12]],
+      poses: [{ P: [120, 84], t: -90, a: [88, 70, 1, 0.3], l: LFS }, { P: [120, 84], t: -90, a: [88, 88], l: LFS }] },
     'leg45': { v: 's', vb: '0 25 240 180', props: LEGP, cap: 'Desça até o joelho formar uns 90°, sem tirar o quadril do banco',
       poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [111, 87], f: -135 } }, { P: [70, 128], t: -150, a: [60, 20], l: { t: [127.6, 70.4], f: -135 } }] },
     'leg45-curto': { v: 's', vb: '0 25 240 180', props: [...LEGP, ['st', 'A', 'T', 0, -4, 52, 'até aqui']], cap: 'Semanas 1–2: a plataforma só desce até a linha tracejada',
@@ -836,9 +889,73 @@ const FIG = (function () {
         { P: [130, 156], t: 180, c: 18, a: { t: [132, 158], s: -1 }, l: { t: [160, 162] }, l2: [0, 0, -80] }] },
     'pallof': { v: 'f', tm: [0.4, 1, 2, 1.2], cap: 'Estenda os braços e segure 2 s sem deixar o tronco girar',
       props: [F(171), ['cb', 14, 56, 'W'], ['dt', 'W', 4, 0, 0]],
-      poses: [{ P: [120, 84], t: -90, a: [100, -10, 1, 0.8], l: [100, 92, 100, 1, 1, 0.4] }, { P: [120, 84], t: -90, a: [40, 70, 0.55, 0.5], l: [100, 92, 100, 1, 1, 0.4] }] }
+      poses: [{ P: [120, 84], t: -90, a: [100, -10, 1, 0.8], l: [100, 92, 100, 1, 1, 0.4] }, { P: [120, 84], t: -90, a: [40, 70, 0.55, 0.5], l: [100, 92, 100, 1, 1, 0.4] }] },
+
+    /* alternativas */
+    'puxada-uni': { v: 'f', cap: 'Um braço de cada vez: o cotovelo desce ao lado do corpo',
+      props: [...FPULL, ['cb', 96, -12, 'W'], ['dt', 'W', 4.5, 0, 0]],
+      poses: [{ P: [120, 120], t: -90, a: [-104, -97], a2: [80, 95], l: LF }, { P: [120, 120], t: -90, a: [98, -78, 0.92, 0.92], a2: [80, 95], l: LF }] },
+    'pulldown-reto': { v: 's', cap: 'Braços quase esticados: leve a barra em arco até as coxas',
+      props: [F(168), ['cb', 210, 0, 'W'], ['dt', 'W', 4.5, 0, 0]],
+      poses: [{ P: [100, 86], t: -76, a: [-28, -24], l: { t: [102, 166] } }, { P: [100, 86], t: -76, a: [84, 80], l: { t: [102, 166] } }] },
+    'triceps-uni': { v: 's', cap: 'Uma mão de cada vez: cotovelo parado ao lado do corpo',
+      props: [F(168), ['cb', 150, 6, 'W'], ['dt', 'W', 3.5, 0, 0]],
+      poses: [{ P: [104, 86], t: -84, a: [97, -25], a2: [96, 92], l: { t: [106, 166] } }, { P: [104, 86], t: -84, a: [97, 92], a2: [96, 92], l: { t: [106, 166] } }] },
+    'triceps-frances': { v: 's', cap: 'Cotovelos apontando para cima: só os antebraços se mexem',
+      props: [F(168), ...SEAT(96), ['bn', 'P', 'N', 7, 8, 3, -6], ['dt', 'W', 6, 0, 0]],
+      poses: [{ P: [96, 124], t: -94, a: [-96, 112], l: LS }, { P: [96, 124], t: -94, a: [-92, -92], l: LS }] },
+    'remada-baixa': { v: 's', cap: 'Tronco parado: só os braços puxam o triângulo até a barriga',
+      props: [F(168), ['bx', 50, 131, 66, 7], ['ln', 62, 138, 62, 167, 4], ['ln', 104, 138, 104, 167, 4], ['ln', 170, 100, 170, 146, 6], ['cb', 214, 98, 'W'], ['dt', 'W', 4.5, 0, 0]],
+      poses: [{ P: [88, 127], t: -88, a: [12, 6], l: { t: [163, 122], f: -80 } }, { P: [88, 127], t: -88, a: [122, 2], l: { t: [163, 122], f: -80 } }] },
+    'face-pull': { v: 's', cap: 'Puxe a corda em direção ao rosto, com os cotovelos altos',
+      props: [F(168), ['cb', 214, 28, 'W'], ['dt', 'W', 4, 0, 0]],
+      poses: [{ P: [100, 86], t: -92, a: [-6, -4], l: { t: [104, 166] } }, { P: [100, 86], t: -92, a: [-6, -62, -0.35, 0.95], l: { t: [104, 166] } }] },
+    'supino-halter': { v: 's', vb: '0 20 240 180', cap: 'Desça os halteres até a linha do peito e empurre para cima',
+      props: [F(168), ['bx', 50, 128, 104, 6], ['ln', 60, 134, 60, 167, 4], ['ln', 144, 134, 144, 167, 4], ['dt', 'W', 6, 0, 0]],
+      poses: [{ P: [126, 122], t: 180, a: [100, -88, 0.5, 1], l: { t: [164, 166] } }, { P: [126, 122], t: 180, a: [100, -90, -1, 1], l: { t: [164, 166] } }] },
+    'desenv-halter': { v: 'f', cap: 'Halteres na altura das orelhas: empurre para cima sem arquear as costas',
+      props: [F(173), ...FSEAT, ['db', 'W', 0, 18], ['db', 'W2', 0, 18]],
+      poses: [{ P: [120, 120], t: -90, a: [180, 270], l: LF }, { P: [120, 120], t: -90, a: [256, 265], l: LF }] },
+    'crossover': { v: 'f', cap: 'Cotovelos levemente dobrados e fixos: feche até as mãos se encontrarem',
+      props: [F(171), ['cb', 6, 4, 'W'], ['cb', 234, 4, 'W2'], ...HANDS2],
+      poses: [{ P: [120, 84], t: -90, a: [198, 190], l: LFS }, { P: [120, 84], t: -90, a: [66, 34, 0.8, 0.55], l: LFS }] },
+    'elev-lateral-polia': { v: 'f', cap: 'Um braço de cada vez: suba pela lateral até a altura do ombro',
+      props: [F(171), ['cb', 232, 164, 'W'], ['dt', 'W', 4.5, 0, 0]],
+      poses: [{ P: [120, 84], t: -90, a: [80, 75], a2: [70, 140, 1, 0.9], l: LFS }, { P: [120, 84], t: -90, a: [184, 172], a2: [70, 140, 1, 0.9], l: LFS }] },
+    'rosca-alt': { v: 's', cap: 'Um braço de cada vez, sem balançar o tronco',
+      props: [F(168), ['dt', 'W2', 6, 0, 0, 'b'], ['dt', 'W', 6, 0, 0]],
+      steps: [{ p: 1, m: 1, h: 0.4 }, { p: 0, m: 2, h: 0.3 }, { p: 2, m: 1, h: 0.4 }, { p: 0, m: 2, h: 0.3 }],
+      poses: [{ P: [110, 84], t: -90, a: [88, 86], a2: [92, 88], l: [90, 90, 0] },
+        { P: [110, 84], t: -90, a: [86, -62], a2: [92, 88], l: [90, 90, 0] },
+        { P: [110, 84], t: -90, a: [88, 86], a2: [90, -60], l: [90, 90, 0] }] },
+    'rosca-sent': { v: 's', cap: 'Costas apoiadas e cotovelos parados ao lado do corpo',
+      props: [F(168), ...SEAT(96), BACK, ['dt', 'W', 6, 0, 0]],
+      poses: [{ P: [96, 124], t: -96, a: [90, 82], l: LS }, { P: [96, 124], t: -96, a: [90, -58], l: LS }] },
+    'smith': { v: 's', cap: 'A barra corre no trilho: pés um pouco à frente e costas retas',
+      props: [F(168), ['ln', 102, 0, 102, 168, 3], ['dt', 'N', 6, -4, -3]],
+      poses: [{ P: [90.5, 120], t: -72, a: [118, -72, 0.85, 0.85], l: { t: [118, 166] } }, { P: [106, 84], t: -90, a: [118, -72, 0.85, 0.85], l: { t: [118, 166] } }] },
+    'leg45-uni': { v: 's', vb: '0 25 240 180', cap: 'Uma perna de cada vez: a outra fica apoiada fora da plataforma',
+      props: LEGP,
+      poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [111, 87], f: -135 }, l2: { t: [102, 166], f: 0 } },
+        { P: [70, 128], t: -150, a: [60, 20], l: { t: [127.6, 70.4], f: -135 }, l2: { t: [102, 166], f: 0 } }] },
+    'pant-leg': { v: 's', vb: '0 25 240 180', tm: [0.4, 1, 1, 2], cap: 'Joelhos quase esticados: só os tornozelos empurram a plataforma',
+      props: [F(168), ['ln', 95, 117, 185, 27, 3], ['bx', 50, 131, 44, 7], ['ln', 62, 138, 62, 167, 4], ['bn', 'P', 'N', 7, 8, 6, 2], ['pt', 'T', -135, 15, 34, 6, 4]],
+      poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [124, 74], f: -150 } }, { P: [70, 128], t: -150, a: [60, 20], l: { t: [124, 74], f: -105 } }] },
+    'elev-pelvica-maq': { v: 's', vb: '0 39 240 180', tm: [0.4, 1, 1, 2], cap: 'Suba até alinhar tronco e coxas e segure 1 s',
+      props: [F(162), ['bx', 16, 123, 46, 7], ['ln', 24, 130, 24, 161, 4], ['ln', 54, 130, 54, 161, 4], ['lv', 138, 160, 'P', 0, -10, 7]],
+      poses: [{ P: [103.3, 145], t: -150, a: [20, 45], l: { t: [152, 160] } }, { P: [110, 120], t: 180, a: [-10, 15], l: { t: [152, 160] } }] },
+    'abd-lado': { v: 'f', vb: '0 35 240 180', tm: [0.4, 1, 1, 2], cap: 'Suba a perna de cima até uns 30°, segure 1 s e desça devagar',
+      props: [MAT],
+      poses: [{ P: [140, 151], t: -172, a: [180, -62], a2: [8, 4], l: [0, 0, 0, 1, 1, 0.3], l2: [9, 2, 0, 1, 1, 0.3] },
+        { P: [140, 151], t: -172, a: [180, -62], a2: [8, 4], l: [0, 0, 0, 1, 1, 0.3], l2: [-24, -24, -24, 1, 1, 0.3] }] },
+    'abd-supra': { v: 's', vb: '0 50 240 180', tm: [0.4, 1, 0.8, 1.6], cap: 'Tire só os ombros do chão, sem puxar o pescoço',
+      props: [MAT],
+      poses: [{ P: [130, 156], t: 180, c: 0, a: [-10, 190, 0.8, 0.65], l: { t: [160, 162] } },
+        { P: [130, 156], t: 180, c: 30, a: [20, 220, 0.8, 0.65], l: { t: [160, 162] } }] },
+    'extensora-iso': { v: 's', still: true, cap: 'Segure parado com o joelho dobrado a uns 60°',
+      props: [F(168), ...SEAT(96), BACK, ['dl', 'A', 'K', -6, 7, 6, 1]],
+      poses: [{ P: [96, 124], t: -100, a: [80, 20], l: [0, 60, -30] }] }
   };
-  f['triceps-barra'] = f['triceps-corda'];
   return f;
 })();
 (function () {
@@ -897,13 +1014,15 @@ const FIG = (function () {
   })();
 
   /* ---------- estado ---------- */
+  /* item do plano com o que muda só para a pessoa (jo / ha) */
+  function mergeItem(it, p) { const o = Object.assign({}, it); delete o.jo; delete o.ha; return Object.assign(o, p === 'joao' ? it.jo : it.ha); }
   function buildDays(p) {
     return PLAN[p].slots.map((s) => {
       const code = s.w, W = WORKOUTS[code];
       return {
         id: code + '-' + s.dow, code: code, dow: s.dow, c: W.c, title: W.title, short: W.short, focus: W.focus,
         together: !!s.together, solo: s.solo, warm: s.warm, extra: s.extra, end: s.end, keep: !!s.keep,
-        items: W.items.map((it) => { const o = Object.assign({}, it); delete o.jo; delete o.ha; return Object.assign(o, p === 'joao' ? it.jo : it.ha); })
+        items: W.items.map((it) => mergeItem(it, p))
       };
     });
   }
@@ -912,6 +1031,17 @@ const FIG = (function () {
   const state = { person: prefs.person, day: null };
   const openSet = new Set();
   const daysOf = (p) => DAYS[p];
+  /* o item do plano com este exercício, na versão da pessoa, mesmo de um treino que ela não faz nesta semana
+     (a alternativa reaproveita avisos e marcações dele) */
+  const ITEMS = { joao: [], haniere: [] };
+  Object.keys(ITEMS).forEach((p) => Object.keys(WORKOUTS).forEach((w) => WORKOUTS[w].items.forEach((it) => ITEMS[p].push(mergeItem(it, p)))));
+  const itemOfEx = (p, id) => ITEMS[p].find((x) => x.ex === id) || null;
+  /* nome do que foi feito num registro "pessoa|exercício" ou "pessoa|exercício--alt" */
+  function nameOfKey(k) {
+    const bk = baseOf(k), parts = bk.split('|'), it = itemOfEx(parts[0], parts[1]);
+    const A = k !== bk ? (it ? altOf(it) : altOf({ ex: parts[1] })) : null;
+    return EX[A ? A.id : parts[1]].n;
+  }
   /* abre no próximo treino a partir de hoje */
   function goDefault(p) {
     const days = daysOf(p);
@@ -923,6 +1053,20 @@ const FIG = (function () {
 
   /* ---------- prescrição ---------- */
   function rxFor(p, it, ph) { const ex = EX[it.ex]; const arr = it.rx || ex.rx || RX[p][it.k] || RX[p].comp; return arr[ph]; }
+  /* alternativa de um item do plano: { id, sets, note }. A definida no treino vale mais que a do exercício. */
+  function altOf(it) {
+    const src = it.alt ? it : EX[it.ex];
+    return src && src.alt && EX[src.alt] ? { id: src.alt, sets: src.altSets || 0, note: src.altNote || '' } : null;
+  }
+  /* séries da alternativa: as dela, se tiver; senão as do exercício que ela substitui */
+  function altRx(p, it, ph, A) {
+    const ax = EX[A.id];
+    let rx = ax.rx ? ax.rx[ph] : rxFor(p, it, ph);
+    if (A.sets) rx = rx.replace(/^\d+/, String(A.sets));
+    if (ax.per && !/ por /.test(rx)) rx += ' por ' + ax.per;
+    return rx;
+  }
+  const isSec = (rx) => /\d\s*s\b/.test(goalOf(rx));
   function setsOf(rx) { const m = /^(\d+)\s*×/.exec(rx); return m ? Math.min(6, +m[1]) : 3; }
   function topOf(rx) { const m = /×\s*(\d+)(?:–(\d+))?/.exec(rx); return m ? +(m[2] || m[1]) : null; }
   function goalOf(rx) { const m = /×\s*(.+)$/.exec(rx || ''); return m ? m[1].trim() : ''; }
@@ -1054,7 +1198,38 @@ const FIG = (function () {
       const a = J[pr[1]], b = J[pr[2]], u = unit(a, b), n = [u[1], -u[0]], o = pr[3], e1 = pr[5] || 0, e2 = pr[6] || 0;
       return [svgLine([a[0] + n[0] * o - u[0] * e1, a[1] + n[1] * o - u[1] * e1], [b[0] + n[0] * o + u[0] * e2, b[1] + n[1] * o + u[1] * e2], 'eql', pr[4]), ''];
     }
-    if (k === 'dt') { const p = J[pr[1]]; return ['', svgDot([p[0] + (pr[3] || 0), p[1] + (pr[4] || 0)], pr[2], 'ld')]; }
+    if (k === 'dt') {
+      const p = J[pr[1]], far = pr[5] === 'b', c = svgDot([p[0] + (pr[3] || 0), p[1] + (pr[4] || 0)], pr[2], far ? 'ld ldf' : 'ld');
+      return far ? [c, ''] : ['', c];
+    }
+    /* pegadores presos ao cabo: barra reta, triângulo e corda (entre as duas mãos) */
+    if (k === 'bar' || k === 'tri' || k === 'rope') {
+      const A = J[pr[1]], B = J[pr[2]], m = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2], c = [pr[4], pr[5]], v = unit(m, c);
+      if (k === 'bar') {
+        const u = unit(A, B), e = pr[3];
+        return [svgLine(c, m, 'cab'), svgLine([A[0] - u[0] * e, A[1] - u[1] * e], [B[0] + u[0] * e, B[1] + u[1] * e], 'ldl', 4)];
+      }
+      const h = k === 'tri' ? pr[3] : Math.sqrt(Math.max(16, pr[3] * pr[3] - Math.pow(Math.hypot(B[0] - A[0], B[1] - A[1]) / 2, 2)));
+      const ap = [m[0] + v[0] * h, m[1] + v[1] * h];
+      if (k === 'tri') return [svgLine(c, ap, 'cab'), '<polyline class="ldl" stroke-width="3" stroke-linejoin="round" points="' + [A, ap, B, A].map((q) => r1(q[0]) + ',' + r1(q[1])).join(' ') + '"/>'];
+      return [svgLine(c, ap, 'cab'), svgLine(ap, A, 'ldl', 3) + svgLine(ap, B, 'ldl', 3) + svgDot(A, 3, 'ld') + svgDot(B, 3, 'ld')];
+    }
+    /* halter visto de frente: cabo com uma anilha em cada ponta */
+    if (k === 'db') {
+      const p = J[pr[1]], u = V(pr[2], pr[3] / 2), a = [p[0] - u[0], p[1] - u[1]], b = [p[0] + u[0], p[1] + u[1]];
+      return ['', svgLine(a, b, 'ldl', 3) + svgDot(a, 4.5, 'ld') + svgDot(b, 4.5, 'ld')];
+    }
+    /* alavanca de máquina com rolo: eixo fixo [x, y] e rolo junto de uma articulação */
+    if (k === 'lv') {
+      const p = J[pr[3]], c = [p[0] + pr[4], p[1] + pr[5]];
+      return [svgLine([pr[1], pr[2]], c, 'eql', 5) + svgDot([pr[1], pr[2]], 4, 'eq'), svgDot(c, pr[6], 'pad')];
+    }
+    /* plataforma com inclinação fixa, começando numa articulação (ponta do pé) */
+    if (k === 'pt') {
+      const p = J[pr[1]], u = V(pr[2], 1), n = V(pr[2] + 90, pr[6] || 0), h = pr[4] / 2;
+      const c = [p[0] + u[0] * pr[3] + n[0], p[1] + u[1] * pr[3] + n[1]];
+      return ['', svgLine([c[0] - u[0] * h, c[1] - u[1] * h], [c[0] + u[0] * h, c[1] + u[1] * h], 'ldl', pr[5])];
+    }
     if (k === 'dl') {
       const A = J[pr[1]], K = J[pr[2]], u = unit(K, A), n = [u[1], -u[0]];
       const c = [A[0] + u[0] * pr[3] + n[0] * pr[4], A[1] + u[1] * pr[3] + n[1] * pr[4]];
@@ -1184,7 +1359,7 @@ const FIG = (function () {
   }
 
   function callout(kind, text) {
-    const label = { warn: 'Cuidado', tip: 'Juntos', why: 'Por quê', prog: 'Progressão', sub: 'Alternativa' }[kind];
+    const label = { warn: 'Cuidado', tip: 'Juntos', why: 'Por quê', prog: 'Progressão' }[kind];
     const mark = kind === 'warn' ? '<span class="tape" aria-hidden="true"></span>' : kind === 'tip' ? ICON.pair : '';
     return '<div class="callout c-' + kind + '"><h4>' + mark + label + '</h4><p>' + esc(text) + '</p></div>';
   }
@@ -1196,13 +1371,6 @@ const FIG = (function () {
     const hasToday = !!(logs[key] || {})[TODAY];
     const flash = sync.flash && sync.flash.base === bk ? sync.flash.text : '';
     if (flash) sync.flash = null;
-    const altBox = alt.has
-      ? '<div class="alt-tog" role="group" aria-label="Qual você fez hoje">' +
-          '<button type="button" data-act="alt" data-key="' + esc(bk) + '" data-v="0" aria-pressed="' + !alt.on + '"' + (ro ? ' disabled' : '') + '>Principal</button>' +
-          '<button type="button" data-act="alt" data-key="' + esc(bk) + '" data-v="1" aria-pressed="' + alt.on + '"' + (ro ? ' disabled' : '') + '>Alternativa</button>' +
-        '</div>' +
-        (alt.on ? '<p class="alt-name"><b>Alternativa:</b> ' + esc(alt.text) + '</p>' : '')
-      : '';
     const mvLabel = alt.on ? 'Foi a principal' : 'Foi a alternativa';
     const mvBtn = (d, label, cls) => '<button type="button" class="mv' + (cls || '') + '" data-act="move" data-from="' + esc(key) + '" data-to="' + esc(other) + '" data-d="' + d + '"' + (cls && !hasToday ? ' hidden' : '') + '>' + label + '</button>';
     const prev = prevEntries(key);
@@ -1213,7 +1381,7 @@ const FIG = (function () {
       hint = '<p class="hint">' + ICON.up + '<span>' + (p === 'haniere' ? 'Pode subir a carga hoje, se a dor ficou em até 3 no último treino.' : 'Pode subir a carga hoje.') + '</span></p>';
     } else if (adv && adv.k === 'down') {
       const faixa = adv.rg[0] === adv.rg[1] ? 'da meta de ' + adv.rg[0] : 'da faixa de ' + adv.rg[0] + '–' + adv.rg[1];
-      hint = '<p class="hint hint-down">' + ICON.down + '<span>Da última vez uma série ficou com ' + adv.min + ' repetições, abaixo ' + faixa + '. Hoje, baixe um pouco a carga: uns 10%, perto de ' + fmtKg(adv.sug) + ' kg.</span></p>';
+      hint = '<p class="hint hint-down">' + ICON.down + '<span>Da última vez uma série ficou com ' + adv.min + (isSec(rx) ? ' s' : ' repetições') + ', abaixo ' + faixa + (isSec(rx) ? ' s' : '') + '. Hoje, baixe um pouco a carga: uns 10%, perto de ' + fmtKg(adv.sug) + ' kg.</span></p>';
     }
     if (!hint && !ro && last && !hasReps(last) && !hasReps(e)) {
       hint = '<p class="hint hint-reps"><span>No último treino faltaram as repetições. Anote quantas você fez em cada série: é com elas que o app avisa quando dá para subir a carga.</span></p>';
@@ -1232,11 +1400,11 @@ const FIG = (function () {
     const hist = prev.slice(0, 3).map(([d, en]) => '<li><span>' + dshort(d) + ' · ' + esc(fmtEntry(en)) + '</span>' + (alt.has && !ro ? mvBtn(d, mvLabel) : '') + '</li>').join('');
     const what = alt.on ? 'da alternativa' : 'deste exercício';
     return '<div class="log" data-key="' + esc(key) + '">' +
-      '<h4>Registro de hoje · ' + dshort(TODAY) + '</h4>' + altBox + hint +
+      '<h4>Registro de hoje · ' + dshort(TODAY) + '</h4>' + hint +
       '<div class="kg-row"><label for="' + base + '-kg">Carga (kg)</label><input type="text" inputmode="decimal" maxlength="6" autocomplete="off" enterkeyhint="next" id="' + base + '-kg" data-log="kg" value="' + (Number.isFinite(e.kg) ? fmtKg(e.kg) : '') + '" placeholder="' + kgPh + '"' + (ro ? ' disabled' : '') + '></div>' +
-      '<p class="reps-lab" id="' + base + '-rl">Repetições em cada série' + (goal ? '<span>meta: ' + esc(goal) + '</span>' : '') + '</p>' +
+      '<p class="reps-lab" id="' + base + '-rl">' + (isSec(rx) ? 'Segundos' : 'Repetições') + ' em cada série' + (goal ? '<span>meta: ' + esc(goal) + '</span>' : '') + '</p>' +
       '<div class="reps-row' + (need ? ' need' : '') + '" style="grid-template-columns:repeat(' + sets + ',minmax(0,1fr))" role="group" aria-labelledby="' + base + '-rl">' + reps + '</div>' +
-      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver: para anotar daqui, o João precisa te convidar como editor.' : flash ? esc(flash) : need ? 'Falta anotar as repetições de cada série.' : noKg ? 'Faltou a carga. Se foi sem peso, pode deixar em branco.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
+      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver: para anotar daqui, o João precisa te convidar como editor.' : flash ? esc(flash) : need ? (isSec(rx) ? 'Falta anotar os segundos de cada série.' : 'Falta anotar as repetições de cada série.') : noKg ? 'Faltou a carga. Se foi sem peso, pode deixar em branco.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
       (alt.has && !ro ? mvBtn(TODAY, alt.on ? 'Anotou aqui por engano? Passar o registro de hoje para a principal' : 'Fez a alternativa? Passar o registro de hoje para ela', ' mv-today') : '') +
       (hist ? '<div><h4>Últimos treinos' + (alt.on ? ' da alternativa' : '') + '</h4><ul class="hist">' + hist + '</ul></div>' : '<p class="saved">Ainda sem registros anteriores ' + what + '.</p>') +
       evo +
@@ -1264,28 +1432,43 @@ const FIG = (function () {
   }
 
   function renderItem(it, i, D, ds) {
-    const p = state.person, ph = prefs.phase, ex = EX[it.ex];
-    const rx = rxFor(p, it, ph), rr = D.keep && ph === 2 && it.k !== 'core' ? 'sobram 2–3' : rrText(p, it.k, ph);
+    const p = state.person, ph = prefs.phase;
+    const bk = p + '|' + it.ex;
+    const loggable = it.k !== 'core';
+    const A = loggable ? altOf(it) : null;
+    const alt = { base: bk, has: !!A, on: false };
+    alt.on = alt.has && altOn(bk);
+    const key = alt.on ? bk + ALT : bk;
+    /* com a alternativa escolhida, o cartão mostra ela: nome, animação, passo a passo e séries.
+       Avisos e marcação vêm do item dela no plano da pessoa, quando ela também faz parte do treino. */
+    const ex = EX[alt.on ? A.id : it.ex], src = alt.on ? itemOfEx(p, A.id) || {} : it;
+    const rx = alt.on ? altRx(p, it, ph, A) : rxFor(p, it, ph), rr = D.keep && ph === 2 && it.k !== 'core' ? 'sobram 2–3' : rrText(p, it.k, ph);
     const rxm = /^(\d+\s*×\s*\d+(?:–\d+)?(?:\s*s\b)?)\s*(.*)$/.exec(rx);
     const rxMain = rxm ? rxm[1] : rx;
     const rxMore = rxm ? rxm[2].replace(' (', ' · ').replace(/[()]/g, '').replace(/^·\s*/, '') : '';
     const rest = REST[it.k] || REST.comp;
-    const bk = p + '|' + it.ex;
     const done = ds.has(it.ex);
-    const loggable = it.k !== 'core';
-    const altText = it.sub || ex.sub || '';
-    const alt = { base: bk, has: loggable && !!altText, text: altText, on: false };
-    alt.on = alt.has && altOn(bk);
-    const key = alt.on ? bk + ALT : bk;
     const uid = p + '-' + D.id + '-' + i;
-    const flag = it.flag ? '<p class="flag"><span class="tape" aria-hidden="true"></span>' + esc(it.flag) + '</p>' : '';
+    const flag = src.flag ? '<p class="flag"><span class="tape" aria-hidden="true"></span>' + esc(src.flag) + '</p>' : '';
     const chips = (it.j ? '<span class="chip" title="Mesmo aparelho, na mesma hora">' + ICON.pair + 'Juntos</span>' : '') +
       (alt.on ? '<span class="chip chip-alt">Alternativa</span>' : '') +
       '<button type="button" class="chip rest-btn" id="rest-' + uid + '" data-act="rest" data-sec="' + rest[0] + '" data-name="' + esc(ex.n) + '" aria-label="Iniciar descanso de ' + rest[1] + '">' + ICON.clock + rest[1] + '</button>' +
       (loggable ? '<span class="last" data-last="' + esc(bk) + '">' + esc(lastText(bk)) + '</span>' : '');
-    const how = (it.how || ex.how).map((h) => '<li>' + esc(h) + '</li>').join('');
-    const calls = (it.warn ? callout('warn', it.warn) : '') + (it.tip ? callout('tip', it.tip) : '') + (it.why ? callout('why', it.why) : '') +
-      ((it.prog || ex.prog) ? callout('prog', it.prog || ex.prog) : '') + ((it.sub || ex.sub) ? callout('sub', it.sub || ex.sub) : '');
+    const how = ((alt.on ? null : it.how) || ex.how).map((h) => '<li>' + esc(h) + '</li>').join('');
+    const prog = src.prog || ex.prog;
+    const calls = (src.warn ? callout('warn', src.warn) : '') + (!alt.on && it.tip ? callout('tip', it.tip) : '') + (src.why ? callout('why', src.why) : '') +
+      (prog ? callout('prog', prog) : '');
+    /* escolha entre principal e alternativa, logo acima da animação */
+    const choice = alt.has
+      ? '<div class="alt-box">' +
+          '<div class="alt-tog" role="group" aria-label="Qual você vai fazer">' +
+            '<button type="button" data-act="alt" data-key="' + esc(bk) + '" data-v="0" aria-pressed="' + !alt.on + '">Principal</button>' +
+            '<button type="button" data-act="alt" data-key="' + esc(bk) + '" data-v="1" aria-pressed="' + alt.on + '">Alternativa</button>' +
+          '</div>' +
+          '<p class="alt-name">' + (alt.on ? 'No lugar de: <b>' + esc(EX[it.ex].n) + '</b>' : 'Alternativa: <b>' + esc(EX[A.id].n) + '</b>') + '</p>' +
+          (A.note ? '<p class="alt-note">' + esc(A.note) + '</p>' : '') +
+        '</div>'
+      : '';
     return '<li class="ex' + (done ? ' done' : '') + '" data-ex="' + it.ex + '">' +
       '<div class="ex-top">' +
         '<span class="num" aria-hidden="true">' + (i + 1) + '</span>' +
@@ -1296,7 +1479,7 @@ const FIG = (function () {
         '<button type="button" class="check" id="ck-' + uid + '" data-act="done" aria-pressed="' + done + '" aria-label="' + esc(ex.n) + ': marcar como feito">' + ICON.check + '</button>' +
       '</div>' +
       '<div class="ex-sub">' + flag + '<div class="chips">' + chips + '</div></div>' +
-      '<div class="ex-detail" id="det-' + uid + '" hidden>' + figHtml(it.ex, ex.n) +
+      '<div class="ex-detail" id="det-' + uid + '" hidden>' + choice + figHtml(alt.on ? A.id : it.ex, ex.n) +
         '<div><h4>Como fazer</h4><ul class="how">' + how + '</ul></div>' + calls +
         (loggable ? renderLog(key, rx, p, D, i, alt) : '') +
       '</div>' +
@@ -1374,14 +1557,15 @@ const FIG = (function () {
       const bk = baseOf(k), ex = bk.split('|')[1], idx = order.indexOf(ex);
       const pts = Object.keys(logs[k]).sort().map((d) => [d, logs[k][d]]);
       const kg = pts.filter((x) => Number.isFinite(x[1].kg)).map((x) => x[1].kg);
-      return { ex: ex, alt: k !== bk, n: pts.length, first: kg.length ? kg[0] : null, lastKg: kg.length ? kg[kg.length - 1] : null, last: pts[pts.length - 1][1], idx: idx < 0 ? 999 : idx };
+      return { ex: ex, alt: k !== bk, name: nameOfKey(k), n: pts.length, first: kg.length ? kg[0] : null, lastKg: kg.length ? kg[kg.length - 1] : null, last: pts[pts.length - 1][1], idx: idx < 0 ? 999 : idx };
     }).sort((a, b) => a.idx - b.idx || (a.alt ? 1 : 0) - (b.alt ? 1 : 0) || a.ex.localeCompare(b.ex));
     const up = [], down = [];
     rows.forEach((r) => {
       const it = itemOf[r.ex];
       if (!it) return;
-      const a = advice(r.last, rxFor(p, it, prefs.phase));
-      const label = EX[r.ex].n + (r.alt ? ' (alternativa)' : '') + (Number.isFinite(r.last.kg) ? ', ' + fmtKg(r.last.kg) + ' kg' : '');
+      const A = r.alt ? altOf(it) : null;
+      const a = advice(r.last, A ? altRx(p, it, prefs.phase, A) : rxFor(p, it, prefs.phase));
+      const label = r.name + (r.alt ? ' (alternativa)' : '') + (Number.isFinite(r.last.kg) ? ', ' + fmtKg(r.last.kg) + ' kg' : '');
       if (a && a.k === 'up') up.push(label);
       else if (a && a.k === 'down') down.push(label + ': perto de ' + fmtKg(a.sug) + ' kg');
     });
@@ -1391,7 +1575,7 @@ const FIG = (function () {
         const pc = Math.round(((r.lastKg - r.first) / r.first) * 100);
         val = fmtKg(r.first) + ' → ' + fmtKg(r.lastKg) + ' kg<b class="' + (pc >= 0 ? 'up' : 'down') + '">' + (pc >= 0 ? '+' : '−') + Math.abs(pc) + '%</b>';
       }
-      return '<li><span class="st-name">' + esc(EX[r.ex].n) + (r.alt ? '<small> · alternativa</small>' : '') + '</span><span class="st-val">' + val + ' <small>· ' + r.n + (r.n === 1 ? ' treino' : ' treinos') + '</small></span></li>';
+      return '<li><span class="st-name">' + esc(r.name) + (r.alt ? '<small> · alternativa</small>' : '') + '</span><span class="st-val">' + val + ' <small>· ' + r.n + (r.n === 1 ? ' treino' : ' treinos') + '</small></span></li>';
     }).join('');
     box.innerHTML =
       '<div><h3>Constância</h3><p>' + trained + (trained === 1 ? ' dia de treino anotado' : ' dias de treino anotados') + ' nas últimas 4 semanas' +
@@ -1960,7 +2144,8 @@ const FIG = (function () {
     Object.keys(logs).forEach((k) => {
       if (!validKey(k)) return;
       const bk = baseOf(k), parts = bk.split('|');
-      Object.keys(logs[k] || {}).forEach((d) => rows.push({ p: parts[0], ex: parts[1], alt: k !== bk, d: d, e: logs[k][d] }));
+      const name = nameOfKey(k);
+      Object.keys(logs[k] || {}).forEach((d) => rows.push({ p: parts[0], ex: parts[1], alt: k !== bk, name: name, d: d, e: logs[k][d] }));
     });
     if (!rows.length) { status('Ainda não há cargas registradas.'); return; }
     const ord = (ex) => (ex in order ? order[ex] : 999);
@@ -1972,7 +2157,7 @@ const FIG = (function () {
     const lines = [head].concat(rows.map((r) => {
       const reps = (r.e.reps || []).slice(0, maxSets);
       while (reps.length < maxSets) reps.push(null);
-      return [dshort(r.d) + '/' + r.d.slice(0, 4), NAMES[r.p], EX[r.ex].n, r.alt ? 'alternativa' : 'principal', Number.isFinite(r.e.kg) ? String(r.e.kg).replace('.', ',') : '']
+      return [dshort(r.d) + '/' + r.d.slice(0, 4), NAMES[r.p], r.name, r.alt ? 'alternativa' : 'principal', Number.isFinite(r.e.kg) ? String(r.e.kg).replace('.', ',') : '']
         .concat(reps.map((x) => (Number.isFinite(x) ? String(x) : '')));
     })).map((r) => r.map(cell).join(';'));
     const blob = new Blob(['\ufeff' + lines.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
@@ -2058,7 +2243,12 @@ const FIG = (function () {
       goDefault(state.person); renderAll();
     } else if (act === 'day') { state.day = a.dataset.v; renderWeek(); renderDay(); }
     else if (act === 'phase') { prefs.phase = +a.dataset.v; savePrefs(); renderPhase(); renderDay(); }
-    else if (act === 'alt') { flushSaves(); setAlt(a.dataset.key, a.dataset.v === '1'); sync.sig = ''; renderDay(); }
+    else if (act === 'alt') {
+      const k = a.dataset.key, v = a.dataset.v;
+      flushSaves(); setAlt(k, v === '1'); sync.sig = ''; renderDay();
+      const b = $$('[data-act="alt"]').find((x) => x.dataset.key === k && x.dataset.v === v);
+      if (b) b.focus({ preventScroll: true });
+    }
     else if (act === 'move') moveEntry(a.dataset.from, a.dataset.to, a.dataset.d);
     else if (act === 'done') setDone(a.closest('.ex'), a.getAttribute('aria-pressed') !== 'true');
     else if (act === 'rest') startTimer(+a.dataset.sec || 60, a.dataset.name || '');

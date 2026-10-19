@@ -31,6 +31,7 @@ No GitHub, use **Add file → Upload files** para substituir o `index.html`. A V
 
 - Qualquer pessoa com o link consegue ver o treino e as cargas. Só quem tem o código do treino consegue gravar.
 - Anote a carga e as repetições de cada série. É pelas repetições que o app avisa quando dá para subir a carga e quando é melhor baixar um pouco.
+- Exercícios com alternativa têm a escolha **Principal / Alternativa** no alto do cartão. Escolhendo a alternativa, o nome, a animação, o passo a passo e o registro de cargas passam a ser dela.
 - A seção **Seu progresso** mostra os dias de treino das últimas 4 semanas, o que ajustar no próximo treino e a evolução da carga em cada exercício.
 - Em **Registro de cargas**, o botão **Baixar planilha** gera um arquivo com todas as cargas, que abre no Excel e no Google Planilhas.
 - Para usar como aplicativo: no Android, toque em **Instalar** no aviso do site ou, no Chrome, em **⋮ → Instalar app**. No iPhone, abra no Safari, toque em **Compartilhar** e depois em **Adicionar à Tela de Início**.
