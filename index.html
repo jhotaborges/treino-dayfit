@@ -386,7 +386,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
       <div><p class="pr-name"><b>9/11 a 6/12</b>Base</p><p>3 séries de 10–12 nos compostos e 12–15 nos isolados: sobram 2–3 reps.</p></div>
       <div><p class="pr-name"><b>7/12 a 3/1</b>Progressão</p><p>3 séries de 8–12, e o João faz 4 nos exercícios principais. João: sobram 1–2 reps. Haniere: continua com 2–3.</p></div>
     </div>
-    <p>A página troca de fase sozinha nessas datas. Depois de 3/1, faça uma semana mais leve e uma nova conferência para montar o próximo treino.</p>
+    <p>A página troca de fase sozinha nessas datas. Depois de 3/1, faça uma nova conferência para montar o próximo treino. A semana mais leve é opcional: faça só se estiver cansado.</p>
     <h3>O que quer dizer “sobram 2”</h3>
     <p>Use uma carga que deixe você terminar a série sentindo que ainda faria mais 2 repetições com boa técnica. Iniciante não precisa treinar até a falha. A faixa de repetições é um guia: pare quando sobrarem as repetições indicadas, não num número fixo.</p>
     <h3>Quando subir a carga</h3>
@@ -444,6 +444,8 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
       <li><span><b>Cada músculo duas vezes por semana.</b> Treinar um músculo duas vezes por semana gera um pouco mais de hipertrofia do que uma vez. O João faz pernas na segunda e na quarta e a parte de cima inteira na terça e no sábado, sem juntar pernas e parte de cima no mesmo dia. O Haniere separa frente e atrás, para nunca juntar peito e costas.</span><span class="src"><a href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2016 · Sports Medicine</a></span></li>
       <li><span><b>Volume que sobe aos poucos.</b> Mais séries por semana geram mais crescimento muscular. Por isso o plano começa com 2 séries e chega a 3–4.</span><span class="src"><a href="https://doi.org/10.1080/02640414.2016.1210197" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2017 · Journal of Sports Sciences</a></span></li>
       <li><span><b>Perto do limite cresce mais.</b> Séries que terminam mais perto da falha geram um pouco mais de hipertrofia. Por isso o que vale é quantas repetições sobram, e não parar sempre no mesmo número.</span><span class="src"><a href="https://pubmed.ncbi.nlm.nih.gov/36334240/" target="_blank" rel="noopener">Refalo et al., 2023 · Sports Medicine</a></span></li>
+      <li><span><b>Cadeira flexora no lugar do stiff.</b> Em 12 semanas, o posterior da coxa cresceu mais na flexora sentada do que na deitada: 14% contra 9%. Por isso, quando o João não fizer o stiff, a troca é pela cadeira flexora, e não por mais mesa flexora.</span><span class="src"><a href="https://doi.org/10.1249/MSS.0000000000002523" target="_blank" rel="noopener">Maeo et al., 2021 · Medicine &amp; Science in Sports &amp; Exercise</a></span></li>
+      <li><span><b>Semana leve só se precisar.</b> Parar uma semana no meio de um programa de 9 semanas não mudou o ganho de músculo e tirou um pouco de força. Por isso a semana leve depois de 3/1 é opcional.</span><span class="src"><a href="https://doi.org/10.7717/peerj.16777" target="_blank" rel="noopener">Coleman et al., 2024 · PeerJ</a></span></li>
       <li><span><b>Amplitudes do joelho do Haniere.</b> Leg press e agachamento entre 45° e 0°, e cadeira extensora entre 90° e 45°, reduzem a pressão sobre a patela.</span><span class="src"><a href="https://doi.org/10.2519/jospt.2014.4936" target="_blank" rel="noopener">Powers et al., 2014 · JOSPT</a> · <a href="https://doi.org/10.1177/036354659302100319" target="_blank" rel="noopener">Steinkamp et al., 1993 · AJSM</a></span></li>
       <li><span><b>Músculo alongado também cresce.</b> Na cadeira extensora, a amplitude parcial com o joelho mais dobrado gerou hipertrofia igual ou maior que a amplitude completa.</span><span class="src"><a href="https://doi.org/10.1080/17461391.2021.1927199" target="_blank" rel="noopener">Pedrosa et al., 2022 · European Journal of Sport Science</a></span></li>
       <li><span><b>Quadril forte ajuda o joelho.</b> Na dor na frente do joelho (patelofemoral), combinar exercícios de quadril e de joelho funciona melhor do que só de joelho.</span><span class="src"><a href="https://pubmed.ncbi.nlm.nih.gov/29925502/" target="_blank" rel="noopener">Collins et al., 2018 · British Journal of Sports Medicine</a></span></li>
@@ -694,6 +696,10 @@ const WORKOUTS = {
   IB: { title: 'Inferior B', short: 'Inf B', c: 4, focus: 'Posteriores, glúteos e quadríceps',
     items: [
       { ex: 'stiff-halter', k: 'main',
+        /* altKey: a cadeira flexora começa um histórico novo; o antigo (mesa flexora) continua com o nome dela */
+        jo: { why: 'O stiff trabalha o posterior da coxa e o glúteo com o músculo alongado. Se der, faça ele.',
+          alt: 'flexora-sent', altKey: 'alt2',
+          altNote: 'Sem o stiff, faça a cadeira flexora com as mesmas séries: sentado, o posterior também trabalha alongado. Para a carga, use a da cadeira flexora de quarta.' },
         ha: { warn: 'Halteres leves, pegos no suporte, e costas retas o tempo todo. Desça só até a altura dos joelhos.' } },
       { ex: 'elev-pelvica', k: 'main', ha: { why: 'Trabalha glúteo e posterior de coxa sem carregar a coluna.' } },
       { ex: 'hack', k: 'comp',
@@ -744,12 +750,13 @@ const WORKOUTS = {
       { ex: 'rosca-w', k: 'iso' },
       { ex: 'triceps-corda', k: 'iso', alt: 'triceps-frances' }
     ] },
-  UB: { title: 'Superior B', short: 'Sup B', c: 3, focus: 'Peito, costas, ombro de trás, bíceps e tríceps',
+  UB: { title: 'Superior B', short: 'Sup B', c: 3, focus: 'Peito, costas, ombros, bíceps e tríceps',
     items: [
       { ex: 'supino-incl-halter', k: 'main' },
       { ex: 'puxada-neutra', k: 'comp', alt: 'pulldown-reto' },
       { ex: 'remada-unilateral', k: 'comp' },
       { ex: 'voador', k: 'iso' },
+      { ex: 'elev-lateral', k: 'iso' },
       { ex: 'crucifixo-inv', k: 'iso' },
       { ex: 'rosca-scott', k: 'iso' },
       { ex: 'triceps-barra', k: 'iso', alt: 'triceps-uni' },
@@ -1069,7 +1076,7 @@ const FIG = (function () {
   /* nome do que foi feito num registro "pessoa|exercício" ou "pessoa|exercício--alt" */
   function nameOfKey(k) {
     const bk = baseOf(k), parts = bk.split('|'), it = itemOfEx(parts[0], parts[1]);
-    const A = k !== bk ? (it ? altOf(it) : altOf({ ex: parts[1] })) : null;
+    const A = k !== bk ? (it && k === altKeyOf(bk) ? altOf(it) : altOf({ ex: parts[1] })) : null;
     return EX[A ? A.id : parts[1]].n;
   }
   /* abre no próximo treino a partir de hoje */
@@ -1123,13 +1130,16 @@ const FIG = (function () {
     return reps.length ? kg + ' · ' + reps.join('/') : kg;
   }
   function prevEntries(key) { const m = logs[key] || {}; return Object.keys(m).filter((d) => d !== TODAY).sort().reverse().map((d) => [d, m[d]]); }
-  /* a alternativa de cada exercício tem o próprio histórico, guardado em "pessoa|exercício--alt" */
+  /* a alternativa de cada exercício tem o próprio histórico, guardado em "pessoa|exercício--alt".
+     Quando a alternativa de um exercício muda, o item ganha altKey (ex.: "alt2"): a nova alternativa começa
+     um histórico em "pessoa|exercício--alt2", e o antigo continua com o nome da alternativa padrão do exercício. */
   const ALT = '--alt';
-  const baseOf = (k) => (k.slice(-ALT.length) === ALT ? k.slice(0, -ALT.length) : k);
+  const baseOf = (k) => k.replace(/--alt\d*$/, '');
+  const altKeyOf = (bk) => { const pr = bk.split('|'), it = itemOfEx(pr[0], pr[1]); return bk + (it && it.altKey ? '--' + it.altKey : ALT); };
   function lastText(base) {
-    const tm = (logs[base] || {})[TODAY], ta = (logs[base + ALT] || {})[TODAY];
+    const tm = (logs[base] || {})[TODAY], ta = (logs[altKeyOf(base)] || {})[TODAY];
     if (tm || ta) return 'Hoje' + (tm ? '' : ', alternativa') + ': ' + fmtEntry(tm || ta);
-    const pm = prevEntries(base)[0], pa = prevEntries(base + ALT)[0];
+    const pm = prevEntries(base)[0], pa = prevEntries(altKeyOf(base))[0];
     const p = pa && (!pm || pa[0] > pm[0]) ? pa : pm;
     return p ? 'Última (' + dshort(p[0]) + (p === pa ? ', alternativa' : '') + '): ' + fmtEntry(p[1]) : '';
   }
@@ -1137,9 +1147,9 @@ const FIG = (function () {
   function altOn(base) {
     const c = prefs.alt[base];
     if (c && c.d === TODAY) return c.v === 1;
-    const tm = (logs[base] || {})[TODAY], ta = (logs[base + ALT] || {})[TODAY];
+    const tm = (logs[base] || {})[TODAY], ta = (logs[altKeyOf(base)] || {})[TODAY];
     if (tm || ta) return !tm;
-    const pm = prevEntries(base)[0], pa = prevEntries(base + ALT)[0];
+    const pm = prevEntries(base)[0], pa = prevEntries(altKeyOf(base))[0];
     return !!pa && (!pm || pa[0] > pm[0]);
   }
   function setAlt(base, v) {
@@ -1396,7 +1406,7 @@ const FIG = (function () {
 
   function renderLog(key, rx, p, D, i, alt, rr) {
     const sets = setsOf(rx), top = topOf(rx), goal = goalOf(rx), ro = sync.mode === 'cloud-ro';
-    const bk = alt.base, other = alt.on ? bk : bk + ALT;
+    const bk = alt.base, other = alt.on ? bk : altKeyOf(bk);
     const e = (logs[key] || {})[TODAY] || { kg: null, reps: [] };
     const hasToday = !!(logs[key] || {})[TODAY];
     const flash = sync.flash && sync.flash.base === bk ? sync.flash.text : '';
@@ -1472,7 +1482,7 @@ const FIG = (function () {
     const A = loggable ? altOf(it) : null;
     const alt = { base: bk, has: !!A, on: false };
     alt.on = alt.has && altOn(bk);
-    const key = alt.on ? bk + ALT : bk;
+    const key = alt.on ? altKeyOf(bk) : bk;
     /* com a alternativa escolhida, o cartão mostra ela: nome, animação, passo a passo e séries.
        Avisos e marcação vêm do item dela no plano da pessoa, quando ela também faz parte do treino. */
     const ex = EX[alt.on ? A.id : it.ex], src = alt.on ? itemOfEx(p, A.id) || {} : it;
@@ -1591,12 +1601,13 @@ const FIG = (function () {
       const bk = baseOf(k), ex = bk.split('|')[1], idx = order.indexOf(ex);
       const pts = Object.keys(logs[k]).sort().map((d) => [d, logs[k][d]]);
       const kg = pts.filter((x) => Number.isFinite(x[1].kg)).map((x) => x[1].kg);
-      return { ex: ex, alt: k !== bk, name: nameOfKey(k), n: pts.length, first: kg.length ? kg[0] : null, lastKg: kg.length ? kg[kg.length - 1] : null, last: pts[pts.length - 1][1], idx: idx < 0 ? 999 : idx };
+      return { k: k, ex: ex, alt: k !== bk, name: nameOfKey(k), n: pts.length, first: kg.length ? kg[0] : null, lastKg: kg.length ? kg[kg.length - 1] : null, last: pts[pts.length - 1][1], idx: idx < 0 ? 999 : idx };
     }).sort((a, b) => a.idx - b.idx || (a.alt ? 1 : 0) - (b.alt ? 1 : 0) || a.ex.localeCompare(b.ex));
     const up = [], down = [];
     rows.forEach((r) => {
       const it = itemOf[r.ex];
-      if (!it) return;
+      /* alternativa que saiu do plano: o histórico fica na lista, sem dica de carga */
+      if (!it || (r.alt && r.k !== altKeyOf(baseOf(r.k)))) return;
       const A = r.alt ? altOf(it) : null;
       const a = advice(r.last, A ? altRx(p, it, prefs.phase, A) : rxFor(p, it, prefs.phase));
       const label = r.name + (r.alt ? ' (alternativa)' : '') + (Number.isFinite(r.last.kg) ? ', ' + fmtKg(r.last.kg) + ' kg' : '');
@@ -1867,7 +1878,7 @@ const FIG = (function () {
   }
   function daySig() {
     const D = curDay();
-    return sync.mode + '|' + D.items.map((it) => { const k = state.person + '|' + it.ex; return JSON.stringify(logs[k] || {}) + JSON.stringify(logs[k + ALT] || {}); }).join('#');
+    return sync.mode + '|' + D.items.map((it) => { const k = state.person + '|' + it.ex; return JSON.stringify(logs[k] || {}) + JSON.stringify(logs[altKeyOf(k)] || {}); }).join('#');
   }
   function editing() { const a = document.activeElement; return !!(a && a.closest && a.closest('.log')); }
   function refreshData() {
