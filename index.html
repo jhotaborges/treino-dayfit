@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#F1F3F6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E1115" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231D5FD1'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%23fff' stroke-opacity='.35' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23F1F3F6'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Cpath d=%22M32 1.0 L36.3 16.1 L44.2 10.8 L43.7 20.3 L58.8 16.5 L47.9 27.7 L56.5 32.0 L47.9 36.3 L58.8 47.5 L43.7 43.7 L44.2 53.2 L36.3 47.9 L32 63.0 L27.7 47.9 L19.8 53.2 L20.3 43.7 L5.2 47.5 L16.1 36.3 L7.5 32.0 L16.1 27.7 L5.2 16.5 L20.3 20.3 L19.7 10.8 L27.7 16.1Z%22 fill=%22%23F2701E%22/%3E%3Cpath d=%22M32 22.0 L34.5 29.5 L42 32.0 L34.5 34.5 L32 42.0 L29.5 34.5 L22 32.0 L29.5 29.5Z%22 fill=%22%23151A21%22/%3E%3C/svg%3E">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Treino">
+<meta name="apple-mobile-web-app-title" content="Mr. Boom">
+<meta name="description" content="Mr. Boom: treinos de hipertrofia, cronômetro de descanso e registro de cargas.">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Treino João &amp; Haniere</title>
+<title>Mr. Boom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Big+Shoulders+Display:wght@700;800&display=swap">
@@ -32,6 +33,7 @@
   --d4:#137A4B; --on-d4:#FFFFFF;
   --ok-bg:#E1F3E8; --ok-ink:#17693A;
   --warn-bg:#FBEFD6; --warn-ink:#875400;
+  --brand:#F2701E; --on-brand:#151A21; --brand-ink:#A84206;
   --stop-bg:#FBE3E1; --stop-ink:#A5251E;
   --tape-a:#F2C200; --tape-b:#151A21;
   --eq:#C3CBD6;
@@ -51,6 +53,7 @@
     --d4:#3CC784; --on-d4:#0E1115;
     --ok-bg:#132A1D; --ok-ink:#62D596;
     --warn-bg:#2D2410; --warn-ink:#F2BC52;
+    --brand:#FF8A3D; --on-brand:#0E1115; --brand-ink:#FF9A52;
     --stop-bg:#331917; --stop-ink:#FF8479;
     --tape-b:#0E1115;
     --eq:#3A434F;
@@ -67,6 +70,7 @@
   --d4:#3CC784; --on-d4:#0E1115;
   --ok-bg:#132A1D; --ok-ink:#62D596;
   --warn-bg:#2D2410; --warn-ink:#F2BC52;
+  --brand:#FF8A3D; --on-brand:#0E1115; --brand-ink:#FF9A52;
   --stop-bg:#331917; --stop-ink:#FF8479;
   --tape-b:#0E1115;
   --eq:#3A434F;
@@ -92,17 +96,21 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 /* barra superior */
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .topbar-in{max-width:680px;margin-inline:auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{font-family:var(--display);font-weight:800;font-size:22px;line-height:1;letter-spacing:.01em;text-transform:uppercase}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:22px;line-height:1;letter-spacing:.01em;text-transform:uppercase}
+.marca-boom{flex:none;width:56px;height:56px}
+.marca-top{width:32px;height:32px}
+.mb-raio{fill:var(--brand)}
+.mb-nucleo{fill:var(--ink)}
 .brand small{display:block;margin-top:4px;font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;padding:3px;border-radius:12px;background:var(--surface-2)}
-.seg button{border:0;background:transparent;border-radius:9px;padding:8px 14px;min-height:40px;font-weight:700;font-size:15px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:8px 14px;min-height:44px;font-weight:700;font-size:15px}
 .seg button[aria-pressed="true"]{background:var(--surface);box-shadow:var(--shadow)}
 
 /* estrutura */
 .app{max-width:680px;margin-inline:auto;padding-inline:16px;padding-block:18px 150px;display:grid;gap:30px}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .plan-top{display:grid;gap:14px}
-.lede{color:var(--muted);font-size:15px}
+.lede{color:var(--muted);font-size:16px}
 
 /* semana */
 .week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
@@ -134,9 +142,6 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .sync[data-mode="cloud-ro"] .sync-dot{background:var(--warn-ink)}
 .log input:disabled{opacity:.55}
 .sync[data-mode="pin"] .sync-dot,.sync[data-off="1"] .sync-dot{background:var(--warn-ink)}
-.pin{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-.pin label{font-size:14px;font-weight:700}
-.pin input{width:130px;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-size:18px;font-weight:700;text-align:center;letter-spacing:.12em}
 
 /* dia */
 .day{display:grid;gap:14px}
@@ -152,8 +157,8 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .notes{display:grid;gap:8px}
 .note{display:flex;align-items:flex-start;gap:10px;font-size:15px}
 .note svg{flex:none;margin-top:3px;color:var(--muted)}
-.prog{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
-.prog-track{flex:1;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.prog{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.prog-track{flex:1;height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
 .prog-fill{height:100%;width:0;background:var(--day);transition:width .3s ease}
 .tap-hint{font-size:14px;color:var(--muted)}
 
@@ -181,21 +186,21 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .ex-rx b{font-family:var(--display);font-weight:800;font-size:24px;line-height:1;letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .rx-more{font-size:14px;font-weight:700}
 .rr{font-size:14px;color:var(--muted)}
-.check{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--muted)}
+.check{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--muted)}
 .check svg{opacity:.45}
 .check[aria-pressed="true"]{background:var(--day);border-color:var(--day);color:var(--on-day)}
 .check[aria-pressed="true"] svg{opacity:1}
 .ex-sub{display:grid;gap:8px;padding:9px 12px 14px 48px}
 .chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
-.chip{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:3px 10px;border-radius:999px;border:1px solid transparent;background:var(--surface-2);font-size:13px;font-weight:700;line-height:1.2}
-.rest-btn{border-color:var(--line);background:var(--surface)}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:3px 10px;border-radius:999px;border:1px solid transparent;background:var(--surface-2);font-size:14px;font-weight:700;line-height:1.2}
+.rest-btn{min-height:44px;padding:6px 14px;border-color:var(--line);background:var(--surface)}
 .rest-btn:hover{border-color:var(--muted)}
-.last{font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.last{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
 .flag{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700}
 .tape{flex:none;display:inline-block;width:14px;height:14px;border-radius:3px;background:repeating-linear-gradient(135deg,var(--tape-a) 0 3.5px,var(--tape-b) 3.5px 7px)}
 .ex-detail{display:grid;gap:14px;padding:0 12px 18px 48px}
 .ex-detail h4{margin-bottom:5px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.how{margin:0;padding-left:18px;display:grid;gap:5px;font-size:15.5px}
+.how{margin:0;padding-left:18px;display:grid;gap:8px;font-size:17px;line-height:1.55}
 .callout{display:grid;gap:3px;font-size:15px}
 .callout h4{display:flex;align-items:center;gap:7px;margin-bottom:0}
 .c-warn h4{color:var(--ink)}
@@ -208,7 +213,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .reps-row{display:grid;gap:8px;max-width:330px}
 .reps-row.need input{border-color:var(--warn-ink);box-shadow:inset 0 0 0 1px var(--warn-ink)}
 .field{display:grid;gap:3px;min-width:0;font-size:12px;font-weight:700;color:var(--muted);text-align:center}
-.log input{width:100%;height:46px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.log input{width:100%;height:52px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
 .log input::placeholder{color:var(--muted);opacity:.6}
 .kg-row input{width:92px}
 .hint{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:var(--ok-bg);color:var(--ok-ink);font-size:14px;font-weight:700}
@@ -218,7 +223,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .hist{margin:0;padding:0;list-style:none;display:grid;gap:2px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
 .hist li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 12px}
 .alt-tog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-width:330px}
-.alt-tog button{min-height:42px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:14px;font-weight:700}
+.alt-tog button{min-height:48px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:14px;font-weight:700}
 .alt-tog button[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:var(--shadow)}
 .alt-box{display:grid;gap:6px}
 .alt-name{font-size:14.5px}
@@ -265,17 +270,28 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .pain-list dt{padding:4px 8px;border-radius:7px;font-size:13.5px;font-weight:700;text-align:center}
 .pain-list dd{margin:0}
 .avoid li b{font-weight:700}
+.acc{border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.acc > summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:3px 14px;min-height:64px;padding:14px 16px;cursor:pointer;border-radius:16px}
+.acc > summary::-webkit-details-marker{display:none}
+.acc > summary h2{grid-column:1;font-size:26px}
+.acc > summary::after{content:"";grid-column:2;grid-row:1 / span 2;width:10px;height:10px;margin-right:4px;border-right:2.5px solid var(--muted);border-bottom:2.5px solid var(--muted);transform:translateY(-3px) rotate(45deg);transition:transform .2s ease}
+.acc[open] > summary::after{transform:translateY(3px) rotate(-135deg)}
+.acc[open] > summary{border-bottom:1px solid var(--line);border-radius:16px 16px 0 0}
+.acc-sub{grid-column:1;font-size:15px;color:var(--muted)}
+.acc-in{display:grid;gap:12px;padding:16px 16px 20px}
+.acc-sec + .acc-sec{margin-top:-18px}
+@media (prefers-reduced-motion:reduce){.acc > summary::after{transition:none}}
 .refs{list-style:none;padding:0 !important;gap:14px !important}
 .refs li{display:grid;gap:3px}
-.src{font-size:13.5px;color:var(--muted)}
+.src{font-size:14px;color:var(--muted)}
 .btn-row{display:flex;flex-wrap:wrap;gap:8px}
-.btn{min-height:44px;padding:9px 16px;border-radius:11px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-weight:700}
+.btn{min-height:48px;padding:10px 18px;border-radius:12px;border:1px solid var(--brand);background:var(--brand);color:var(--on-brand);font-weight:700}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .restore{display:grid;gap:8px}
 .restore label{font-size:14px;font-weight:700}
 textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:14px;line-height:1.4;resize:vertical}
 .status{min-height:1.3em;font-size:14px;font-weight:700}
-.tip{font-size:14px;color:var(--muted)}
+.tip{font-size:15px;color:var(--muted)}
 /* evolução, recordes e progresso */
 .hint svg{flex:none}
 .hint-down{align-items:flex-start;background:var(--warn-bg);color:var(--warn-ink);font-weight:400}
@@ -322,12 +338,77 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 .t-label{grid-column:1 / -1;min-width:0;font-size:13px;font-weight:700;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .t-time{font-family:var(--display);font-weight:800;font-size:42px;line-height:1;font-variant-numeric:tabular-nums}
 .t-btns{justify-self:end;display:flex;gap:6px}
-.t-btns button{min-height:44px;padding:8px 12px;border-radius:11px;border:1px solid rgba(127,127,127,.55);background:transparent;color:var(--timer-ink);font-weight:700;font-variant-numeric:tabular-nums}
+.t-btns button{min-height:48px;padding:8px 12px;border-radius:11px;border:1px solid rgba(127,127,127,.55);background:transparent;color:var(--timer-ink);font-weight:700;font-variant-numeric:tabular-nums}
 .timer.done .t-time{color:var(--day)}
 
 @media (max-width:480px){
   .ex-detail{padding-left:12px}
 }
+/* entrada, perguntas e pessoas */
+.gate{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:28px 16px 64px}
+.gate-in{width:100%;max-width:380px;display:grid;gap:14px;justify-items:start}
+.gate-wide{max-width:560px}
+.gate-promessa{max-width:32ch;font-size:19px;font-weight:700;line-height:1.35;text-wrap:balance}
+.gate-title{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
+.gate-form{display:grid;gap:8px;width:100%}
+.gate-form label,.pform label,.pinline label{font-size:14px;font-weight:700}
+.gate-form input,.pform input:not([type="checkbox"]),.pinline input{width:100%;height:48px;padding:0 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:18px}
+.gate-form .btn{margin-top:4px}
+#form-perguntas{display:grid;gap:22px;width:100%}
+.q{margin:0;padding:0;border:0;display:grid;gap:8px;min-width:0}
+.q legend{padding:0;margin-bottom:8px;font-size:17px;font-weight:700}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts.col{display:grid}
+.opt{position:relative;display:block}
+.opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.opt span{display:block;min-height:48px;padding:12px 14px;border-radius:11px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:15px;cursor:pointer}
+.opts.dias .opt span{min-width:50px;text-align:center;padding-inline:8px}
+.opt input:checked + span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.opt input:focus-visible + span{outline:3px solid var(--focus);outline-offset:2px}
+.marca{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.marca input{flex:none;margin-top:3px;width:18px;height:18px}
+/* conta, no topo */
+.conta{position:relative}
+.conta-btn{display:inline-flex;align-items:center;gap:6px;min-height:46px;max-width:190px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:15px}
+.conta-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conta-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:230px;display:grid;padding:6px;border-radius:14px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+.conta-menu button{min-height:44px;padding:10px 12px;border:0;border-radius:9px;background:transparent;text-align:left;font-weight:700}
+.conta-menu button:hover{background:var(--surface-2)}
+.conta-menu .tip{padding:4px 12px 8px;max-width:260px}
+/* pessoas (só o administrador) */
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(14,17,21,.5);display:grid;justify-items:center;align-items:end;overflow-y:auto}
+.sheet-in{width:100%;max-width:680px;margin-top:48px;min-height:70vh;padding:18px 16px calc(28px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0;background:var(--bg);display:grid;gap:14px;align-content:start}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sheet-head h2{font-family:var(--display);font-weight:800;font-size:32px;line-height:1;letter-spacing:.01em;text-transform:uppercase}
+.pform{display:grid;gap:8px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.pform .btn{justify-self:start}
+.plist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.plist li{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.p-nome{font-weight:700;font-size:17px}
+.pinline{display:grid;gap:8px}
+body.travado{overflow:hidden}
+.link{padding:0;border:0;background:none;color:var(--focus);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.gate-bloco{display:grid;gap:14px;width:100%}
+.gate-troca{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:15px}
+.pgrupo{display:grid;gap:10px}
+.pgrupo h3{font-size:17px;font-weight:700}
+.p-user{color:var(--muted);font-size:14px}
+.aviso-pedidos{padding:10px 14px;border-radius:12px;background:var(--warn-bg);color:var(--ink);font-size:15px}
+/* perguntas de saúde */
+.priv{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:15px}
+.medidas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;max-width:340px}
+.mfield{display:grid;gap:4px;font-size:14px;font-weight:700}
+.mfield input{width:100%;height:48px;padding:0 12px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:18px;font-variant-numeric:tabular-nums}
+.q-lista{margin:0;padding-left:20px;display:grid;gap:4px;font-size:15px}
+/* saúde, no alto do treino */
+.saude-box{display:grid;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font-size:15px}
+.saude-box h2{display:flex;align-items:center;gap:8px;margin:0;font-size:17px;font-weight:700;line-height:1.3}
+.saude-box p{margin:0}
+.saude-box ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.saude-alerta{padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--ink)}
+.saude-box details{display:grid;gap:6px}
+.saude-box summary{min-height:32px;cursor:pointer;font-weight:700}
+.saude-box .dor{padding:10px 12px;border-radius:10px;background:var(--surface-2)}
 @media (min-width:560px){
   .app{padding-block:26px 150px}
   .wd .ab,.wd .lb{font-size:13px}
@@ -339,125 +420,271 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 </head>
 <body>
 
-<header class="topbar">
+<section class="gate" id="tela-carregando" aria-label="Abrindo">
+  <div class="gate-in">
+    <svg class="marca-boom" viewBox="0 0 64 64" aria-hidden="true"><path class="mb-raio" d="M32 1.0 L36.3 16.1 L44.2 10.8 L43.7 20.3 L58.8 16.5 L47.9 27.7 L56.5 32.0 L47.9 36.3 L58.8 47.5 L43.7 43.7 L44.2 53.2 L36.3 47.9 L32 63.0 L27.7 47.9 L19.8 53.2 L20.3 43.7 L5.2 47.5 L16.1 36.3 L7.5 32.0 L16.1 27.7 L5.2 16.5 L20.3 20.3 L19.7 10.8 L27.7 16.1Z"/><path class="mb-nucleo" d="M32 22.0 L34.5 29.5 L42 32.0 L34.5 34.5 L32 42.0 L29.5 34.5 L22 32.0 L29.5 29.5Z"/></svg>
+    <p class="gate-title">Mr. Boom</p>
+    <p class="lede" id="carregando-msg">Abrindo…</p>
+    <noscript><p>Esta página precisa de JavaScript para mostrar os treinos.</p></noscript>
+  </div>
+</section>
+
+<section class="gate" id="tela-entrar" aria-labelledby="h-entrar" hidden>
+  <div class="gate-in">
+    <svg class="marca-boom" viewBox="0 0 64 64" aria-hidden="true"><path class="mb-raio" d="M32 1.0 L36.3 16.1 L44.2 10.8 L43.7 20.3 L58.8 16.5 L47.9 27.7 L56.5 32.0 L47.9 36.3 L58.8 47.5 L43.7 43.7 L44.2 53.2 L36.3 47.9 L32 63.0 L27.7 47.9 L19.8 53.2 L20.3 43.7 L5.2 47.5 L16.1 36.3 L7.5 32.0 L16.1 27.7 L5.2 16.5 L20.3 20.3 L19.7 10.8 L27.7 16.1Z"/><path class="mb-nucleo" d="M32 22.0 L34.5 29.5 L42 32.0 L34.5 34.5 L32 42.0 L29.5 34.5 L22 32.0 L29.5 29.5Z"/></svg>
+    <h1 class="gate-title" id="h-entrar">Mr. Boom</h1>
+    <p class="gate-promessa">Treino de hipertrofia montado para você, com cada escolha explicada por estudos.</p>
+    <div class="gate-bloco" id="bloco-entrar">
+      <p class="lede">Entre com seu usuário e sua senha. Você só precisa fazer isso uma vez neste celular: depois ele fica logado.</p>
+      <form class="gate-form" id="form-entrar">
+        <label for="entrar-usuario">Usuário</label>
+        <input id="entrar-usuario" name="usuario" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="20" required>
+        <label for="entrar-senha">Senha</label>
+        <input id="entrar-senha" name="senha" type="password" autocomplete="current-password" maxlength="40" required>
+        <button type="submit" class="btn" id="entrar-btn">Entrar</button>
+        <p class="status" id="entrar-msg" role="status" aria-live="polite"></p>
+      </form>
+      <div class="gate-troca"><span>Primeira vez aqui?</span><button type="button" class="btn ghost" id="ir-cadastro">Criar conta</button></div>
+    </div>
+    <div class="gate-bloco" id="bloco-cadastro" hidden>
+      <p class="lede">Escolha seu usuário e sua senha. Depois, o administrador do Mr. Boom libera o seu acesso e o seu treino aparece aqui.</p>
+      <form class="gate-form" id="form-cadastro">
+        <label for="cad-nome">Seu nome</label>
+        <input id="cad-nome" name="nome" autocomplete="name" maxlength="30" required>
+        <label for="cad-usuario">Usuário</label>
+        <input id="cad-usuario" name="usuario" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="20" required aria-describedby="cad-usuario-dica">
+        <p class="tip" id="cad-usuario-dica">De 3 a 20 letras ou números, sem espaço nem acento. Pode usar ponto, hífen e sublinhado.</p>
+        <label for="cad-senha">Senha</label>
+        <input id="cad-senha" name="senha" type="password" autocomplete="new-password" minlength="6" maxlength="40" required aria-describedby="cad-senha-dica">
+        <p class="tip" id="cad-senha-dica">Pelo menos 6 caracteres.</p>
+        <label for="cad-senha2">Repita a senha</label>
+        <input id="cad-senha2" name="senha2" type="password" autocomplete="new-password" maxlength="40" required>
+        <button type="submit" class="btn" id="cad-btn">Criar conta</button>
+        <p class="status" id="cad-msg" role="status" aria-live="polite"></p>
+      </form>
+      <p class="gate-troca">Já tem conta? <button type="button" class="link" id="ir-entrar">Entrar</button></p>
+    </div>
+  </div>
+</section>
+
+<section class="gate" id="tela-aguardando" aria-labelledby="h-aguardando" hidden>
+  <div class="gate-in">
+    <svg class="marca-boom" viewBox="0 0 64 64" aria-hidden="true"><path class="mb-raio" d="M32 1.0 L36.3 16.1 L44.2 10.8 L43.7 20.3 L58.8 16.5 L47.9 27.7 L56.5 32.0 L47.9 36.3 L58.8 47.5 L43.7 43.7 L44.2 53.2 L36.3 47.9 L32 63.0 L27.7 47.9 L19.8 53.2 L20.3 43.7 L5.2 47.5 L16.1 36.3 L7.5 32.0 L16.1 27.7 L5.2 16.5 L20.3 20.3 L19.7 10.8 L27.7 16.1Z"/><path class="mb-nucleo" d="M32 22.0 L34.5 29.5 L42 32.0 L34.5 34.5 L32 42.0 L29.5 34.5 L22 32.0 L29.5 29.5Z"/></svg>
+    <p class="eyebrow" id="ag-ola">Olá!</p>
+    <h1 class="gate-title" id="h-aguardando">Conta criada</h1>
+    <p class="lede">Agora é só esperar o administrador do Mr. Boom liberar o seu acesso. Quando ele liberar, o seu treino aparece aqui. Pode fechar e voltar depois: você continua logado neste celular.</p>
+    <div class="btn-row">
+      <button type="button" class="btn" id="ag-atualizar">Ver se já foi liberado</button>
+      <button type="button" class="btn ghost" id="ag-sair">Sair</button>
+    </div>
+    <p class="status" id="ag-msg" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<section class="gate" id="tela-perguntas" aria-labelledby="h-perguntas" hidden>
+  <div class="gate-in gate-wide">
+    <p class="eyebrow" id="perg-ola">Olá!</p>
+    <h1 class="gate-title" id="h-perguntas">Vamos montar o seu treino</h1>
+    <p class="lede">São 8 perguntas rápidas. Com as respostas, o Mr. Boom escolhe o modelo de treino e a quantidade de séries, e troca os exercícios que podem forçar alguma lesão. Dá para mudar depois, no menu.</p>
+    <form id="form-perguntas" novalidate>
+      <fieldset class="q">
+        <legend>1. Quantos dias por semana você consegue treinar?</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="ndias" value="2"><span>2 dias</span></label>
+          <label class="opt"><input type="radio" name="ndias" value="3"><span>3 dias</span></label>
+          <label class="opt"><input type="radio" name="ndias" value="4"><span>4 dias</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="q" id="q-dias">
+        <legend>2. Em quais dias?</legend>
+        <p class="tip" id="dias-dica">Escolha primeiro quantos dias.</p>
+        <div class="opts dias">
+          <label class="opt"><input type="checkbox" name="dia" value="1"><span>Seg</span></label>
+          <label class="opt"><input type="checkbox" name="dia" value="2"><span>Ter</span></label>
+          <label class="opt"><input type="checkbox" name="dia" value="3"><span>Qua</span></label>
+          <label class="opt"><input type="checkbox" name="dia" value="4"><span>Qui</span></label>
+          <label class="opt"><input type="checkbox" name="dia" value="5"><span>Sex</span></label>
+          <label class="opt"><input type="checkbox" name="dia" value="6"><span>Sáb</span></label>
+          <label class="opt"><input type="checkbox" name="dia" value="0"><span>Dom</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="q">
+        <legend>3. Há quanto tempo você faz musculação?</legend>
+        <div class="opts col">
+          <label class="opt"><input type="radio" name="nivel" value="novo"><span>Nunca fiz, ou parei há mais de 6 meses</span></label>
+          <label class="opt"><input type="radio" name="nivel" value="menos1"><span>Faço há menos de 1 ano</span></label>
+          <label class="opt"><input type="radio" name="nivel" value="mais1"><span>Faço há mais de 1 ano</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="q">
+        <legend>4. Quanto tempo você tem em cada treino?</legend>
+        <div class="opts col">
+          <label class="opt"><input type="radio" name="tempo" value="curto"><span>Até 45 minutos</span></label>
+          <label class="opt"><input type="radio" name="tempo" value="normal"><span>Cerca de 1 hora</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="q">
+        <legend>5. Quer dar mais atenção a alguma parte do corpo?</legend>
+        <div class="opts col">
+          <label class="opt"><input type="radio" name="foco" value="igual"><span>Corpo todo por igual</span></label>
+          <label class="opt"><input type="radio" name="foco" value="inferior"><span>Pernas e glúteos</span></label>
+          <label class="opt"><input type="radio" name="foco" value="superior"><span>Parte de cima</span></label>
+        </div>
+      </fieldset>
+      <div class="priv" id="perg-priv">
+        <p><b>As próximas 3 perguntas são sobre a sua saúde.</b> As respostas aparecem só para você. Na lista do administrador aparecem apenas o seu nome, o usuário e o modelo de treino.</p>
+      </div>
+      <fieldset class="q">
+        <legend>6. Qual o seu peso e a sua altura?</legend>
+        <p class="tip">Responda se quiser. Com o peso, o app calcula quanta proteína comer por dia.</p>
+        <div class="medidas">
+          <label class="mfield" for="perg-peso">Peso (kg)<input type="text" id="perg-peso" inputmode="decimal" maxlength="5" autocomplete="off" placeholder="ex.: 72,5"></label>
+          <label class="mfield" for="perg-altura">Altura (cm)<input type="text" id="perg-altura" inputmode="decimal" maxlength="5" autocomplete="off" placeholder="ex.: 170"></label>
+        </div>
+      </fieldset>
+      <fieldset class="q" id="q-lesao">
+        <legend>7. Você tem alguma lesão, dor frequente ou limitação nos músculos, ossos ou articulações?</legend>
+        <p class="tip">Marque todas que valem. O treino troca os exercícios que costumam forçar essas partes e mostra cuidados nos outros.</p>
+        <div class="opts col">
+          <label class="opt"><input type="checkbox" name="lesao" value="nenhuma"><span>Não tenho</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="pescoco"><span>Pescoço ou parte de cima das costas</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="ombro"><span>Ombro</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="cotovelo"><span>Cotovelo ou punho</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="lombar"><span>Lombar (parte de baixo das costas)</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="quadril"><span>Quadril</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="joelho"><span>Joelho</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="tornozelo"><span>Tornozelo ou pé</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="osteo"><span>Osteoporose ou osteopenia</span></label>
+          <label class="opt"><input type="checkbox" name="lesao" value="outra"><span>Outra</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="q">
+        <legend>8. Alguma destas situações vale para você?</legend>
+        <ul class="q-lista">
+          <li>Um médico já disse para você evitar exercício ou só fazer com acompanhamento.</li>
+          <li>Você tem doença do coração, diabetes ou doença nos rins.</li>
+          <li>Você sente dor no peito, tontura, desmaio ou falta de ar fora do comum quando faz esforço.</li>
+        </ul>
+        <div class="opts col">
+          <label class="opt"><input type="radio" name="triagem" value="nao"><span>Não</span></label>
+          <label class="opt"><input type="radio" name="triagem" value="liberado"><span>Sim, e um médico já liberou o treino</span></label>
+          <label class="opt"><input type="radio" name="triagem" value="pendente"><span>Sim, e ainda não falei com um médico</span></label>
+        </div>
+      </fieldset>
+      <label class="marca" id="novo-ciclo-wrap" hidden><input type="checkbox" id="novo-ciclo"> Começar um ciclo novo de 12 semanas a partir de hoje (as fases voltam para a Adaptação)</label>
+      <p class="status" id="perg-msg" role="status" aria-live="polite"></p>
+      <div class="btn-row">
+        <button type="submit" class="btn" id="perg-btn">Montar meu treino</button>
+        <button type="button" class="btn ghost" id="perg-cancelar" hidden>Cancelar</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<header class="topbar" id="topbar" hidden>
   <div class="topbar-in">
-    <h1 class="brand">João &amp; Haniere<small>Treino na DAY FIT</small></h1>
-    <div class="seg" role="group" aria-label="De quem é o treino">
-      <button type="button" id="p-joao" data-act="person" data-v="joao" aria-pressed="true">João</button>
-      <button type="button" id="p-haniere" data-act="person" data-v="haniere" aria-pressed="false">Haniere</button>
+    <h1 class="brand"><svg class="marca-boom marca-top" viewBox="0 0 64 64" aria-hidden="true"><path class="mb-raio" d="M32 1.0 L36.3 16.1 L44.2 10.8 L43.7 20.3 L58.8 16.5 L47.9 27.7 L56.5 32.0 L47.9 36.3 L58.8 47.5 L43.7 43.7 L44.2 53.2 L36.3 47.9 L32 63.0 L27.7 47.9 L19.8 53.2 L20.3 43.7 L5.2 47.5 L16.1 36.3 L7.5 32.0 L16.1 27.7 L5.2 16.5 L20.3 20.3 L19.7 10.8 L27.7 16.1Z"/><path class="mb-nucleo" d="M32 22.0 L34.5 29.5 L42 32.0 L34.5 34.5 L32 42.0 L29.5 34.5 L22 32.0 L29.5 29.5Z"/></svg><span>Mr. Boom<small>Treino com ciência</small></span></h1>
+    <div class="conta">
+      <button type="button" class="conta-btn" id="conta-btn" data-act="menu" aria-expanded="false" aria-controls="conta-menu"><span id="conta-nome"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="conta-menu" id="conta-menu" hidden>
+        <button type="button" data-act="pessoas" id="m-pessoas" hidden>Pessoas</button>
+        <button type="button" data-act="perguntas" id="m-perguntas" hidden>Refazer as perguntas</button>
+        <button type="button" data-act="sair" id="m-sair">Sair</button>
+        <p class="tip" id="sair-aviso" hidden></p>
+      </div>
     </div>
   </div>
 </header>
 
-<main class="app">
+<main class="app" id="app" hidden>
   <section class="plan-top" aria-label="Semana e fase do plano">
-    <p class="lede" id="lede">Hipertrofia para iniciantes · 4 treinos por semana · 12 semanas</p>
+    <p class="lede" id="lede"></p>
+    <p class="aviso-pedidos" id="aviso-novas" hidden><span>Há 3 perguntas novas, sobre peso, altura e lesões, para o treino se adaptar a você.</span> <button type="button" class="link" data-act="perguntas">Responder</button></p>
+    <div class="saude-box" id="saude-box" hidden></div>
     <div class="week" id="week" role="group" aria-label="Dias da semana"></div>
     <div class="phase-wrap">
       <p class="eyebrow" id="phase-label">Fase do plano</p>
       <div class="phase" id="phase" role="group" aria-labelledby="phase-label"></div>
     </div>
-    <p class="sync" id="sync-line" data-mode="local" role="status"><span class="sync-dot" aria-hidden="true"></span><span id="sync-text">Cargas salvas só neste aparelho.</span></p>
+    <p class="sync" id="sync-line" data-mode="local" role="status"><span class="sync-dot" aria-hidden="true"></span><span id="sync-text">Conectando à nuvem…</span></p>
+    <p class="aviso-pedidos" id="aviso-pedidos" hidden><span id="aviso-pedidos-txt"></span> <button type="button" class="link" data-act="pessoas">Ver pedidos</button></p>
     <div class="install" id="install" hidden>
-      <p><b>Use como aplicativo.</b> Instale o treino na tela inicial do celular: abre direto e funciona mesmo sem sinal na academia.</p>
+      <p><b>Use como aplicativo.</b> Instale o Mr. Boom na tela inicial do celular: abre direto e funciona mesmo sem sinal na academia.</p>
       <p class="tip" id="ios-install" hidden>No iPhone, toque em Compartilhar e depois em Adicionar à Tela de Início.</p>
       <div class="btn-row"><button type="button" class="btn" id="btn-install" data-act="install" hidden>Instalar</button><button type="button" class="btn ghost" id="btn-install-later" data-act="install-later">Agora não</button></div>
     </div>
-    <form class="pin" id="pin-form" hidden>
-      <label for="pin-in">Código do treino</label>
-      <input id="pin-in" type="password" inputmode="numeric" autocomplete="off" maxlength="20" required>
-      <button type="submit" class="btn" id="pin-btn">Salvar código</button>
-    </form>
   </section>
 
-  <section class="day" id="day" data-day="1" aria-label="Treino do dia">
-    <noscript><p>Esta página precisa de JavaScript para mostrar os treinos.</p></noscript>
-  </section>
+  <section class="day" id="day" data-day="1" aria-label="Treino do dia"></section>
 
   <section class="guide" id="progresso" aria-labelledby="h-progresso">
     <h2 id="h-progresso">Seu progresso</h2>
     <div class="stats" id="stats"></div>
   </section>
 
-  <section class="guide" id="progredir" aria-labelledby="h-prog">
-    <h2 id="h-prog">Como progredir</h2>
-    <div class="phase-rows">
-      <div><p class="pr-name"><b>Até 8/11</b>Adaptação</p><p>2 séries de 12–15 com carga leve: sobram 3–4 reps. É a hora de aprender a regular cada aparelho.</p></div>
-      <div><p class="pr-name"><b>9/11 a 6/12</b>Base</p><p>3 séries de 10–12 nos compostos e 12–15 nos isolados: sobram 2–3 reps.</p></div>
-      <div><p class="pr-name"><b>7/12 a 3/1</b>Progressão</p><p>3 séries de 8–12, e o João faz 4 nos exercícios principais. João: sobram 1–2 reps. Haniere: continua com 2–3.</p></div>
-    </div>
-    <p>A página troca de fase sozinha nessas datas. Depois de 3/1, faça uma nova conferência para montar o próximo treino. A semana mais leve é opcional: faça só se estiver cansado.</p>
+  <section class="guide acc-sec" id="progredir" aria-labelledby="h-prog">
+    <details class="acc"><summary><h2 id="h-prog">Como progredir</h2><span class="acc-sub" id="progredir-sub">Fases do plano, quando subir a carga e descanso</span></summary><div class="acc-in">
+    <div class="phase-rows" id="fases-guia"></div>
+    <p id="fases-fim"></p>
     <h3>O que quer dizer “sobram 2”</h3>
     <p>Use uma carga que deixe você terminar a série sentindo que ainda faria mais 2 repetições com boa técnica. Iniciante não precisa treinar até a falha. A faixa de repetições é um guia: pare quando sobrarem as repetições indicadas, não num número fixo.</p>
     <h3>Quando subir a carga</h3>
     <p>Fez o número máximo da faixa em todas as séries? No treino seguinte, suba o menor passo possível (1 placa na máquina ou 1–2 kg no halter) e volte para o início da faixa. A página avisa quando o registro mostra que chegou a hora.</p>
     <h3>Descanso e ritmo</h3>
-    <p>2 min nos exercícios principais, 90 s nos compostos e 60–90 s nos isolados. Desçam em 2–3 s, subam com controle e soltem o ar na fase de força, sem prender a respiração. Use o cronômetro de cada exercício para respeitar o descanso.</p>
+    <p>2 min nos exercícios principais, 90 s nos compostos e 60–90 s nos isolados. Desça em 2–3 s, suba com controle e solte o ar na fase de força, sem prender a respiração. Use o cronômetro de cada exercício para respeitar o descanso.</p>
     <h3>A semana</h3>
-    <p>João: segunda, Inferior B; terça, Superior A; quarta, Inferior A; sexta, vôlei; sábado, Superior B. Pernas e parte de cima nunca ficam no mesmo dia, e cada músculo é treinado duas vezes por semana.</p>
-    <p>Haniere: segunda, Inferior B; terça, Superior frente (peito, ombros e bíceps); quinta, Superior atrás (costas, ombro de trás e tríceps); quarta e sábado, spinning.</p>
+    <p id="semana-guia"></p>
     <h3>Primeiras semanas</h3>
-    <p>Peçam ao professor da DAY FIT para conferir a regulagem dos aparelhos e a execução.</p>
+    <p>Peça ao professor da academia para conferir a regulagem dos aparelhos e a execução.</p>
+    </div></details>
   </section>
 
-  <section class="guide" id="seguranca" aria-labelledby="h-seg">
-    <h2 id="h-seg">Cuidados do Haniere</h2>
-    <p>Antes de começar, o Haniere deve mostrar este treino ao médico ou fisioterapeuta que acompanha o joelho e a lombar. Com o diagnóstico exato, dá para ajustar amplitudes e exercícios.</p>
-    <h3>Escala de dor, de 0 a 10</h3>
-    <div class="pain-bar" aria-hidden="true"><span class="pz-ok">0–3</span><span class="pz-warn">4–5</span><span class="pz-stop">6–10</span></div>
-    <dl class="pain-list">
-      <div><dt class="pz-ok">0–3 · Siga</dt><dd>Desconforto leve, que passa até o dia seguinte.</dd></div>
-      <div><dt class="pz-warn">4–5 · Alivie</dt><dd>Diminua a carga ou a amplitude e não suba a carga nesse dia.</dd></div>
-      <div><dt class="pz-stop">6+ · Pare</dt><dd>Pare também se sentir pontada, falseio, travamento, formigamento ou dor que desce pela perna. Troque pelo substituto indicado e fale com o fisioterapeuta.</dd></div>
-    </dl>
-    <p>Acordou no dia seguinte com mais dor que o normal? Diminua a carga na próxima sessão.</p>
-    <h3>O treino do Haniere</h3>
-    <p>Sem dor na coluna e no joelho, o Haniere faz o Inferior B na segunda, o Superior frente na terça e o Superior atrás na quinta. Stiff, hack e afundo pedem mais do joelho e da lombar: neles, comece com carga leve e amplitude menor, como indicado em cada exercício. Aumente aos poucos, só se a dor ficar em 0–3 durante o treino e no dia seguinte. Se passar disso, use a alternativa indicada.</p>
-    <p>No lugar do abdominal na máquina ele faz o curl-up, que trabalha o abdômen sem dobrar a coluna com carga.</p>
-    <h3>Fica fora do treino dele</h3>
-    <ul class="avoid">
-      <li><b>Impacto:</b> corrida, saltos, pular corda, burpee e step. Das aulas da DAY FIT: Jump, HIIT, Zumba e FitDance.</li>
-      <li><b>Peso sobre a coluna:</b> agachamento com barra, levantamento terra, remada curvada e desenvolvimento em pé.</li>
-      <li><b>Dobrar ou girar a coluna com carga ou repetidamente:</b> abdominal na máquina, abdominal tradicional, elevação de pernas, russian twist e hiperextensão lombar.</li>
-      <li><b>Joelho muito dobrado com carga:</b> agachamento profundo, búlgaro e descidas completas no leg press e no hack.</li>
-    </ul>
-    <h3>Spinning (quarta e sábado)</h3>
+  <section class="guide acc-sec" id="proteina" aria-labelledby="h-proteina">
+    <details class="acc"><summary><h2 id="h-proteina">Proteína</h2><span class="acc-sub" id="proteina-sub">Quanto comer por dia</span></summary><div class="acc-in">
+    <p id="proteina-txt"></p>
+    <p class="tip">Quem tem doença nos rins deve combinar a quantidade com o médico.</p>
+    <p class="src">Fonte: <a href="https://pubmed.ncbi.nlm.nih.gov/28698222/" target="_blank" rel="noopener">Morton et al., 2018 · British Journal of Sports Medicine</a></p>
+    </div></details>
+  </section>
+
+  <section class="guide acc-sec" id="cuidados" aria-labelledby="h-cuidados">
+    <details class="acc"><summary><h2 id="h-cuidados">Cuidados</h2><span class="acc-sub" id="cuidados-sub">Dor, sinais de alerta e anilhas</span></summary><div class="acc-in">
     <ul>
-      <li>Avise o professor da aula sobre o joelho e a lombar, e confirme com o fisioterapeuta que o spinning está liberado.</li>
-      <li>Banco na altura do quadril: com o pedal embaixo, o joelho fica quase estendido. Banco baixo dobra demais o joelho e força a patela.</li>
-      <li>Guidão alto, na altura do banco ou acima, para a coluna ficar mais reta.</li>
-      <li>Pedale sempre sentado. Pule as partes em pé, os “saltos” e as subidas com carga pesada: prefira girar mais leve e mais rápido.</li>
-      <li>Ritmo moderado, em que ainda dá para falar frases curtas. A escala de dor vale aqui também.</li>
-    </ul>
-    <h3>No dia a dia</h3>
-    <ul>
-      <li>Pegar halteres no suporte, nunca do chão.</li>
+      <li>Cansaço e ardência no músculo são normais. Dor em pontada, falseio, formigamento ou dor que não passa não são: pare o exercício, use a alternativa e, se continuar, procure um profissional de saúde.</li>
+      <li>Dor no peito, tontura, desmaio ou falta de ar fora do comum: pare o treino na hora e procure atendimento médico.</li>
+      <li>Pegue e devolva os halteres no suporte, sem se abaixar até o chão com peso.</li>
       <li>Anilhas: uma de cada vez, dobrando os joelhos e com as costas retas. Se puder, peça ajuda ao professor.</li>
-      <li>Na bike, banco alto: joelho quase estendido quando o pedal está embaixo.</li>
-      <li>Caminhadas leves em terreno plano, fora da academia, também ajudam a lombar, se o fisioterapeuta liberar.</li>
+      <li>Acordou no dia seguinte com mais dor que o normal? Diminua a carga no próximo treino.</li>
     </ul>
+    </div></details>
   </section>
 
-  <section class="guide" id="porque" aria-labelledby="h-porque">
-    <h2 id="h-porque">Por que o treino é assim</h2>
+  <section class="guide acc-sec" id="porque" aria-labelledby="h-porque">
+    <details class="acc"><summary><h2 id="h-porque">Por que o treino é assim</h2><span class="acc-sub" id="porque-sub">Cada escolha e o estudo por trás dela</span></summary><div class="acc-in">
     <ul class="refs">
-      <li><span><b>Cada músculo duas vezes por semana.</b> Treinar um músculo duas vezes por semana gera um pouco mais de hipertrofia do que uma vez. O João faz pernas na segunda e na quarta e a parte de cima inteira na terça e no sábado, sem juntar pernas e parte de cima no mesmo dia. O Haniere separa frente e atrás, para nunca juntar peito e costas.</span><span class="src"><a href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2016 · Sports Medicine</a></span></li>
-      <li><span><b>Volume que sobe aos poucos.</b> Mais séries por semana geram mais crescimento muscular. Por isso o plano começa com 2 séries e chega a 3–4.</span><span class="src"><a href="https://doi.org/10.1080/02640414.2016.1210197" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2017 · Journal of Sports Sciences</a></span></li>
+      <li><span><b>Cada músculo duas vezes por semana.</b> Treinar um músculo duas vezes por semana gera um pouco mais de hipertrofia do que uma vez. Por isso todos os modelos repetem cada músculo pelo menos duas vezes na semana.</span><span class="src"><a href="https://doi.org/10.1007/s40279-016-0543-8" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2016 · Sports Medicine</a></span></li>
+      <li><span><b>Corpo inteiro ou dividido dá o mesmo resultado.</b> Com o mesmo número de séries, treinar o corpo inteiro em cada dia ou dividir em parte de cima e pernas gerou ganhos parecidos de força e de músculo. Por isso o modelo depende só de quantos dias você tem.</span><span class="src"><a href="https://doi.org/10.1519/JSC.0000000000004774" target="_blank" rel="noopener">Ramos-Campo et al., 2024 · Journal of Strength and Conditioning Research</a></span></li>
+      <li><span><b>Volume que sobe aos poucos.</b> Mais séries por semana geram mais crescimento muscular. Por isso o plano começa com 2 séries e chega a 3–4, e quem escolhe um foco ganha uma série a mais nos exercícios principais daquela parte.</span><span class="src"><a href="https://doi.org/10.1080/02640414.2016.1210197" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2017 · Journal of Sports Sciences</a></span></li>
       <li><span><b>Perto do limite cresce mais.</b> Séries que terminam mais perto da falha geram um pouco mais de hipertrofia. Por isso o que vale é quantas repetições sobram, e não parar sempre no mesmo número.</span><span class="src"><a href="https://pubmed.ncbi.nlm.nih.gov/36334240/" target="_blank" rel="noopener">Refalo et al., 2023 · Sports Medicine</a></span></li>
-      <li><span><b>Cadeira flexora no lugar do stiff.</b> Em 12 semanas, o posterior da coxa cresceu mais na flexora sentada do que na deitada: 14% contra 9%. Por isso, quando o João não fizer o stiff, a troca é pela cadeira flexora, e não por mais mesa flexora.</span><span class="src"><a href="https://doi.org/10.1249/MSS.0000000000002523" target="_blank" rel="noopener">Maeo et al., 2021 · Medicine &amp; Science in Sports &amp; Exercise</a></span></li>
-      <li><span><b>Semana leve só se precisar.</b> Parar uma semana no meio de um programa de 9 semanas não mudou o ganho de músculo e tirou um pouco de força. Por isso a semana leve depois de 3/1 é opcional.</span><span class="src"><a href="https://doi.org/10.7717/peerj.16777" target="_blank" rel="noopener">Coleman et al., 2024 · PeerJ</a></span></li>
-      <li><span><b>Amplitudes do joelho do Haniere.</b> Leg press e agachamento entre 45° e 0°, e cadeira extensora entre 90° e 45°, reduzem a pressão sobre a patela.</span><span class="src"><a href="https://doi.org/10.2519/jospt.2014.4936" target="_blank" rel="noopener">Powers et al., 2014 · JOSPT</a> · <a href="https://doi.org/10.1177/036354659302100319" target="_blank" rel="noopener">Steinkamp et al., 1993 · AJSM</a></span></li>
-      <li><span><b>Músculo alongado também cresce.</b> Na cadeira extensora, a amplitude parcial com o joelho mais dobrado gerou hipertrofia igual ou maior que a amplitude completa.</span><span class="src"><a href="https://doi.org/10.1080/17461391.2021.1927199" target="_blank" rel="noopener">Pedrosa et al., 2022 · European Journal of Sport Science</a></span></li>
-      <li><span><b>Quadril forte ajuda o joelho.</b> Na dor na frente do joelho (patelofemoral), combinar exercícios de quadril e de joelho funciona melhor do que só de joelho.</span><span class="src"><a href="https://pubmed.ncbi.nlm.nih.gov/29925502/" target="_blank" rel="noopener">Collins et al., 2018 · British Journal of Sports Medicine</a></span></li>
-      <li><span><b>Exercício alivia a lombar.</b> Numa revisão de 249 estudos com mais de 24 mil pessoas, o exercício provavelmente reduz a dor lombar crônica.</span><span class="src"><a href="https://doi.org/10.1002/14651858.CD009790.pub2" target="_blank" rel="noopener">Hayden et al., 2021 · Cochrane</a></span></li>
-      <li><span><b>Caminhar adia novas crises.</b> Um programa de caminhada com orientação quase dobrou o tempo até a próxima crise de dor lombar: 208 contra 112 dias.</span><span class="src"><a href="https://doi.org/10.1016/S0140-6736(24)00755-4" target="_blank" rel="noopener">Pocovi et al., 2024 · The Lancet</a></span></li>
-      <li><span><b>Abdômen sem forçar a coluna.</b> Curl-up, prancha lateral e perdigueiro trabalham o core sem dobrar a coluna repetidamente.</span><span class="src">McGill · Low Back Disorders (Human Kinetics)</span></li>
+      <li><span><b>Cadeira flexora no lugar do stiff.</b> Em 12 semanas, o posterior da coxa cresceu mais na flexora sentada do que na deitada: 14% contra 9%. Por isso, quando não der para fazer o stiff, a troca é pela cadeira flexora.</span><span class="src"><a href="https://doi.org/10.1249/MSS.0000000000002523" target="_blank" rel="noopener">Maeo et al., 2021 · Medicine &amp; Science in Sports &amp; Exercise</a></span></li>
+      <li><span><b>Semana leve só se precisar.</b> Parar uma semana no meio de um programa de 9 semanas não mudou o ganho de músculo e tirou um pouco de força. Por isso a semana leve no fim do ciclo é opcional.</span><span class="src"><a href="https://doi.org/10.7717/peerj.16777" target="_blank" rel="noopener">Coleman et al., 2024 · PeerJ</a></span></li>
+      <li><span><b>Tríceps com o braço acima da cabeça.</b> Em 12 semanas, o tríceps cresceu 19,9% no exercício com os braços acima da cabeça, contra 13,9% na polia com os braços ao lado do corpo. Na cabeça longa, foi 28,5% contra 19,6%. Por isso, nos modelos, o tríceps francês é o principal e a polia fica de alternativa.</span><span class="src"><a href="https://doi.org/10.1080/17461391.2022.2100279" target="_blank" rel="noopener">Maeo et al., 2023 · European Journal of Sport Science</a></span></li>
+      <li><span><b>Panturrilha trabalhando alongada.</b> Em 8 semanas, a panturrilha (gastrocnêmio medial) cresceu 15,2% em quem fez só a metade de baixo do movimento, com o músculo alongado, contra 6,7% no movimento completo e 3,4% na metade de cima. Por isso, com os joelhos esticados (em pé e no leg press), a panturrilha desce o máximo e sobe só até o pé ficar reto.</span><span class="src"><a href="https://doi.org/10.1519/JSC.0000000000004460" target="_blank" rel="noopener">Kassiano et al., 2023 · Journal of Strength and Conditioning Research</a></span></li>
+      <li><span><b>Agachar fundo.</b> Em 10 semanas, o agachamento completo fez o glúteo crescer 6,7%, contra 2,2% no meio agachamento, e a parte de dentro da coxa 6,2% contra 2,7%. O quadríceps cresceu parecido nos dois. Por isso a orientação é descer o mais fundo que der com as costas retas.</span><span class="src"><a href="https://doi.org/10.1007/s00421-019-04181-y" target="_blank" rel="noopener">Kubo et al., 2019 · European Journal of Applied Physiology</a></span></li>
+      <li><span><b>Agachamento e elevação pélvica.</b> Em 9 semanas, os dois fizeram o glúteo crescer de forma parecida, e o agachamento fez crescer mais o quadríceps e a parte de dentro da coxa. Por isso os modelos têm os dois.</span><span class="src"><a href="https://doi.org/10.3389/fphys.2023.1279170" target="_blank" rel="noopener">Plotkin et al., 2023 · Frontiers in Physiology</a></span></li>
+      <li><span><b>Ritmo controlado, sem exagero.</b> Repetições de 0,5 a 8 segundos geraram hipertrofia parecida, e as muito lentas, acima de 10 segundos, pareceram piores. Por isso a orientação é descer em 2–3 s, sem tranco, sem arrastar a repetição.</span><span class="src"><a href="https://doi.org/10.1007/s40279-015-0304-0" target="_blank" rel="noopener">Schoenfeld, Ogborn e Krieger, 2015 · Sports Medicine</a></span></li>
+      <li><span><b>O mesmo treino para mulheres e homens.</b> Uma revisão de 29 estudos mostrou que, em proporção ao tamanho do músculo no começo, mulheres e homens ganham músculo de forma parecida com a musculação. Por isso os modelos são os mesmos para todo mundo.</span><span class="src"><a href="https://doi.org/10.7717/peerj.19042" target="_blank" rel="noopener">Refalo et al., 2025 · PeerJ</a></span></li>
+      <li><span><b>Lesão não precisa parar o treino.</b> Exercício diminuiu a dor no ombro. Musculação está entre os exercícios que mais melhoram o dia a dia de quem tem dor lombar crônica. Para dor na frente do joelho, o recomendado é fortalecer quadril e coxa juntos. E treinar sentindo um pouco de dor não piorou os resultados. Por isso o treino troca só o que costuma forçar a parte marcada e usa uma escala de dor.</span><span class="src"><a href="https://pubmed.ncbi.nlm.nih.gov/28630217/" target="_blank" rel="noopener">Steuri et al., 2017</a> · <a href="https://doi.org/10.1136/bjsports-2019-100886" target="_blank" rel="noopener">Owen et al., 2020</a> · <a href="https://doi.org/10.1136/bjsports-2018-099397" target="_blank" rel="noopener">Collins et al., 2018</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/28596288/" target="_blank" rel="noopener">Smith et al., 2017</a> · todos no British Journal of Sports Medicine</span></li>
+      <li><span><b>Escala de dor.</b> Num estudo com 38 pessoas com dor no tendão de Aquiles, quem continuou treinando dentro de um limite de dor melhorou tanto quanto quem ficou em repouso ativo. A escala do app segue a mesma ideia: até 4 de 10 durante o exercício, voltando ao normal até a manhã seguinte.</span><span class="src"><a href="https://doi.org/10.1177/0363546506298279" target="_blank" rel="noopener">Silbernagel et al., 2007 · American Journal of Sports Medicine</a></span></li>
+      <li><span><b>Musculação fortalece os ossos.</b> Em 8 meses, mulheres depois da menopausa com massa óssea baixa que fizeram musculação pesada, com supervisão, ganharam 2,9% de densidade óssea na coluna, enquanto o grupo de comparação perdeu 1,2%. Por isso quem marca osteoporose continua com carga, com o professor por perto no começo.</span><span class="src"><a href="https://doi.org/10.1002/jbmr.3284" target="_blank" rel="noopener">Watson et al., 2018 · Journal of Bone and Mineral Research</a></span></li>
+      <li><span><b>Antes de começar.</b> A triagem do American College of Sports Medicine olha três coisas: se a pessoa já é ativa, se tem sinais ou sintomas ou doença do coração, metabólica ou dos rins, e a intensidade do treino. Por isso a pergunta 8 indica quando é melhor passar pelo médico antes.</span><span class="src"><a href="https://doi.org/10.1249/MSS.0000000000000664" target="_blank" rel="noopener">Riebe et al., 2015 · Medicine &amp; Science in Sports &amp; Exercise</a></span></li>
     </ul>
+    </div></details>
   </section>
 
-  <section class="guide" id="registros" aria-labelledby="h-reg">
-    <h2 id="h-reg">Registro de cargas</h2>
-    <p id="store-msg">As cargas ficam salvas neste aparelho, no navegador ou app em que a página foi aberta, e cada um anota no próprio celular. Faça um backup de vez em quando.</p>
+  <section class="guide acc-sec" id="registros" aria-labelledby="h-reg">
+    <details class="acc"><summary><h2 id="h-reg">Registro de cargas</h2><span class="acc-sub" id="registros-sub">Backup e planilha das suas cargas</span></summary><div class="acc-in">
+    <p id="store-msg">Suas cargas ficam na nuvem, ligadas à sua senha.</p>
     <div class="btn-row">
       <button type="button" class="btn" id="btn-import" data-act="import" hidden>Enviar registros deste aparelho</button>
       <button type="button" class="btn" id="btn-copy" data-act="copy">Copiar backup</button>
@@ -475,14 +702,34 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
     </div>
     <p class="status" id="reg-status" role="status" aria-live="polite"></p>
     <p class="tip">Vai fazer a alternativa de um exercício? Abra o exercício e toque em <b>Alternativa</b>: a animação e o passo a passo passam a ser dela, e a carga fica num histórico próprio. Se anotou no lugar errado, toque em <b>Foi a alternativa</b> ao lado do registro, em Últimos treinos.</p>
-    <p class="tip">Para o link abrir direto no treino do Haniere, acrescente <code>#haniere</code> no final.</p>
+    </div></details>
   </section>
 
   <footer class="foot">
-    <p>Plano de 12 semanas para iniciantes, montado em setembro e ajustado em outubro de 2026 para a DAY FIT, em Patos de Minas.</p>
+    <p>Mr. Boom · planos de 12 semanas de hipertrofia para quem está começando ou voltando a treinar.</p>
     <p>Não substitui a avaliação de um profissional de educação física ou de um fisioterapeuta.</p>
   </footer>
 </main>
+
+<div class="sheet" id="pessoas" role="dialog" aria-modal="true" aria-labelledby="h-pessoas" hidden>
+  <div class="sheet-in">
+    <div class="sheet-head">
+      <h2 id="h-pessoas">Pessoas</h2>
+      <button type="button" class="btn ghost" data-pa="fechar">Fechar</button>
+    </div>
+    <p>Quem quer usar o Mr. Boom cria a própria conta na tela de entrada, com usuário e senha. Os pedidos aparecem aqui: libere quem você conhece. Depois de liberada, a pessoa responde as perguntas que montam o treino dela, e cada uma vê só o próprio treino e as próprias cargas. As respostas sobre peso, altura, lesões e saúde ficam só com a pessoa: não aparecem nesta lista.</p>
+    <p class="status" id="pessoas-msg" role="status" aria-live="polite"></p>
+    <div class="pgrupo" id="grupo-pedidos" hidden>
+      <h3>Pedidos para entrar</h3>
+      <ul class="plist" id="lista-pedidos"></ul>
+    </div>
+    <div class="pgrupo">
+      <h3>Com acesso</h3>
+      <ul class="plist" id="pessoas-lista"></ul>
+    </div>
+    <p class="tip">Você entra com o usuário <b>joao</b> e o código do treino. Para trocar o código, mude TREINO_PIN na Vercel: todos os celulares em que você entrou pedem o código novo.</p>
+  </div>
+</div>
 
 <div class="timer" id="timer" data-day="1" hidden>
   <div class="timer-track"><div class="timer-fill" id="t-fill"></div></div>
@@ -526,7 +773,7 @@ const EX = {
     how: ['Pés no meio da plataforma, na largura dos ombros.', 'Desça até os joelhos formarem cerca de 90°, sem o quadril sair do banco.', 'Empurre com o pé inteiro, sem travar os joelhos no alto.'],
     alt: 'hack' },
   'goblet': { n: 'Agachamento goblet com halter',
-    how: ['Segure o halter em pé, junto ao peito.', 'Desça como se fosse sentar entre os calcanhares, com os joelhos na direção dos pés.', 'Desça só até onde as costas continuam retas e suba empurrando o chão.'],
+    how: ['Segure o halter em pé, junto ao peito.', 'Desça como se fosse sentar entre os calcanhares, com os joelhos na direção dos pés.', 'Desça o mais fundo que conseguir com as costas retas: agachar fundo trabalha mais o glúteo e a parte de dentro da coxa. Suba empurrando o chão.'],
     alt: 'smith' },
   'extensora': { n: 'Cadeira extensora',
     how: ['Ajuste o encosto para o joelho ficar alinhado com o eixo do aparelho.', 'Estenda em 1 s e segure 1 s em cima.', 'Desça em 2–3 s, sem deixar o peso bater.'] },
@@ -570,7 +817,7 @@ const EX = {
     how: ['Alto das costas apoiado no banco e barra sobre o quadril, com uma espuma de proteção.', 'Suba até tronco e coxas ficarem alinhados, com o queixo recolhido.', 'Segure 1 s em cima e desça controlando.'],
     alt: 'elev-pelvica-maq' },
   'hack': { n: 'Agachamento no hack',
-    how: ['Costas coladas no encosto e pés à frente, na largura dos ombros.', 'Desça até cerca de 90° de joelho, ou mais se o quadril continuar colado.', 'Suba empurrando com o pé inteiro.'],
+    how: ['Costas coladas no encosto e pés à frente, na largura dos ombros.', 'Desça o mais fundo que conseguir com o quadril colado no encosto: agachar fundo trabalha mais o glúteo e a parte de dentro da coxa.', 'Suba empurrando com o pé inteiro.'],
     alt: 'smith' },
   'afundo': { n: 'Afundo com halteres',
     how: ['Passo longo, tronco reto e halteres ao lado do corpo.', 'Desça o joelho de trás em direção ao chão.', 'Suba empurrando com o pé da frente. Faça todas as repetições de uma perna e troque.'],
@@ -580,36 +827,15 @@ const EX = {
     how: ['Deitado, com o quadril colado no banco.', 'Dobre os joelhos até onde conseguir.', 'Desça em 3 s.'],
     alt: 'flexora-sent' },
   'pant-pe': { n: 'Panturrilha em pé',
-    how: ['Pontas dos pés na borda da plataforma.', 'Desça o calcanhar até alongar bem.', 'Suba o máximo e segure 1 s.'],
+    how: ['Pontas dos pés na borda da plataforma.', 'Desça o calcanhar o máximo que conseguir e segure 1 s lá embaixo, com a panturrilha alongada.', 'Suba só até o pé ficar reto, sem ficar na ponta: é a parte de baixo do movimento que mais faz a panturrilha crescer.'],
     alt: 'pant-leg' },
   'abd-maq': { n: 'Abdominal na máquina',
     how: ['Enrole o tronco aproximando as costelas do quadril.', 'Solte o ar ao fechar.', 'Volte devagar, sem soltar o peso.'],
     alt: 'abd-supra' },
 
-  /* adaptados para o Haniere */
-  'leg45-curto': { n: 'Leg press 45° com descida curta',
-    how: ['Pés no meio da plataforma, na largura do quadril.', 'Semanas 1–2: desça pouco, até o joelho dobrar uns 45° (cerca de um terço da descida normal). Sem dor, aumente aos poucos: uns 60° até a semana 6 e até 90° depois.', 'Lombar e quadril sempre colados no encosto. Se o quadril começar a sair, você desceu demais.'] },
-  'extensora-90-45': { n: 'Cadeira extensora até a metade',
-    how: ['Comece com o joelho dobrado a 90°, a posição normal do aparelho.', 'Estenda só até a metade do caminho (joelho a uns 45°), sem esticar a perna toda. Se o aparelho tiver limitador de amplitude, use.', 'Suba em 2 s e desça em 3 s, sem tranco.'] },
-  'ponte': { n: 'Ponte de glúteo no colchonete',
-    how: ['Deitado de barriga para cima, joelhos dobrados e pés na largura do quadril.', 'Suba o quadril contraindo o glúteo até alinhar ombros, quadril e joelhos.', 'Pare quando o glúteo contrair: arquear a lombar no alto não ajuda.'],
-    prog: 'Quando 15 repetições ficarem fáceis, apoie uma anilha sobre o quadril.',
-    alt: 'elev-pelvica-maq', altNote: 'Com carga leve.' },
-  'deadbug': { n: 'Dead bug',
-    how: ['Deitado, braços apontando para o teto e joelhos dobrados a 90° no ar.', 'Estenda devagar um braço e a perna oposta, soltando o ar.', 'A lombar fica encostada no chão o tempo todo. Se descolar, diminua o movimento.'],
-    rx: ['2 × 6 por lado', '3 × 8 por lado', '3 × 10 por lado'] },
   'prancha-lat': { n: 'Prancha lateral com joelhos apoiados',
     how: ['De lado no colchonete, cotovelo embaixo do ombro e joelhos dobrados.', 'Suba o quadril até alinhar cabeça, quadril e joelhos.', 'Respire normalmente. Quando ficar fácil, faça com as pernas estendidas.'],
     rx: ['2 × 15 s por lado', '3 × 20 s por lado', '3 × 30 s por lado'] },
-  'birddog': { n: 'Perdigueiro (bird dog)',
-    how: ['Quatro apoios: mãos sob os ombros, joelhos sob o quadril e um colchonete dobrado sob os joelhos.', 'Estenda um braço e a perna oposta até a linha do corpo, sem girar o quadril.', 'Segure, volte devagar e troque de lado.'],
-    rx: ['2 × 5 por lado (segure 5 s)', '3 × 6 por lado (segure 8 s)', '3 × 8 por lado (segure 10 s)'] },
-  'curlup': { n: 'Curl-up de McGill',
-    how: ['Deitado, uma perna dobrada e a outra estendida, com as mãos sob a lombar.', 'Tire do chão só a cabeça e os ombros, sem dobrar o pescoço.', 'Segure respirando e desça devagar. Na metade das repetições, troque a perna dobrada.'],
-    rx: ['2 × 5 (segure 8 s)', '3 × 6 (segure 10 s)', '3 × 8 (segure 10 s)'] },
-  'pallof': { n: 'Pallof press na polia',
-    how: ['De lado para a polia, cabo na altura do peito e pés afastados.', 'Estenda os braços à frente e segure 2 s sem deixar o tronco girar.', 'Volte as mãos ao peito devagar. Faça os dois lados.'],
-    rx: ['2 × 8 por lado', '3 × 10 por lado', '3 × 12 por lado'] },
   'supino-incl-maq': { n: 'Supino inclinado na máquina',
     how: ['Costas apoiadas e pegadas na altura do alto do peito.', 'Empurre sem travar os cotovelos.', 'Volte em 2–3 s.'],
     alt: 'supino-maq' },
@@ -635,177 +861,378 @@ const EX = {
   'face-pull': { n: 'Face pull na polia com corda',
     how: ['Polia na altura do rosto: segure a corda com as palmas para baixo.', 'Puxe em direção ao rosto, abrindo as mãos e mantendo os cotovelos altos.', 'Aproxime as escápulas no final e volte devagar.'] },
   'triceps-frances': { n: 'Tríceps francês sentado com halter',
-    how: ['Banco com encosto: segure um halter com as duas mãos acima da cabeça.', 'Com os cotovelos apontando para cima, desça o halter atrás da cabeça.', 'Estenda os braços sem abrir os cotovelos.'] },
+    how: ['Banco com encosto: segure um halter com as duas mãos acima da cabeça.', 'Com os cotovelos apontando para cima, desça o halter atrás da cabeça até sentir o tríceps alongar.', 'Estenda os braços sem abrir os cotovelos.'] },
   'triceps-uni': { n: 'Tríceps na polia com uma mão', per: 'braço',
     how: ['Pegador simples na polia alta, cotovelo colado ao lado do corpo.', 'Estenda o braço até o fim, sem mexer o ombro.', 'Volte devagar até o cotovelo formar cerca de 90°. Faça todas as repetições e troque de braço.'] },
   'smith': { n: 'Agachamento no Smith',
-    how: ['Barra apoiada no alto das costas e pés um pouco à frente da barra.', 'Desça como se fosse sentar, com os joelhos na direção dos pés.', 'Desça só até onde as costas continuam retas e suba empurrando o chão.'] },
+    how: ['Barra apoiada no alto das costas e pés um pouco à frente da barra.', 'Desça como se fosse sentar, com os joelhos na direção dos pés.', 'Desça o mais fundo que conseguir com as costas retas e suba empurrando o chão.'] },
   'leg45-uni': { n: 'Leg press com uma perna',
     how: ['Um pé no meio da plataforma; o outro fica apoiado fora dela.', 'Desça até o joelho formar uns 90°, sem o quadril sair do banco.', 'Empurre com o pé inteiro. Faça todas as repetições e troque de perna.'],
     rx: ['2 × 10 por perna', '3 × 10 por perna', '3 × 8–12 por perna'] },
   'pant-leg': { n: 'Panturrilha no leg press',
-    how: ['Sentado no leg press, só a ponta dos pés na borda de baixo da plataforma.', 'Joelhos quase esticados e parados: desça os calcanhares até alongar.', 'Empurre com a ponta dos pés o máximo que puder e segure 1 s.'] },
+    how: ['Sentado no leg press, só a ponta dos pés na borda de baixo da plataforma.', 'Joelhos quase esticados e parados: desça os calcanhares o máximo que conseguir e segure 1 s.', 'Empurre só até a sola do pé ficar paralela à plataforma: é a parte de baixo do movimento, com a panturrilha alongada, que mais faz crescer.'] },
   'elev-pelvica-maq': { n: 'Máquina de elevação pélvica',
     how: ['Alto das costas no apoio e o rolo da máquina sobre o quadril.', 'Suba até tronco e coxas ficarem alinhados, com o queixo recolhido.', 'Segure 1 s em cima e desça controlando.'] },
   'abd-lado': { n: 'Abdução de quadril deitado de lado', per: 'lado',
     how: ['Deitado de lado no colchonete, pernas estendidas e quadril alinhado, sem rolar para trás.', 'Suba a perna de cima até uns 30°, com o pé apontando para a frente.', 'Segure 1 s e desça em 2 s. Faça todas as repetições e troque de lado.'] },
+  /* usados nas trocas por lesão */
+  'leg45-curto': { n: 'Leg press 45° com descida curta',
+    how: ['Pés no meio da plataforma, na largura do quadril.', 'Comece descendo pouco, até o joelho dobrar uns 45°. Se não doer, aumente a descida aos poucos, semana a semana, até uns 90°.', 'Lombar e quadril sempre colados no encosto. Se o quadril começar a sair, você desceu demais.'] },
+  'extensora-90-45': { n: 'Cadeira extensora até a metade',
+    how: ['Comece com o joelho dobrado a 90°, a posição normal do aparelho.', 'Estenda só até a metade do caminho (joelho a uns 45°), sem esticar a perna toda. Se o aparelho tiver limitador de amplitude, use.', 'Suba em 2 s e desça em 3 s, sem tranco.'] },
   'abd-supra': { n: 'Abdominal supra no colchonete',
     how: ['Deitado, joelhos dobrados, pés no chão e braços cruzados no peito.', 'Solte o ar e tire só os ombros do chão, aproximando as costelas do quadril.', 'Desça devagar, sem puxar o pescoço.'] },
-  'extensora-iso': { n: 'Extensora parada a 60°',
-    how: ['Na cadeira extensora, com carga leve.', 'Suba até o joelho ficar dobrado a uns 60° e segure parado 30 s, respirando normalmente.', 'Desça devagar e descanse antes da próxima.'],
-    rx: ['5 × 30 s', '5 × 30 s', '5 × 30 s'] },
-  'elev-lateral-sent': { n: 'Elevação lateral sentado',
-    how: ['Sentado em banco com encosto, costas apoiadas.', 'Suba os braços pelas laterais até a altura dos ombros.', 'Desça em 2–3 s.'],
-    alt: 'elev-lateral-polia' }
 };
 
-/* ---------- Plano semanal ----------
-   k: main (principal do João) · comp (composto) · iso (isolado) · reab (perna/quadril do Haniere) · core
-   Cada um treina por conta própria. jo / ha: o que muda só no do João ou só no do Haniere
-   (avisos e, em alguns exercícios, a versão que protege o joelho ou a lombar dele). */
-const WARM_J = 'Aquecimento: 8 min de bike ou esteira + 1 série leve (12 reps) do primeiro exercício.';
-const WARM_H = 'Aquecimento: 8–10 min de bike com o banco alto (joelho quase estendido com o pedal embaixo) + 1 série leve do primeiro exercício.';
-const CARDIO_J = 'Cardio opcional: 15–20 min de bike ou esteira em ritmo moderado.';
-const W_PUXADA = 'Tronco quase na vertical: inclinar muito para trás joga peso na lombar.';
-const W_HALTER = 'Pegue e devolva os halteres no suporte, sem se abaixar até o chão com peso.';
-
-const SOLO_H = 'Sem ninguém para revezar, use o cronômetro para respeitar o descanso entre as séries.';
-const SAT_HOURS = 'No sábado a DAY FIT abre das 8h às 12h. Confirmem o horário na recepção.';
+/* ---------- Treinos e modelos ----------
+   k: main (principal) · comp (composto) · iso (isolado) · core
+   x45: sai do treino de quem tem até 45 min.
+   jo: o que muda só no treino do João. */
+const WARM = 'Aquecimento: 8 min de bike ou esteira + 1 série leve (12 reps) do primeiro exercício.';
+const CARDIO = 'Cardio opcional: 15–20 min de bike ou esteira em ritmo moderado.';
+const SAT_HOURS = 'No sábado a academia abre das 8h às 12h. Confirme o horário na recepção.';
+const STIFF_WHY = 'O stiff trabalha o posterior da coxa e o glúteo com o músculo alongado. Se der, faça ele.';
+const STIFF_ALT = 'Sem o stiff, faça a cadeira flexora com as mesmas séries: sentado, o posterior também trabalha alongado.';
+const STIFF = { ex: 'stiff-halter', k: 'main', why: STIFF_WHY, alt: 'flexora-sent', altNote: STIFF_ALT };
 
 /* c: cor do treino (anilha) · short: nome curto na faixa da semana */
 const WORKOUTS = {
+  /* superior e inferior em 4 dias: o do João e o modelo de 4 dias */
   IA: { title: 'Inferior A', short: 'Inf A', c: 2, focus: 'Quadríceps, posteriores, glúteos e panturrilha',
     items: [
-      { ex: 'leg45', k: 'main',
-        ha: { ex: 'leg45-curto', k: 'reab', flag: 'Descida curta, lombar colada',
-          warn: 'Coloque e tire as anilhas uma de cada vez, dobrando os joelhos e com as costas retas: levantar anilha do chão força a lombar.',
-          why: 'Com o joelho pouco dobrado, a pressão sobre a patela é menor. A amplitude só aumenta se não houver dor.',
-          alt: 'extensora-90-45', altSets: 2, altNote: 'Se incomodar o joelho ou a lombar, pule o leg press e faça 2 séries a mais da cadeira extensora até a metade.' } },
-      { ex: 'goblet', k: 'main',
-        ha: { warn: 'Halter leve e descida só até onde o joelho não doer e as costas continuam retas.',
-          alt: 'leg45-curto', altSets: 2, altNote: 'Se incomodar o joelho ou a lombar, faça 2 séries a mais do leg press com descida curta no lugar do agachamento.' } },
-      { ex: 'extensora', k: 'iso',
-        ha: { ex: 'extensora-90-45', k: 'reab', flag: 'Só até a metade: 90° → 45°',
-          why: 'Nessa faixa a extensora força menos a patela, e trabalhar com o músculo alongado também faz crescer.',
-          alt: 'extensora-iso', altNote: 'Se doer, troque pela extensora parada: 5 vezes de 30 s com o joelho a uns 60° (isometria).' } },
+      { ex: 'leg45', k: 'main' },
+      { ex: 'goblet', k: 'main' },
+      { ex: 'extensora', k: 'iso' },
       { ex: 'flexora-sent', k: 'iso' },
-      { ex: 'abdutora', k: 'iso', ha: { why: 'Fortalece o glúteo médio, que ajuda a manter o joelho alinhado.' } },
+      { ex: 'abdutora', k: 'iso', x45: true },
       { ex: 'pant-sent', k: 'iso' },
-      { ex: 'prancha', k: 'core' }
+      { ex: 'prancha', k: 'core', x45: true }
     ] },
   IB: { title: 'Inferior B', short: 'Inf B', c: 4, focus: 'Posteriores, glúteos e quadríceps',
     items: [
-      { ex: 'stiff-halter', k: 'main',
-        /* altKey: a cadeira flexora começa um histórico novo; o antigo (mesa flexora) continua com o nome dela */
-        jo: { why: 'O stiff trabalha o posterior da coxa e o glúteo com o músculo alongado. Se der, faça ele.',
-          alt: 'flexora-sent', altKey: 'alt2',
-          altNote: 'Sem o stiff, faça a cadeira flexora com as mesmas séries: sentado, o posterior também trabalha alongado. Para a carga, use a da cadeira flexora de quarta.' },
-        ha: { warn: 'Halteres leves, pegos no suporte, e costas retas o tempo todo. Desça só até a altura dos joelhos.' } },
-      { ex: 'elev-pelvica', k: 'main', ha: { why: 'Trabalha glúteo e posterior de coxa sem carregar a coluna.' } },
-      { ex: 'hack', k: 'comp',
-        ha: { warn: 'No hack o peso apoia nos ombros e pressiona a coluna: carga leve, costas coladas no encosto e descida só até o joelho formar 90°. Coloque e tire as anilhas uma de cada vez, com as costas retas.',
-          alt: 'leg45-curto', altNote: 'Use se a lombar ou o joelho incomodarem no hack.' } },
-      { ex: 'afundo', k: 'comp',
-        ha: { warn: 'Halteres leves e descida só até a metade, sem o joelho de trás chegar perto do chão. Se precisar, apoie uma mão no suporte para se equilibrar.' } },
-      { ex: 'mesa-flexora', k: 'iso',
-        ha: { warn: 'Quadril colado no banco e abdômen firme. Se a lombar arquear, faça na cadeira flexora.' } },
-      { ex: 'pant-pe', k: 'iso',
-        ha: { warn: 'Se a máquina apoia o peso nos ombros, faça a panturrilha sentado: em pé, a carga desce pela coluna.' } },
-      { ex: 'abd-maq', k: 'iso',
-        ha: { ex: 'curlup', k: 'core', flag: 'No lugar do abdominal na máquina',
-          why: 'Dobrar a coluna com carga, como no abdominal na máquina, é o movimento que mais força a lombar. O curl-up trabalha o abdômen sem isso.' } }
+      /* altKey: no João, a cadeira flexora tem um histórico novo; o antigo (mesa flexora) continua com o nome dela */
+      Object.assign({}, STIFF, { jo: { altKey: 'alt2', altNote: STIFF_ALT + ' Para a carga, use a da cadeira flexora de quarta.' } }),
+      { ex: 'elev-pelvica', k: 'main' },
+      { ex: 'hack', k: 'comp' },
+      { ex: 'afundo', k: 'comp' },
+      { ex: 'mesa-flexora', k: 'iso' },
+      { ex: 'pant-pe', k: 'iso', x45: true },
+      { ex: 'abd-maq', k: 'iso', x45: true }
     ] },
-  SF: { title: 'Superior frente', short: 'Frente', c: 1, focus: 'Peito, ombros e bíceps',
-    items: [
-      { ex: 'supino-maq', k: 'main' },
-      { ex: 'supino-incl-halter', k: 'main', ha: { warn: W_HALTER } },
-      { ex: 'desenv-maq', k: 'comp', ha: { warn: 'Se a lombar descolar do encosto, a carga está alta.' } },
-      { ex: 'voador', k: 'iso', ha: { why: 'Sentado e com as costas apoiadas, trabalha o peito sem exigir da lombar.' } },
-      { ex: 'elev-lateral', k: 'iso', ha: { warn: W_HALTER } },
-      { ex: 'rosca-w', k: 'iso', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o tronco para trás: isso força a lombar.' } },
-      { ex: 'rosca-scott', k: 'iso', ha: { why: 'O apoio do banco Scott protege a coluna.' } },
-      { ex: 'birddog', k: 'core', ha: { why: 'Fortalece os músculos que estabilizam a lombar.' } }
-    ] },
-  SA: { title: 'Superior atrás', short: 'Atrás', c: 3, focus: 'Costas, ombro de trás e tríceps',
-    items: [
-      { ex: 'puxada-aberta', k: 'main', alt: 'puxada-uni', ha: { warn: W_PUXADA } },
-      { ex: 'remada-apoio', k: 'main', ha: { why: 'É a remada que menos exige da lombar: o apoio no peito segura a coluna.' } },
-      { ex: 'puxada-neutra', k: 'comp', alt: 'pulldown-reto', ha: { warn: W_PUXADA } },
-      { ex: 'remada-unilateral', k: 'comp',
-        ha: { warn: 'Mão e joelho bem apoiados no banco e costas retas, sem girar o tronco.',
-          alt: 'remada-apoio', altSets: 2, altNote: 'Se a lombar incomodar, faça 2 séries a mais da remada com apoio no peito no lugar desta.' } },
-      { ex: 'crucifixo-inv', k: 'iso' },
-      { ex: 'triceps-corda', k: 'iso', alt: 'triceps-frances', ha: { warn: 'Joelhos destravados e abdômen firme, sem jogar o corpo sobre a corda.' } },
-      { ex: 'triceps-barra', k: 'iso', alt: 'triceps-uni' },
-      { ex: 'prancha-lat', k: 'core', ha: { why: 'Fortalece a lateral do tronco sem carregar a coluna.' } }
-    ] },
-  /* João: parte de cima inteira em dois dias, para cada músculo ser treinado duas vezes por semana */
   UA: { title: 'Superior A', short: 'Sup A', c: 1, focus: 'Peito, costas, ombros, bíceps e tríceps',
     items: [
       { ex: 'supino-maq', k: 'main' },
       { ex: 'puxada-aberta', k: 'main', alt: 'puxada-uni' },
-      { ex: 'desenv-maq', k: 'comp' },
+      { ex: 'desenv-maq', k: 'comp', x45: true },
       { ex: 'remada-apoio', k: 'comp' },
       { ex: 'elev-lateral', k: 'iso' },
       { ex: 'rosca-w', k: 'iso' },
-      { ex: 'triceps-corda', k: 'iso', alt: 'triceps-frances' }
+      /* jo: o João continua com a corda como principal, para não perder o histórico dela */
+      { ex: 'triceps-frances', k: 'iso', alt: 'triceps-corda', x45: true, jo: { ex: 'triceps-corda', alt: 'triceps-frances' } }
     ] },
   UB: { title: 'Superior B', short: 'Sup B', c: 3, focus: 'Peito, costas, ombros, bíceps e tríceps',
     items: [
       { ex: 'supino-incl-halter', k: 'main' },
       { ex: 'puxada-neutra', k: 'comp', alt: 'pulldown-reto' },
-      { ex: 'remada-unilateral', k: 'comp' },
+      { ex: 'remada-unilateral', k: 'comp', x45: true },
       { ex: 'voador', k: 'iso' },
       { ex: 'elev-lateral', k: 'iso' },
-      { ex: 'crucifixo-inv', k: 'iso' },
-      { ex: 'rosca-scott', k: 'iso' },
+      { ex: 'crucifixo-inv', k: 'iso', x45: true },
+      { ex: 'rosca-scott', k: 'iso', x45: true },
       { ex: 'triceps-barra', k: 'iso', alt: 'triceps-uni' },
-      { ex: 'prancha-lat', k: 'core' }
+      { ex: 'prancha-lat', k: 'core', x45: true }
+    ] },
+  /* corpo inteiro em 3 dias: cada músculo 3 vezes por semana */
+  C3A: { title: 'Corpo inteiro A', short: 'Corpo A', c: 1, focus: 'Pernas, peito, costas, ombros e bíceps',
+    items: [
+      { ex: 'leg45', k: 'main' },
+      { ex: 'supino-maq', k: 'main' },
+      { ex: 'puxada-aberta', k: 'comp', alt: 'puxada-uni' },
+      { ex: 'flexora-sent', k: 'iso' },
+      { ex: 'elev-lateral', k: 'iso' },
+      { ex: 'rosca-w', k: 'iso', x45: true },
+      { ex: 'prancha', k: 'core', x45: true }
+    ] },
+  C3B: { title: 'Corpo inteiro B', short: 'Corpo B', c: 2, focus: 'Posteriores, glúteos, peito, costas, ombros e tríceps',
+    items: [
+      Object.assign({}, STIFF),
+      { ex: 'supino-incl-halter', k: 'comp' },
+      { ex: 'remada-apoio', k: 'comp' },
+      { ex: 'extensora', k: 'iso' },
+      { ex: 'desenv-maq', k: 'comp', x45: true },
+      { ex: 'triceps-frances', k: 'iso', alt: 'triceps-corda' },
+      { ex: 'pant-pe', k: 'iso', x45: true }
+    ] },
+  C3C: { title: 'Corpo inteiro C', short: 'Corpo C', c: 3, focus: 'Pernas, glúteos, peito, costas e braços',
+    items: [
+      { ex: 'hack', k: 'main' },
+      { ex: 'voador', k: 'iso' },
+      { ex: 'puxada-neutra', k: 'comp', alt: 'pulldown-reto' },
+      { ex: 'elev-pelvica', k: 'comp' },
+      { ex: 'elev-lateral', k: 'iso', x45: true },
+      { ex: 'rosca-scott', k: 'iso' },
+      { ex: 'triceps-barra', k: 'iso', alt: 'triceps-uni', x45: true }
+    ] },
+  /* corpo inteiro em 2 dias: cada músculo 2 vezes por semana */
+  C2A: { title: 'Corpo inteiro A', short: 'Corpo A', c: 1, focus: 'Pernas, peito, costas, ombros e braços',
+    items: [
+      { ex: 'leg45', k: 'main' },
+      { ex: 'supino-maq', k: 'main' },
+      { ex: 'puxada-aberta', k: 'comp', alt: 'puxada-uni' },
+      { ex: 'flexora-sent', k: 'iso' },
+      { ex: 'elev-lateral', k: 'iso', x45: true },
+      { ex: 'rosca-w', k: 'iso' },
+      { ex: 'triceps-frances', k: 'iso', alt: 'triceps-corda', x45: true },
+      { ex: 'prancha', k: 'core', x45: true }
+    ] },
+  C2B: { title: 'Corpo inteiro B', short: 'Corpo B', c: 2, focus: 'Pernas, glúteos, peito, costas, ombros e bíceps',
+    items: [
+      { ex: 'hack', k: 'main' },
+      { ex: 'supino-incl-halter', k: 'comp' },
+      { ex: 'remada-apoio', k: 'comp' },
+      Object.assign({}, STIFF),
+      { ex: 'desenv-maq', k: 'comp' },
+      { ex: 'rosca-scott', k: 'iso', x45: true },
+      { ex: 'abd-maq', k: 'iso', x45: true }
     ] }
 };
 
-/* semana fixa em vigor a partir desta segunda: antes dela o calendário de "Seu progresso" não marca treino do plano sem registro */
-const PLAN_FROM = '2026-10-19';
-/* w: o treino de cada dia, igual toda semana */
-const PLAN = {
-  joao: {
-    lede: 'Hipertrofia · 4 treinos por semana, com pernas e parte de cima em dias separados',
-    other: { 5: 'vôlei' },
-    slots: [
-      { dow: 1, w: 'IB', warm: WARM_J },
-      { dow: 2, w: 'UA', warm: WARM_J, end: CARDIO_J },
-      { dow: 3, w: 'IA', keep: true, warm: WARM_J,
-        extra: 'Sexta tem vôlei: neste treino, termine cada série com 2–3 repetições sobrando, mesmo na fase de progressão, para chegar ao jogo com as pernas inteiras.' },
-      { dow: 6, w: 'UB', warm: WARM_J, end: CARDIO_J,
-        extra: ['É o dia seguinte ao vôlei. Se os ombros ou os braços estiverem cansados, use cargas um pouco menores.', SAT_HOURS] }
-    ]
-  },
-  haniere: {
-    lede: 'Hipertrofia sem impacto · 3 treinos de musculação e 2 aulas de spinning por semana',
-    /* nome curto na faixa da semana: "spinning" não cabe na coluna do celular */
-    other: { 3: 'bike', 6: 'bike' },
-    slots: [
-      { dow: 1, w: 'IB', warm: WARM_H, solo: SOLO_H },
-      { dow: 2, w: 'SF', warm: WARM_H, solo: SOLO_H },
-      { dow: 4, w: 'SA', warm: WARM_H, solo: SOLO_H }
-    ]
-  }
+/* o treino do João: semana fixa, com o vôlei de sexta */
+const PLANO_JOAO = {
+  lede: 'Hipertrofia · 4 treinos por semana, com pernas e parte de cima em dias separados',
+  other: { 5: 'vôlei' },
+  /* semana fixa em vigor a partir desta segunda: antes dela o calendário de "Seu progresso" não marca treino do plano sem registro */
+  from: '2026-10-19',
+  slots: [
+    { dow: 1, w: 'IB', warm: WARM },
+    { dow: 2, w: 'UA', warm: WARM, end: CARDIO },
+    { dow: 3, w: 'IA', keep: true, warm: WARM,
+      extra: 'Sexta tem vôlei: neste treino, termine cada série com 2–3 repetições sobrando, mesmo na fase de progressão, para chegar ao jogo com as pernas inteiras.' },
+    { dow: 6, w: 'UB', warm: WARM, end: CARDIO,
+      extra: ['É o dia seguinte ao vôlei. Se os ombros ou os braços estiverem cansados, use cargas um pouco menores.', SAT_HOURS] }
+  ],
+  /* from: a partir de quando a fase vale. A página troca de fase sozinha nessas datas. */
+  ate: '2027-01-03',
+  phases: [
+    { label: 'Até 8/11', name: 'Adaptação', from: '2026-10-07' },
+    { label: '9/11 a 6/12', name: 'Base', from: '2026-11-09' },
+    { label: '7/12 a 3/1', name: 'Progressão', from: '2026-12-07' }
+  ],
+  fim: 'Depois de 3/1, faça uma nova conferência para montar o próximo treino.'
 };
 
-const RX = {
-  joao: { main: ['2 × 12–15', '3 × 10–12', '4 × 8–12'], comp: ['2 × 12–15', '3 × 10–12', '3 × 8–12'], iso: ['2 × 12–15', '3 × 12–15', '3 × 10–15'] },
-  haniere: { comp: ['2 × 12–15', '3 × 10–12', '3 × 10–12'], iso: ['2 × 12–15', '3 × 12–15', '3 × 12–15'], reab: ['2 × 12–15', '3 × 12–15', '3 × 12–15'] }
+/* modelos para quem entra pelas perguntas: a sequência de treinos cai nos dias escolhidos, na ordem da semana */
+const MODELOS = {
+  c2: { nome: 'Corpo inteiro', dias: 2, seq: ['C2A', 'C2B'], lede: 'Hipertrofia · corpo inteiro, 2 treinos por semana',
+    semana: 'Cada treino trabalha o corpo todo, então cada músculo é treinado duas vezes por semana. Deixe pelo menos um dia de folga entre os treinos.' },
+  c3: { nome: 'Corpo inteiro', dias: 3, seq: ['C3A', 'C3B', 'C3C'], lede: 'Hipertrofia · corpo inteiro, 3 treinos por semana',
+    semana: 'Cada treino trabalha o corpo todo, com exercícios diferentes em cada dia, e cada músculo é treinado três vezes por semana.' },
+  ul4: { nome: 'Superior e inferior', dias: 4, seq: ['IA', 'UA', 'IB', 'UB'], lede: 'Hipertrofia · 4 treinos por semana, com pernas e parte de cima em dias separados',
+    semana: 'Pernas e parte de cima nunca ficam no mesmo dia, e cada músculo é treinado duas vezes por semana.' }
 };
-const REST = { main: [120, '2 min'], comp: [90, '90 s'], iso: [60, '60–90 s'], reab: [60, '60–90 s'], core: [40, '30–45 s'] };
-/* from: a partir de quando a fase vale. A página troca de fase sozinha nessas datas. */
-const PHASES = [
-  { label: 'Até 8/11', name: 'Adaptação', from: '2026-10-07' },
-  { label: '9/11 a 6/12', name: 'Base', from: '2026-11-09' },
-  { label: '7/12 a 3/1', name: 'Progressão', from: '2026-12-07' }
-];
+const MODELO_DIAS = { 2: 'c2', 3: 'c3', 4: 'ul4' };
+const DIAS_SUGERIDOS = { 2: [1, 4], 3: [1, 3, 5], 4: [1, 2, 4, 5] };
+/* semanas de adaptação conforme a experiência; depois vêm 4 semanas de base e a progressão até a semana 12 */
+const ADAPTA_SEMANAS = { novo: 3, menos1: 2, mais1: 1 };
+const FOCO_NOME = { inferior: 'pernas e glúteos', superior: 'parte de cima' };
+/* exercícios de pernas e glúteos (para o foco escolhido nas perguntas) */
+const INFERIOR = new Set(['leg45', 'goblet', 'hack', 'afundo', 'extensora', 'flexora-sent', 'mesa-flexora', 'stiff-halter', 'elev-pelvica', 'abdutora', 'pant-pe', 'pant-sent', 'smith', 'leg45-uni', 'pant-leg', 'elev-pelvica-maq', 'abd-lado', 'leg45-curto', 'extensora-90-45']);
+
+/* ---------- Lesões e limitações (pergunta 7) ----------
+   troca: exercício que sai → substitutos em ordem de preferência. Entra o primeiro que não force outra parte marcada
+          e que ainda não esteja no treino do dia. Se nenhum servir, o exercício sai do dia.
+   evita: exercícios que também não entram, nem como alternativa.
+   cuidado: aviso no cartão dos exercícios que continuam no treino.
+   A ordem das chaves é a das perguntas. */
+const LESOES = {
+  pescoco: { nome: 'pescoço', o: 'o pescoço',
+    troca: { hack: ['leg45', 'leg45-uni'], afundo: ['leg45-uni', 'abdutora'] },
+    evita: ['smith'],
+    cuidado: {
+      'desenv-maq': 'Pescoço: cabeça encostada e queixo recolhido, sem jogar a cabeça para a frente.',
+      'puxada-aberta': 'Pescoço: puxe a barra pela frente, até o alto do peito, sem abaixar a cabeça.',
+      'puxada-neutra': 'Pescoço: puxe até o alto do peito, sem abaixar a cabeça.',
+      'elev-lateral': 'Pescoço: ombros longe das orelhas durante toda a série.',
+      'remada-unilateral': 'Pescoço: olhe para o chão, com o pescoço alinhado às costas.' },
+    geral: 'Saíram os exercícios com carga apoiada nos ombros. Mantenha o pescoço alinhado com o tronco em todos os exercícios.' },
+  ombro: { nome: 'ombro', o: 'o ombro',
+    troca: { 'desenv-maq': ['face-pull', 'crucifixo-inv'], 'puxada-aberta': ['puxada-neutra', 'remada-baixa'],
+      'supino-incl-halter': ['supino-incl-maq', 'supino-maq'], 'triceps-frances': ['triceps-corda', 'triceps-barra'] },
+    evita: ['desenv-halter', 'pulldown-reto'],
+    cuidado: {
+      'supino-maq': 'Ombro: desça só até a linha do peito, com os cotovelos a uns 45° do tronco.',
+      'supino-incl-maq': 'Ombro: desça só até a linha do peito, com os cotovelos a uns 45° do tronco.',
+      'voador': 'Ombro: abra os braços só até a linha do corpo.',
+      'elev-lateral': 'Ombro: suba só até onde não doer, no máximo até a altura dos ombros, com os braços um pouco à frente do corpo.',
+      'puxada-neutra': 'Ombro: no alto, pare antes de sentir o ombro puxar.',
+      'crucifixo-inv': 'Ombro: abra só até onde não doer.' },
+    geral: 'Exercício ajuda a diminuir a dor no ombro. Saíram os movimentos com carga e o braço acima da cabeça.' },
+  cotovelo: { nome: 'cotovelo ou punho', o: 'o cotovelo e o punho',
+    troca: { 'triceps-barra': ['triceps-corda', 'triceps-uni'], 'triceps-frances': ['triceps-corda', 'triceps-uni'],
+      'supino-incl-halter': ['supino-incl-maq', 'supino-maq'], 'remada-unilateral': ['remada-apoio', 'remada-baixa'],
+      'rosca-w': ['rosca-sent', 'rosca-alt'], 'rosca-scott': ['rosca-sent', 'rosca-alt'] },
+    evita: [],
+    cuidado: {
+      'rosca-sent': 'Cotovelo ou punho: use a pegada que não doer. Com as palmas viradas uma para a outra costuma incomodar menos.',
+      'rosca-alt': 'Cotovelo ou punho: use a pegada que não doer. Com as palmas viradas uma para a outra costuma incomodar menos.',
+      'triceps-corda': 'Cotovelo ou punho: aumente a carga devagar e diminua se a dor passar de 4.',
+      'triceps-uni': 'Cotovelo ou punho: aumente a carga devagar e diminua se a dor passar de 4.' },
+    geral: 'Saíram os exercícios com barra reta e pegada fixa. Use a pegada que não doer e aumente a carga devagar.' },
+  lombar: { nome: 'lombar', o: 'a lombar',
+    troca: { 'stiff-halter': ['flexora-sent', 'mesa-flexora'], goblet: ['leg45', 'leg45-uni'], hack: ['leg45', 'leg45-uni'],
+      afundo: ['leg45-uni', 'abdutora'], 'abd-maq': ['prancha', 'prancha-lat'], 'rosca-w': ['rosca-sent', 'rosca-scott'] },
+    evita: ['smith', 'abd-supra'],
+    cuidado: {
+      leg45: 'Lombar: desça só até onde a lombar continua colada no encosto.',
+      'leg45-uni': 'Lombar: desça só até onde a lombar continua colada no encosto.',
+      'elev-pelvica': 'Lombar: suba só até alinhar tronco e coxas, sem arquear a lombar no alto.',
+      'desenv-maq': 'Lombar: costas e glúteos colados no encosto, sem arquear.',
+      'remada-unilateral': 'Lombar: mão e joelho bem apoiados no banco e costas retas.',
+      'remada-baixa': 'Lombar: tronco parado, sem curvar as costas para alcançar o triângulo.' },
+    geral: 'Musculação está entre os exercícios que mais ajudam quem tem dor lombar crônica. Os exercícios que carregam peso nas costas deram lugar a aparelhos com as costas apoiadas.' },
+  quadril: { nome: 'quadril', o: 'o quadril',
+    troca: { afundo: ['leg45-uni', 'abdutora'] },
+    evita: [],
+    cuidado: {
+      goblet: 'Quadril: desça só até onde não sentir o quadril travar ou pinçar na frente.',
+      hack: 'Quadril: desça só até onde não sentir o quadril travar ou pinçar na frente.',
+      smith: 'Quadril: desça só até onde não sentir o quadril travar ou pinçar na frente.',
+      leg45: 'Quadril: não traga os joelhos para perto do peito e pare antes de o quadril sair do banco.',
+      'leg45-uni': 'Quadril: não traga o joelho para perto do peito e pare antes de o quadril sair do banco.',
+      'stiff-halter': 'Quadril: desça só até sentir o posterior da coxa alongar, sem forçar.',
+      abdutora: 'Quadril: abra só até onde não doer.' },
+    geral: 'Nos agachamentos e no leg press, desça só até onde não sentir o quadril travar ou pinçar.' },
+  joelho: { nome: 'joelho', o: 'o joelho',
+    troca: { leg45: ['leg45-curto'], hack: ['leg45-curto', 'elev-pelvica'], goblet: ['elev-pelvica', 'abdutora'],
+      afundo: ['abdutora', 'elev-pelvica-maq'], extensora: ['extensora-90-45'] },
+    evita: ['smith', 'leg45-uni'],
+    cuidado: {
+      'flexora-sent': 'Joelho: movimento lento, sem tranco no fim.',
+      'mesa-flexora': 'Joelho: movimento lento, sem tranco no fim.' },
+    geral: 'Fortalecer quadril e coxa juntos ajuda quem tem dor no joelho. Nos exercícios com descida curta, aumente a descida aos poucos, semana a semana, se não doer.' },
+  tornozelo: { nome: 'tornozelo ou pé', o: 'o tornozelo e o pé',
+    troca: { 'pant-pe': ['pant-sent', 'pant-leg'], afundo: ['leg45-uni', 'abdutora'] },
+    evita: [],
+    cuidado: {
+      goblet: 'Tornozelo: se o calcanhar sair do chão, desça menos.',
+      'pant-sent': 'Tornozelo: desça o calcanhar só até onde não doer.',
+      'pant-leg': 'Tornozelo: desça o calcanhar só até onde não doer.' },
+    geral: 'Saíram os exercícios em pé que mais carregam o tornozelo.' },
+  osteo: { nome: 'osteoporose ou osteopenia', o: 'a coluna',
+    troca: { 'abd-maq': ['prancha', 'prancha-lat'] },
+    evita: ['abd-supra'],
+    cuidado: {
+      'stiff-halter': 'Ossos: costas sempre retas, sem curvar a coluna para descer mais.',
+      goblet: 'Ossos: costas retas o tempo todo.',
+      'remada-unilateral': 'Ossos: costas retas, com mão e joelho apoiados no banco.' },
+    geral: 'Musculação com carga que sobe aos poucos ajuda a manter os ossos fortes. Saiu o abdominal que curva a coluna com peso. No começo, peça ao professor para acompanhar de perto.' },
+  outra: { nome: 'outra lesão', o: '', troca: {}, evita: [], cuidado: {},
+    geral: 'Como o app não sabe qual é a outra lesão, não trocou exercícios por ela. Pergunte ao fisioterapeuta ou ao professor o que evitar e use a alternativa de cada exercício quando precisar.' }
+};
+/* exercícios que entram como prancha: segura a posição, sem carga para anotar */
+const K_FIXO = { prancha: 'core', 'prancha-lat': 'core' };
+const juntarPt = (a) => (a.length > 1 ? a.slice(0, -1).join(', ') + ' e ' + a[a.length - 1] : a.join(''));
+
+/* os exercícios de um dia, adaptados às partes do corpo marcadas na pergunta 7.
+   Item trocado: { ex, k, x45, troca: { de, regs } }. Item que saiu: vai para saiu[]. */
+function adaptarItens(items, lesoes, saiu) {
+  const regs = (lesoes || []).filter((r) => LESOES[r]);
+  if (!regs.length) return items;
+  const evita = new Set();
+  regs.forEach((r) => { Object.keys(LESOES[r].troca).forEach((x) => evita.add(x)); LESOES[r].evita.forEach((x) => evita.add(x)); });
+  const usados = new Set(items.filter((it) => !evita.has(it.ex)).map((it) => it.ex));
+  const candidatos = (ex, fora) => {
+    const c = [];
+    regs.forEach((r) => (LESOES[r].troca[ex] || []).forEach((x) => { if (c.indexOf(x) < 0 && EX[x] && !evita.has(x) && fora.indexOf(x) < 0) c.push(x); }));
+    return c;
+  };
+  const out = [];
+  items.forEach((it0) => {
+    let it;
+    if (evita.has(it0.ex)) {
+      const quem = regs.filter((r) => LESOES[r].troca[it0.ex] || LESOES[r].evita.indexOf(it0.ex) >= 0);
+      const novo = candidatos(it0.ex, []).find((x) => !usados.has(x));
+      if (!novo) { if (saiu) saiu.push({ de: it0.ex, regs: quem }); return; }
+      usados.add(novo);
+      it = { ex: novo, k: K_FIXO[novo] || it0.k, x45: it0.x45, troca: { de: it0.ex, regs: quem } };
+      it.flag = 'No lugar de ' + EX[it0.ex].n + ', para poupar ' + juntarPt(quem.map((r) => LESOES[r].o).filter(Boolean));
+    } else {
+      it = Object.assign({}, it0);
+    }
+    /* alternativa que força uma parte marcada: troca por outra que sirva, ou fica sem alternativa */
+    const altId = it.alt || (EX[it.ex] && EX[it.ex].alt);
+    if (altId && evita.has(altId)) {
+      const outra = candidatos(altId, [it.ex])[0];
+      delete it.altSets; delete it.altNote;
+      if (outra) it.alt = outra; else { delete it.alt; it.noAlt = true; }
+    }
+    const avisos = regs.map((r) => LESOES[r].cuidado[it.ex]).filter(Boolean);
+    if (avisos.length) it.warn = [it.warn].concat(avisos).filter(Boolean).join(' ');
+    out.push(it);
+  });
+  return out;
+}
+
+const RX_PADRAO = { main: ['2 × 12–15', '3 × 10–12', '4 × 8–12'], comp: ['2 × 12–15', '3 × 10–12', '3 × 8–12'], iso: ['2 × 12–15', '3 × 12–15', '3 × 10–15'] };
+const REST = { main: [120, '2 min'], comp: [90, '90 s'], iso: [60, '60–90 s'], core: [40, '30–45 s'] };
 const WEEK = [[1, 'SEG'], [2, 'TER'], [3, 'QUA'], [4, 'QUI'], [5, 'SEX'], [6, 'SÁB'], [0, 'DOM']];
 const DOW_NAME = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-const NAMES = { joao: 'João', haniere: 'Haniere' };
+const DOW_CURTO = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+
+/* datas no formato 2026-11-19 */
+function dataMais(k, n) { const p = k.split('-').map(Number), d = new Date(p[0], p[1] - 1, p[2] + n); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+const dCurta = (k) => { const p = k.split('-').map(Number); return p[2] + '/' + p[1]; };
+const ordemSemana = (a, b) => ((a + 6) % 7) - ((b + 6) % 7);
+function listaDias(dias) {
+  const n = dias.slice().sort(ordemSemana).map((d) => DOW_NAME[d].toLowerCase());
+  return n.length > 1 ? n.slice(0, -1).join(', ') + ' e ' + n[n.length - 1] : n.join('');
+}
+function resumoPlano(pl) {
+  const M = MODELOS[pl && pl.modelo];
+  if (!M) return '';
+  return M.nome + ' · ' + M.dias + ' dias (' + pl.dias.slice().sort(ordemSemana).map((d) => DOW_CURTO[d]).join(', ') + ')' +
+    (pl.tempo === 'curto' ? ' · até 45 min' : '') + (FOCO_NOME[pl.foco] ? ' · foco em ' + FOCO_NOME[pl.foco] : '');
+}
+
+/* o plano de uma pessoa: dias da semana, fases e ajustes das respostas */
+/* respostas de saúde (perguntas 6 a 8): só a própria pessoa recebe */
+function lerSaude(sd) {
+  sd = sd && typeof sd === 'object' ? sd : null;
+  return {
+    respondida: !!sd,
+    lesoes: sd && Array.isArray(sd.lesoes) ? Object.keys(LESOES).filter((r) => sd.lesoes.indexOf(r) >= 0) : [],
+    triagem: sd && ['liberado', 'pendente'].indexOf(sd.triagem) >= 0 ? sd.triagem : 'nao',
+    peso: sd && Number.isFinite(sd.peso) ? sd.peso : null,
+    altura: sd && Number.isFinite(sd.altura) ? sd.altura : null
+  };
+}
+function montarPlano(perfil) {
+  if (perfil.id === 'joao' || (perfil.plano && perfil.plano.modelo === 'joao')) {
+    /* o treino do João é montado à parte: ele não passa pelas perguntas */
+    return { id: perfil.id, nome: perfil.nome, admin: !!perfil.admin, modelo: 'joao', lede: PLANO_JOAO.lede, other: PLANO_JOAO.other,
+      slots: PLANO_JOAO.slots, phases: PLANO_JOAO.phases, from: PLANO_JOAO.from, fim: PLANO_JOAO.fim, ate: PLANO_JOAO.ate,
+      semana: MODELOS.ul4.semana, foco: 'igual', curto: false, saude: Object.assign(lerSaude(null), { respondida: true }) };
+  }
+  const pl = perfil.plano || {};
+  const M = MODELOS[pl.modelo] || MODELOS.c3;
+  const dias = (Array.isArray(pl.dias) && pl.dias.length === M.dias ? pl.dias : DIAS_SUGERIDOS[M.dias]).slice().sort(ordemSemana);
+  const slots = dias.map((dow, i) => {
+    const w = M.seq[i % M.seq.length];
+    return { dow: dow, w: w, warm: WARM, end: pl.modelo === 'ul4' && w.charAt(0) === 'U' && pl.tempo !== 'curto' ? CARDIO : undefined };
+  });
+  const ini = /^\d{4}-\d{2}-\d{2}$/.test(pl.inicio || '') ? pl.inicio : dataMais(new Date().toISOString().slice(0, 10), 0);
+  const base = dataMais(ini, 7 * (ADAPTA_SEMANAS[pl.nivel] || 3)), prog = dataMais(base, 28), fim = dataMais(ini, 83);
+  return {
+    id: perfil.id, nome: perfil.nome, admin: !!perfil.admin, modelo: pl.modelo, lede: M.lede, other: {}, slots: slots,
+    phases: [
+      { label: 'Até ' + dCurta(dataMais(base, -1)), name: 'Adaptação', from: ini },
+      { label: dCurta(base) + ' a ' + dCurta(dataMais(prog, -1)), name: 'Base', from: base },
+      { label: dCurta(prog) + ' a ' + dCurta(fim), name: 'Progressão', from: prog }
+    ],
+    from: ini, ate: fim, fim: 'Depois de ' + dCurta(fim) + ', refaça as perguntas no menu para montar o próximo ciclo de 12 semanas.',
+    semana: M.semana, foco: FOCO_NOME[pl.foco] ? pl.foco : 'igual', curto: pl.tempo === 'curto', saude: lerSaude(perfil.saude)
+  };
+}
 
 /* ---------- Animações (boneco em SVG, 240 × 180) ----------
    v: 's' de lado · 'f' de frente
@@ -855,7 +1282,7 @@ const FIG = (function () {
       poses: [{ P: [120, 84], t: -90, a: [88, 70, 1, 0.3], l: LFS }, { P: [120, 84], t: -90, a: [88, 88], l: LFS }] },
     'leg45': { v: 's', vb: '0 25 240 180', props: LEGP, cap: 'Desça até o joelho formar uns 90°, sem tirar o quadril do banco',
       poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [111, 87], f: -135 } }, { P: [70, 128], t: -150, a: [60, 20], l: { t: [127.6, 70.4], f: -135 } }] },
-    'leg45-curto': { v: 's', vb: '0 25 240 180', props: [...LEGP, ['st', 'A', 'T', 0, -4, 52, 'até aqui']], cap: 'Semanas 1–2: a plataforma só desce até a linha tracejada',
+    'leg45-curto': { v: 's', vb: '0 25 240 180', props: [...LEGP, ['st', 'A', 'T', 0, -4, 52, 'até aqui']], cap: 'Comece descendo só até a linha tracejada e aumente aos poucos, se não doer',
       poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [123.6, 74.4], f: -135 } }, { P: [70, 128], t: -150, a: [60, 20], l: { t: [127.6, 70.4], f: -135 } }] },
     'goblet': { v: 's', props: [F(168), ['dt', 'W', 6, 0, 0]],
       poses: [{ P: [92, 124], t: -58, a: [30, 188], l: { t: [116, 166] } }, { P: [113, 86], t: -90, a: [70, 260], l: { t: [116, 166] } }] },
@@ -885,8 +1312,6 @@ const FIG = (function () {
         { P: [95, 70], t: -8, a: [200, 100], a2: [80, 80], l: { t: [100, 150] }, l2: [92, 180, 180] }] },
     'elev-lateral': { v: 'f', props: [F(171), ...DB2],
       poses: [{ P: [120, 84], t: -90, a: [98, 94], l: LFS }, { P: [120, 84], t: -90, a: [182, 170], l: LFS }] },
-    'elev-lateral-sent': { v: 'f', props: [F(173), ...FSEAT, ...DB2],
-      poses: [{ P: [120, 120], t: -90, a: [98, 94], l: LF }, { P: [120, 120], t: -90, a: [182, 170], l: LF }] },
     'rosca-scott': { v: 's', props: [F(168), ['bx', 62, 127, 40, 6], ['ln', 84, 133, 84, 167, 5], ['sg', 88, 83, 112, 107, 7], ['ln', 112, 107, 112, 167, 4], ['dt', 'W', 7, 0, 0]],
       poses: [{ P: [80, 124], t: -80, a: [45, 40], l: LS }, { P: [80, 124], t: -80, a: [45, -62], l: LS }] },
     'stiff-halter': { v: 's', props: [F(168), ['dt', 'W', 6, 0, 0]],
@@ -902,27 +1327,10 @@ const FIG = (function () {
     'mesa-flexora': { v: 's', vb: '0 30 240 180', props: [F(168), ['bx', 84, 118, 124, 8], ['ln', 96, 126, 96, 167, 4], ['ln', 196, 126, 196, 167, 4], ['dl', 'A', 'K', -6, -7, 6, 1]],
       poses: [{ P: [132, 112], t: 0, a: [100, 60], l: [180, 180, 90] }, { P: [132, 112], t: 0, a: [100, 60], l: [180, -80, -10] }] },
     'pant-pe': { v: 's', vb: '-10 -18 260 195', props: [F(168), ['bx', 116, 151, 36, 17], ['dt', 'N', 5, -2, -5]],
-      poses: [{ P: [113.1, 73.1], t: -90, a: [70, -95], l: [90, 90, -25] }, { P: [116.3, 58.8], t: -90, a: [70, -95], l: [90, 90, 50] }] },
+      cap: 'Desça o calcanhar o máximo e suba só até o pé ficar reto',
+      poses: [{ P: [113.1, 73.1], t: -90, a: [70, -95], l: [90, 90, -25] }, { P: [112, 68], t: -90, a: [70, -95], l: [90, 90, 0] }] },
     'abd-maq': { v: 's', props: [F(168), ...SEAT(96), ['dt', 'W', 4, 0, 0]],
       poses: [{ P: [96, 124], t: -95, c: 0, a: [60, -110], l: LS }, { P: [96, 124], t: -82, c: 45, a: [118, -52], l: LS }] },
-    'ponte': { v: 's', vb: '0 50 240 180', tm: [0.4, 1, 1, 2], cap: 'Suba contraindo o glúteo e segure 1 s', props: [['bx', 26, 166, 160, 4]],
-      poses: [{ P: [110, 158], t: 180, a: [10, 5], l: { t: [128, 162] } }, { P: [107, 140.9], t: 160, a: [15, 5], l: { t: [128, 162] } }] },
-    'deadbug': { v: 's', vb: '0 45 240 180', cap: 'Alterne os lados sem tirar a lombar do chão', props: [MAT],
-      steps: [{ p: 1, m: 1.5, h: 0.6 }, { p: 0, m: 1.5, h: 0.3 }, { p: 2, m: 1.5, h: 0.6 }, { p: 0, m: 1.5, h: 0.3 }],
-      poses: [{ P: [130, 156], t: 180, a: [-90, -90], l: [-90, 0, -60] },
-        { P: [130, 156], t: 180, a: [180, 180], a2: [-90, -90], l: [-90, 0, -60], l2: [-8, -4, -40] },
-        { P: [130, 156], t: 180, a: [-90, -90], a2: [180, 180], l: [-8, -4, -40], l2: [-90, 0, -60] }] },
-    'birddog': { v: 's', vb: '0 42 240 180', cap: 'Alterne os lados e segure alguns segundos em cada', props: [MAT, ['bx', 92, 160, 34, 5]],
-      steps: [{ p: 1, m: 1.3, h: 1.2 }, { p: 0, m: 1.3, h: 0.3 }, { p: 2, m: 1.3, h: 1.2 }, { p: 0, m: 1.3, h: 0.3 }],
-      poses: [{ P: [106, 120], t: -10, a: [90, 90], l: [90, 180, 180] },
-        { P: [106, 120], t: -10, a: [-8, -8], a2: [90, 90], l: [90, 180, 180], l2: [178, 178, 90] },
-        { P: [106, 120], t: -10, a: [90, 90], a2: [-8, -8], l: [178, 178, 90], l2: [90, 180, 180] }] },
-    'curlup': { v: 's', vb: '0 54 240 180', tm: [0.6, 1.2, 2, 1.2], cap: 'Tire só a cabeça e os ombros do chão e segure', props: [MAT],
-      poses: [{ P: [130, 156], t: 180, c: 0, a: { t: [132, 158], s: -1 }, l: { t: [160, 162] }, l2: [0, 0, -80] },
-        { P: [130, 156], t: 180, c: 18, a: { t: [132, 158], s: -1 }, l: { t: [160, 162] }, l2: [0, 0, -80] }] },
-    'pallof': { v: 'f', tm: [0.4, 1, 2, 1.2], cap: 'Estenda os braços e segure 2 s sem deixar o tronco girar',
-      props: [F(171), ['cb', 14, 56, 'W'], ['dt', 'W', 4, 0, 0]],
-      poses: [{ P: [120, 84], t: -90, a: [100, -10, 1, 0.8], l: [100, 92, 100, 1, 1, 0.4] }, { P: [120, 84], t: -90, a: [40, 70, 0.55, 0.5], l: [100, 92, 100, 1, 1, 0.4] }] },
 
     /* alternativas */
     'puxada-uni': { v: 'f', cap: 'Um braço de cada vez: o cotovelo desce ao lado do corpo',
@@ -971,9 +1379,9 @@ const FIG = (function () {
       props: LEGP,
       poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [111, 87], f: -135 }, l2: { t: [102, 166], f: 0 } },
         { P: [70, 128], t: -150, a: [60, 20], l: { t: [127.6, 70.4], f: -135 }, l2: { t: [102, 166], f: 0 } }] },
-    'pant-leg': { v: 's', vb: '0 25 240 180', tm: [0.4, 1, 1, 2], cap: 'Joelhos quase esticados: só os tornozelos empurram a plataforma',
+    'pant-leg': { v: 's', vb: '0 25 240 180', tm: [0.4, 1, 1, 2], cap: 'Joelhos parados: desça os calcanhares e empurre só até a sola ficar paralela à plataforma',
       props: [F(168), ['ln', 95, 117, 185, 27, 3], ['bx', 50, 131, 44, 7], ['ln', 62, 138, 62, 167, 4], ['bn', 'P', 'N', 7, 8, 6, 2], ['pt', 'T', -135, 15, 34, 6, 4]],
-      poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [124, 74], f: -150 } }, { P: [70, 128], t: -150, a: [60, 20], l: { t: [124, 74], f: -105 } }] },
+      poses: [{ P: [70, 128], t: -150, a: [60, 20], l: { t: [124, 74], f: -150 } }, { P: [70, 128], t: -150, a: [60, 20], l: { t: [124, 74], f: -135 } }] },
     'elev-pelvica-maq': { v: 's', vb: '0 39 240 180', tm: [0.4, 1, 1, 2], cap: 'Suba até alinhar tronco e coxas e segure 1 s',
       props: [F(162), ['bx', 16, 123, 46, 7], ['ln', 24, 130, 24, 161, 4], ['ln', 54, 130, 54, 161, 4], ['lv', 138, 160, 'P', 0, -10, 7]],
       poses: [{ P: [103.3, 145], t: -150, a: [20, 45], l: { t: [152, 160] } }, { P: [110, 120], t: 180, a: [-10, 15], l: { t: [152, 160] } }] },
@@ -985,14 +1393,387 @@ const FIG = (function () {
       props: [MAT],
       poses: [{ P: [130, 156], t: 180, c: 0, a: [-10, 190, 0.8, 0.65], l: { t: [160, 162] } },
         { P: [130, 156], t: 180, c: 30, a: [20, 220, 0.8, 0.65], l: { t: [160, 162] } }] },
-    'extensora-iso': { v: 's', still: true, cap: 'Segure parado com o joelho dobrado a uns 60°',
-      props: [F(168), ...SEAT(96), BACK, ['dl', 'A', 'K', -6, 7, 6, 1]],
-      poses: [{ P: [96, 124], t: -100, a: [80, 20], l: [0, 60, -30] }] }
   };
   return f;
 })();
-(function () {
+/* ---------- Mr. Boom: conta, perguntas e pessoas ----------
+   Cada pessoa cria a própria conta (usuário e senha) e espera o administrador liberar.
+   A senha é digitada uma vez por aparelho: o servidor grava um cookie que vale 400 dias e se renova a cada uso.
+   Sem conexão, o app abre com a pessoa guardada neste aparelho. */
+const G = (function () {
   'use strict';
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const LS_PERFIL = 'mrboom.perfil.v1';
+  const LS_SAIR = 'mrboom.sair.v1';
+  /* código do treino guardado pelas versões antigas: entra sozinho como João uma vez e depois é apagado */
+  const LS_PIN = 'jh-treino.pin.v1';
+  /* o que fica guardado do app neste aparelho: sai junto com a pessoa */
+  const LS_APP = ['jh-treino.cloud.v1', 'jh-treino.outbox.v1', 'jh-treino.logs.v1', 'jh-treino.prefs.v1'];
+  const USUARIO_RE = /^[a-z0-9][a-z0-9._-]{2,19}$/;
+  let iniciado = false, perfilAtual = null, pessoas = [], espera = null;
+
+  function lsGet(k) { try { const v = window.localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+  function lsSet(k, v) { try { window.localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* ok */ } }
+  function lsRaw(k) { try { return window.localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+  function lsDel(k) { try { window.localStorage.removeItem(k); } catch (e) { /* ok */ } }
+  function hoje() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  const primeiroNome = (p) => String((p && p.nome) || '').split(' ')[0];
+
+  function tela(nome) {
+    ['carregando', 'entrar', 'aguardando', 'perguntas'].forEach((t) => { $('#tela-' + t).hidden = t !== nome; });
+    $('#topbar').hidden = nome !== 'app';
+    $('#app').hidden = nome !== 'app';
+    if (nome !== 'aguardando' && espera) { clearInterval(espera); espera = null; }
+    window.scrollTo(0, 0);
+  }
+  async function conta(corpo, query) {
+    const opt = corpo
+      ? { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) }
+      : { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } };
+    const r = await fetch('/api/conta' + (query || ''), opt);
+    let j = {};
+    try { j = (await r.json()) || {}; } catch (e) { j = {}; }
+    return { st: r.status, j: j };
+  }
+  async function tentar(corpo) {
+    let r = null;
+    try { r = await conta(corpo); } catch (e) { r = null; }
+    if (r && r.st === 401) { fecharPessoas(); expirou(); return { ok: false, msg: '' }; }
+    if (r && r.st === 200) return { ok: true, j: r.j };
+    return { ok: false, msg: !r ? 'Sem conexão. Tente de novo quando a internet voltar.' : r.j.erro || 'Não deu certo. Tente de novo.' };
+  }
+  const comPedidos = (j) => { const p = j.pessoa; if (p && typeof j.pendentes === 'number') p.pendentes = j.pendentes; return p; };
+
+  async function boot() {
+    tela('carregando');
+    if (lsGet(LS_SAIR)) {
+      try { if ((await conta({ acao: 'sair' })).st === 200) lsDel(LS_SAIR); } catch (e) { /* continua pendente */ }
+      if (lsGet(LS_SAIR)) { entrar('Sem conexão com o servidor agora. Confira a internet e tente de novo.'); return; }
+    }
+    let r = null;
+    try { r = await conta(); } catch (e) { r = null; }
+    if (r && r.st === 200 && r.j.pessoa) { seguir(comPedidos(r.j)); return; }
+    if (r && r.st === 401) {
+      const pin = lsRaw(LS_PIN);
+      if (pin) {
+        let e = null;
+        try { e = await conta({ acao: 'entrar', usuario: 'joao', senha: pin }); } catch (x) { e = null; }
+        if (e) lsDel(LS_PIN);
+        if (e && e.st === 200 && e.j.pessoa) {
+          let c = null;
+          try { c = await conta(); } catch (x) { c = null; }
+          seguir(c && c.st === 200 && c.j.pessoa ? comPedidos(c.j) : e.j.pessoa);
+          return;
+        }
+      }
+      lsDel(LS_PERFIL);
+      entrar();
+      return;
+    }
+    /* sem conexão ou servidor fora do ar: abre com a pessoa guardada neste aparelho */
+    const guardado = lsGet(LS_PERFIL);
+    if (guardado && guardado.id && guardado.plano && guardado.status !== 'pendente') { seguir(guardado); return; }
+    entrar('Sem conexão com o servidor agora. Confira a internet e tente de novo.');
+  }
+
+  function seguir(p) {
+    if (iniciado) { location.reload(); return; }
+    perfilAtual = p;
+    lsSet(LS_PERFIL, p);
+    if (p.status === 'pendente') { aguardando(p); return; }
+    if (!p.plano) { abrirPerguntas(p); return; }
+    tela('app');
+    iniciado = true;
+    iniciarApp(p);
+  }
+
+  /* ---------- entrar e criar conta ---------- */
+  function mostrarBloco(qual) {
+    $('#bloco-entrar').hidden = qual !== 'entrar';
+    $('#bloco-cadastro').hidden = qual !== 'cadastro';
+    $('#entrar-msg').textContent = '';
+    $('#cad-msg').textContent = '';
+    setTimeout(() => { try { $(qual === 'entrar' ? '#entrar-usuario' : '#cad-nome').focus(); } catch (e) { /* ok */ } }, 60);
+  }
+  function entrar(msg) {
+    tela('entrar');
+    mostrarBloco('entrar');
+    $('#entrar-msg').textContent = msg || '';
+    $('#entrar-senha').value = '';
+  }
+  function expirou() {
+    if (!$('#tela-entrar').hidden) return;
+    lsDel(LS_PERFIL);
+    entrar('Entre de novo com seu usuário e sua senha. Se a senha foi trocada, peça a nova ao administrador.');
+  }
+  $('#ir-cadastro').addEventListener('click', () => mostrarBloco('cadastro'));
+  $('#ir-entrar').addEventListener('click', () => mostrarBloco('entrar'));
+  $('#form-entrar').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const iu = $('#entrar-usuario'), is = $('#entrar-senha'), msg = $('#entrar-msg'), btn = $('#entrar-btn');
+    const usuario = iu.value.trim().toLowerCase(), senha = is.value.trim();
+    if (!usuario) { msg.textContent = 'Digite o seu usuário.'; iu.focus(); return; }
+    if (!senha) { msg.textContent = 'Digite a sua senha.'; is.focus(); return; }
+    btn.disabled = true;
+    msg.textContent = 'Entrando…';
+    let r = null;
+    try { r = await conta({ acao: 'entrar', usuario: usuario, senha: senha }); } catch (e) { r = null; }
+    if (r && r.st === 200 && r.j.pessoa) {
+      let c = null;
+      try { c = await conta(); } catch (e) { c = null; }
+      btn.disabled = false;
+      msg.textContent = '';
+      is.value = '';
+      lsDel(LS_PIN); lsDel(LS_SAIR);
+      seguir(c && c.st === 200 && c.j.pessoa ? comPedidos(c.j) : r.j.pessoa);
+      return;
+    }
+    btn.disabled = false;
+    msg.textContent = !r ? 'Sem conexão. Confira a internet e tente de novo.' : r.j.erro || 'Não deu para entrar agora. Tente de novo em instantes.';
+    is.select();
+  });
+  $('#form-cadastro').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const msg = $('#cad-msg'), btn = $('#cad-btn');
+    const nome = $('#cad-nome').value.replace(/\s+/g, ' ').trim();
+    const usuario = $('#cad-usuario').value.trim().toLowerCase().replace(/^@/, '');
+    const senha = $('#cad-senha').value.trim(), senha2 = $('#cad-senha2').value.trim();
+    const erro = (t, campo) => { msg.textContent = t; if (campo) $(campo).focus(); };
+    if (nome.length < 2) return erro('Escreva o seu nome.', '#cad-nome');
+    if (!USUARIO_RE.test(usuario)) return erro('O usuário precisa ter de 3 a 20 letras ou números, sem espaço nem acento. Pode usar ponto, hífen e sublinhado.', '#cad-usuario');
+    if (senha.length < 6) return erro('A senha precisa ter pelo menos 6 caracteres.', '#cad-senha');
+    if (senha !== senha2) return erro('As duas senhas não são iguais.', '#cad-senha2');
+    btn.disabled = true;
+    msg.textContent = 'Criando a conta…';
+    let r = null;
+    try { r = await conta({ acao: 'cadastrar', nome: nome, usuario: usuario, senha: senha }); } catch (e) { r = null; }
+    btn.disabled = false;
+    if (r && r.st === 200 && r.j.pessoa) {
+      msg.textContent = '';
+      ['#cad-nome', '#cad-usuario', '#cad-senha', '#cad-senha2'].forEach((s) => { $(s).value = ''; });
+      lsDel(LS_SAIR);
+      seguir(r.j.pessoa);
+      return;
+    }
+    const campo = r && r.j.campo ? { nome: '#cad-nome', usuario: '#cad-usuario', senha: '#cad-senha' }[r.j.campo] : null;
+    erro(!r ? 'Sem conexão. Confira a internet e tente de novo.' : r.j.erro || 'Não deu para criar a conta agora. Tente de novo.', campo);
+  });
+
+  /* ---------- esperando a liberação ---------- */
+  function aguardando(p) {
+    tela('aguardando');
+    $('#ag-ola').textContent = 'Olá, ' + primeiroNome(p) + '!';
+    $('#ag-msg').textContent = '';
+    if (!espera) espera = setInterval(() => { if (document.visibilityState === 'visible') conferir(false); }, 20000);
+  }
+  async function conferir(manual) {
+    const msg = $('#ag-msg');
+    if (manual) msg.textContent = 'Conferindo…';
+    let r = null;
+    try { r = await conta(); } catch (e) { r = null; }
+    if (r && r.st === 200 && r.j.pessoa) {
+      if (r.j.pessoa.status !== 'pendente') { seguir(r.j.pessoa); return; }
+      if (manual) msg.textContent = 'Ainda não foi liberado. Assim que for, o seu treino aparece aqui.';
+      return;
+    }
+    if (r && r.st === 401) {
+      lsDel(LS_PERFIL);
+      entrar('Esse pedido não está mais ativo. Crie a conta de novo ou fale com o administrador.');
+      return;
+    }
+    if (manual) msg.textContent = 'Sem conexão agora. Tente de novo quando a internet voltar.';
+  }
+  $('#ag-atualizar').addEventListener('click', () => conferir(true));
+  $('#ag-sair').addEventListener('click', () => sair());
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !$('#tela-aguardando').hidden) conferir(false); });
+
+  async function sair() {
+    let ok = false;
+    try { ok = (await conta({ acao: 'sair' })).st === 200; } catch (e) { ok = false; }
+    if (!ok) lsSet(LS_SAIR, 1);
+    LS_APP.concat([LS_PERFIL, LS_PIN]).forEach(lsDel);
+    location.reload();
+  }
+
+  /* ---------- perguntas ---------- */
+  const marcado = (name) => { const r = $('#form-perguntas input[name="' + name + '"]:checked'); return r ? r.value : ''; };
+  const nDias = () => +marcado('ndias') || 0;
+  const diasMarcados = () => $$('#form-perguntas input[name="dia"]:checked').map((i) => +i.value);
+  function dicaDias() {
+    const n = nDias(), m = diasMarcados().length, d = $('#dias-dica');
+    if (!n) { d.textContent = 'Escolha primeiro quantos dias.'; return; }
+    const folga = n < 4 ? ' Com um dia de folga entre eles, o corpo recupera melhor.' : ' Os treinos de pernas e de parte de cima se alternam nesses dias.';
+    d.textContent = (m === n ? 'Pronto: ' + n + ' dias escolhidos.' : 'Escolha ' + n + ' dias' + (m ? ' (marcados agora: ' + m + ').' : '.')) + folga;
+  }
+  function abrirPerguntas(p) {
+    p = p || perfilAtual;
+    perfilAtual = p;
+    const pl = p.plano && MODELOS[p.plano.modelo] ? p.plano : null;
+    tela('perguntas');
+    $('#perg-ola').textContent = 'Olá, ' + primeiroNome(p) + '!';
+    $('#h-perguntas').textContent = pl ? 'Mudar as respostas' : 'Vamos montar o seu treino';
+    $('#perg-cancelar').hidden = !pl;
+    $('#novo-ciclo-wrap').hidden = !pl;
+    $('#novo-ciclo').checked = false;
+    $('#perg-msg').textContent = '';
+    const marcar = (name, v) => $$('#form-perguntas input[name="' + name + '"]').forEach((i) => { i.checked = String(i.value) === String(v); });
+    marcar('ndias', pl ? MODELOS[pl.modelo].dias : '');
+    $$('#form-perguntas input[name="dia"]').forEach((i) => { i.checked = !!pl && pl.dias.indexOf(+i.value) >= 0; });
+    marcar('nivel', pl ? pl.nivel : '');
+    marcar('tempo', pl ? pl.tempo : '');
+    marcar('foco', pl ? pl.foco : '');
+    /* perguntas de saúde: marcadas com o que a pessoa já respondeu */
+    const sd = p.saude && typeof p.saude === 'object' ? p.saude : null;
+    $('#perg-peso').value = sd && Number.isFinite(sd.peso) ? String(sd.peso).replace('.', ',') : '';
+    $('#perg-altura').value = sd && Number.isFinite(sd.altura) ? String(sd.altura) : '';
+    $$('#form-perguntas input[name="lesao"]').forEach((i) => { i.checked = !!sd && (i.value === 'nenhuma' ? !sd.lesoes.length : sd.lesoes.indexOf(i.value) >= 0); });
+    marcar('triagem', sd ? sd.triagem : '');
+    dicaDias();
+    /* quem já tinha treino e ainda não respondeu as perguntas novas vai direto para elas */
+    window.scrollTo(0, 0);
+    if (pl && !sd) setTimeout(() => { const el = $('#perg-priv'); if (el) el.scrollIntoView({ block: 'start' }); }, 60);
+  }
+  /* peso e altura: vazio vale; número fora da faixa não. Altura em metros (1,75) vira centímetros. */
+  function medida(v, min, max, cm) {
+    const t = String(v || '').trim().replace(',', '.');
+    if (!t) return null;
+    let n = Number(t);
+    if (!Number.isFinite(n)) return undefined;
+    if (cm && n > 0 && n < 3) n = n * 100;
+    n = cm ? Math.round(n) : Math.round(n * 10) / 10;
+    return n >= min && n <= max ? n : undefined;
+  }
+  $('#form-perguntas').addEventListener('change', (ev) => {
+    if (ev.target.name === 'ndias') {
+      const n = nDias();
+      if (diasMarcados().length !== n) $$('#form-perguntas input[name="dia"]').forEach((i) => { i.checked = DIAS_SUGERIDOS[n].indexOf(+i.value) >= 0; });
+    }
+    /* "Não tenho" não combina com as outras respostas da pergunta 7 */
+    if (ev.target.name === 'lesao' && ev.target.checked) {
+      $$('#form-perguntas input[name="lesao"]').forEach((i) => { if (ev.target.value === 'nenhuma' ? i.value !== 'nenhuma' : i.value === 'nenhuma') i.checked = false; });
+    }
+    dicaDias();
+  });
+  $('#form-perguntas').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const n = nDias(), dias = diasMarcados(), msg = $('#perg-msg');
+    const lesoes = $$('#form-perguntas input[name="lesao"]:checked').map((i) => i.value);
+    const falta = !n ? 'quantos dias por semana' : dias.length !== n ? 'quais são os ' + n + ' dias' : !marcado('nivel') ? 'há quanto tempo você faz musculação'
+      : !marcado('tempo') ? 'quanto tempo você tem em cada treino' : !marcado('foco') ? 'se quer dar mais atenção a alguma parte'
+      : !lesoes.length ? 'se você tem alguma lesão ou limitação (pergunta 7)' : !marcado('triagem') ? 'a pergunta 8, sobre a sua saúde' : '';
+    if (falta) { msg.textContent = 'Falta responder ' + falta + '.'; return; }
+    const peso = medida($('#perg-peso').value, 30, 300, false), altura = medida($('#perg-altura').value, 100, 250, true);
+    if (peso === undefined) { msg.textContent = 'Confira o peso: um número entre 30 e 300 kg, ou deixe em branco.'; $('#perg-peso').focus(); return; }
+    if (altura === undefined) { msg.textContent = 'Confira a altura: um número em centímetros, entre 100 e 250, ou deixe em branco.'; $('#perg-altura').focus(); return; }
+    const saude = { peso: peso, altura: altura, lesoes: lesoes.filter((x) => x !== 'nenhuma'), triagem: marcado('triagem') };
+    const plano = { modelo: MODELO_DIAS[n], dias: dias, nivel: marcado('nivel'), tempo: marcado('tempo'), foco: marcado('foco'), inicio: hoje(), novoCiclo: $('#novo-ciclo').checked };
+    const btn = $('#perg-btn');
+    btn.disabled = true;
+    msg.textContent = 'Montando o seu treino…';
+    let r = null;
+    try { r = await conta({ acao: 'plano', plano: plano, saude: saude }); } catch (e) { r = null; }
+    btn.disabled = false;
+    if (r && r.st === 200 && r.j.pessoa) { msg.textContent = ''; lsSet(LS_PERFIL, r.j.pessoa); seguir(r.j.pessoa); return; }
+    if (r && r.st === 401) { expirou(); return; }
+    msg.textContent = !r ? 'Sem conexão: as respostas não foram salvas. Tente de novo quando a internet voltar.' : r.j.erro || 'Não deu para salvar agora. Tente de novo.';
+  });
+  $('#perg-cancelar').addEventListener('click', () => { tela('app'); });
+
+  /* ---------- pessoas (só o administrador) ---------- */
+  const aviso = (t) => { $('#pessoas-msg').textContent = t; };
+  const avisarApp = () => document.dispatchEvent(new CustomEvent('mrboom:pedidos', { detail: pessoas.filter((x) => x.status === 'pendente').length }));
+  function abrirPessoas() {
+    $('#pessoas').hidden = false;
+    document.body.classList.add('travado');
+    aviso('');
+    carregarPessoas();
+    setTimeout(() => { try { $('#pessoas [data-pa="fechar"]').focus(); } catch (e) { /* ok */ } }, 60);
+  }
+  function fecharPessoas() {
+    $('#pessoas').hidden = true;
+    document.body.classList.remove('travado');
+  }
+  async function carregarPessoas() {
+    const ul = $('#pessoas-lista');
+    ul.innerHTML = '<li class="tip">Carregando…</li>';
+    $('#grupo-pedidos').hidden = true;
+    let r = null;
+    try { r = await conta(null, '?pessoas=1'); } catch (e) { r = null; }
+    if (r && r.st === 401) { fecharPessoas(); expirou(); return; }
+    if (!r || r.st !== 200) { ul.innerHTML = '<li class="tip">' + esc(!r ? 'Sem conexão: a lista aparece quando a internet voltar.' : r.j.erro || 'Não deu para abrir a lista agora.') + '</li>'; return; }
+    pessoas = r.j.pessoas || [];
+    desenharPessoas();
+  }
+  function quando(k) { if (!k) return ''; const p = String(k).split('-'); return p.length === 3 ? p[2] + '/' + p[1] : ''; }
+  function desenharPessoas() {
+    const ped = pessoas.filter((x) => x.status === 'pendente').sort((a, b) => String(a.criado).localeCompare(String(b.criado)) || a.nome.localeCompare(b.nome, 'pt-BR'));
+    const ok = pessoas.filter((x) => x.status !== 'pendente').sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    const cab = (p, info) => '<div><p class="p-nome">' + esc(p.nome) + '</p><p class="p-user">@' + esc(p.usuario) + '</p><p class="tip">' + esc(info) + '</p></div>';
+    $('#grupo-pedidos').hidden = !ped.length;
+    $('#lista-pedidos').innerHTML = ped.map((p) => '<li data-id="' + esc(p.id) + '">' + cab(p, 'Pediu para entrar' + (p.criado ? ' em ' + quando(p.criado) : '')) +
+      '<div class="btn-row"><button type="button" class="btn" data-pa="liberar">Liberar</button><button type="button" class="btn ghost" data-pa="recusar">Recusar</button></div></li>').join('');
+    $('#pessoas-lista').innerHTML = !ok.length ? '<li class="tip">Ninguém com acesso ainda, além de você.</li>' : ok.map((p) => {
+      const id = esc(p.id), nome = esc(p.nome);
+      return '<li data-id="' + id + '">' + cab(p, p.plano ? resumoPlano(p.plano) : 'Ainda não respondeu as perguntas') +
+        '<div class="btn-row"><button type="button" class="btn ghost" data-pa="senha">Trocar senha</button><button type="button" class="btn ghost" data-pa="remover">Remover</button></div>' +
+        '<form class="pinline" data-pf="senha" hidden><label for="ps-' + id + '">Nova senha de ' + nome + '</label>' +
+          '<input id="ps-' + id + '" type="password" maxlength="40" minlength="6" autocomplete="new-password" required>' +
+          '<p class="tip">Use quando a pessoa esquecer a senha. Depois, passe a senha nova para ela.</p>' +
+          '<div class="btn-row"><button type="submit" class="btn">Salvar senha</button><button type="button" class="btn ghost" data-pa="cancelar">Cancelar</button></div></form>' +
+        '<div class="pinline" data-pf="remover" hidden><p>Apagar a conta de ' + nome + ' e todas as cargas anotadas? Não dá para desfazer.</p>' +
+          '<div class="btn-row"><button type="button" class="btn" data-pa="remover-sim">Apagar</button><button type="button" class="btn ghost" data-pa="cancelar">Cancelar</button></div></div>' +
+        '</li>';
+    }).join('');
+    avisarApp();
+  }
+  $('#pessoas').addEventListener('click', async (ev) => {
+    if (ev.target === ev.currentTarget) { fecharPessoas(); return; }
+    const b = ev.target.closest('[data-pa]');
+    if (!b) return;
+    const pa = b.dataset.pa;
+    if (pa === 'fechar') { fecharPessoas(); return; }
+    const li = b.closest('li[data-id]');
+    if (!li) return;
+    const id = li.dataset.id, p = pessoas.find((x) => x.id === id) || { nome: '' };
+    const fs = li.querySelector('[data-pf="senha"]'), fr = li.querySelector('[data-pf="remover"]');
+    if (pa === 'senha') { fs.hidden = false; fr.hidden = true; fs.querySelector('input').focus(); }
+    else if (pa === 'remover') { fr.hidden = false; fs.hidden = true; }
+    else if (pa === 'cancelar') { fs.hidden = true; fr.hidden = true; }
+    else if (pa === 'liberar' || pa === 'recusar' || pa === 'remover-sim') {
+      b.disabled = true;
+      const r = await tentar({ acao: pa === 'remover-sim' ? 'remover' : pa, id: id });
+      if (!r.ok) { b.disabled = false; if (r.msg) aviso(r.msg); return; }
+      if (pa === 'liberar') { p.status = 'ativo'; aviso('Pronto: ' + p.nome + ' já pode usar o Mr. Boom. No próximo acesso, aparecem as perguntas do treino.'); }
+      else { pessoas = pessoas.filter((x) => x.id !== id); aviso(pa === 'recusar' ? 'Pedido de ' + p.nome + ' recusado.' : 'Pronto: a conta de ' + p.nome + ' foi apagada.'); }
+      desenharPessoas();
+    }
+  });
+  $('#pessoas').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const f = ev.target;
+    if (f.dataset.pf !== 'senha') return;
+    const li = f.closest('li[data-id]'), inp = f.querySelector('input'), senha = inp.value.trim();
+    if (senha.length < 6) { aviso('A senha precisa ter pelo menos 6 caracteres.'); inp.focus(); return; }
+    const r = await tentar({ acao: 'senha', id: li.dataset.id, senha: senha });
+    if (r.ok) { inp.value = ''; f.hidden = true; aviso('Senha trocada. Nos celulares em que a pessoa já tinha entrado, ela vai digitar a senha nova uma vez.'); }
+    else if (r.msg) aviso(r.msg);
+  });
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('#pessoas').hidden) fecharPessoas(); });
+
+  return { boot: boot, expirou: expirou, sair: sair, abrirPessoas: abrirPessoas, abrirPerguntas: abrirPerguntas };
+})();
+
+/* ---------- o aplicativo de quem entrou ---------- */
+function iniciarApp(perfil) {
+  'use strict';
+  const PL = montarPlano(perfil);
+  const PLAN = { [PL.id]: { lede: PL.lede, other: PL.other, slots: PL.slots } };
+  const RX = { [PL.id]: RX_PADRAO };
+  const PHASES = PL.phases;
+  const NAMES = { [PL.id]: PL.nome };
+  const PLAN_FROM = PL.from;
 
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
@@ -1017,9 +1798,11 @@ const FIG = (function () {
   function lsGet(k, fb) { if (!storageOK) return fb; try { const v = window.localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch (e) { return fb; } }
   function lsSet(k, v) { if (!storageOK) return false; try { window.localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
 
-  const rawPrefs = lsGet(LS_PREFS, {}) || {};
+  const rawAll = lsGet(LS_PREFS, {}) || {};
+  /* preferências de outra pessoa que entrou antes neste aparelho não valem (as antigas, sem pessoa, eram do João) */
+  const rawPrefs = rawAll.pessoa === PL.id || (!rawAll.pessoa && PL.id === 'joao') ? rawAll : {};
   const prefs = {
-    person: rawPrefs.person === 'haniere' ? 'haniere' : 'joao',
+    pessoa: PL.id,
     phase: [0, 1, 2].indexOf(rawPrefs.phase) >= 0 ? rawPrefs.phase : 0,
     /* dia em que a fase foi escolhida à mão: a escolha vale até a próxima troca de fase pelas datas */
     phaseAt: typeof rawPrefs.phaseAt === 'string' ? rawPrefs.phaseAt : null,
@@ -1035,8 +1818,6 @@ const FIG = (function () {
   const sync = { mode: 'local', kind: null, offline: false, db: null, unsub: null, queue: {}, dirty: false, sig: '', mut: 0, keyMut: {}, keyAt: {}, adopted: false, flushing: false, flash: null };
   function savePrefs() { lsSet(LS_PREFS, prefs); }
 
-  const hashPerson = () => { const h = (location.hash || '').slice(1).toLowerCase(); return h === 'haniere' || h === 'joao' ? h : null; };
-  if (hashPerson()) prefs.person = hashPerson();
 
   /* ---------- datas ---------- */
   function dkey(d) { d = d || new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -1051,27 +1832,33 @@ const FIG = (function () {
   })();
 
   /* ---------- estado ---------- */
-  /* item do plano com o que muda só para a pessoa (jo / ha) */
-  function mergeItem(it, p) { const o = Object.assign({}, it); delete o.jo; delete o.ha; return Object.assign(o, p === 'joao' ? it.jo : it.ha); }
+  /* item do plano com o que muda só no treino do João (jo) */
+  function mergeItem(it, p) { const o = Object.assign({}, it); delete o.jo; return Object.assign(o, p === 'joao' ? it.jo : null); }
   function buildDays(p) {
     return PLAN[p].slots.map((s) => {
-      const code = s.w, W = WORKOUTS[code];
+      const code = s.w, W = WORKOUTS[code], saiu = [];
+      const base = W.items.filter((it) => !(PL.curto && it.x45)).map((it) => mergeItem(it, p));
       return {
         id: code + '-' + s.dow, code: code, dow: s.dow, c: W.c, title: W.title, short: W.short, focus: W.focus,
         together: !!s.together, solo: s.solo, warm: s.warm, extra: s.extra, end: s.end, keep: !!s.keep,
-        items: W.items.map((it) => mergeItem(it, p))
+        /* trocas por lesão (pergunta 7); o que não tinha substituto fica em saiu */
+        items: adaptarItens(base, PL.saude.lesoes, saiu), saiu: saiu
       };
     });
   }
-  const DAYS = { joao: buildDays('joao'), haniere: buildDays('haniere') };
+  const DAYS = { [PL.id]: buildDays(PL.id) };
 
-  const state = { person: prefs.person, day: null };
+  const state = { person: PL.id, day: null };
   const openSet = new Set();
   const daysOf = (p) => DAYS[p];
   /* o item do plano com este exercício, na versão da pessoa, mesmo de um treino que ela não faz nesta semana
      (a alternativa reaproveita avisos e marcações dele) */
-  const ITEMS = { joao: [], haniere: [] };
-  Object.keys(ITEMS).forEach((p) => Object.keys(WORKOUTS).forEach((w) => WORKOUTS[w].items.forEach((it) => ITEMS[p].push(mergeItem(it, p)))));
+  const ITEMS = { [PL.id]: [] };
+  /* primeiro os exercícios dos dias da pessoa, já com as trocas por lesão; depois os treinos dela e os outros,
+     que só servem para achar alternativas */
+  DAYS[PL.id].forEach((D) => D.items.forEach((it) => ITEMS[PL.id].push(it)));
+  const ordemW = PL.slots.map((sl) => sl.w).concat(Object.keys(WORKOUTS));
+  ordemW.filter((w, i) => ordemW.indexOf(w) === i).forEach((w) => WORKOUTS[w].items.forEach((it) => ITEMS[PL.id].push(mergeItem(it, PL.id))));
   const itemOfEx = (p, id) => ITEMS[p].find((x) => x.ex === id) || null;
   /* nome do que foi feito num registro "pessoa|exercício" ou "pessoa|exercício--alt" */
   function nameOfKey(k) {
@@ -1089,9 +1876,16 @@ const FIG = (function () {
   goDefault(state.person);
 
   /* ---------- prescrição ---------- */
-  function rxFor(p, it, ph) { const ex = EX[it.ex]; const arr = it.rx || ex.rx || RX[p][it.k] || RX[p].comp; return arr[ph]; }
+  function rxFor(p, it, ph) {
+    const ex = EX[it.ex]; const arr = it.rx || ex.rx || RX[p][it.k] || RX[p].comp;
+    const rx = arr[ph];
+    /* foco escolhido nas perguntas: uma série a mais nos principais e compostos daquela parte, depois da adaptação */
+    if (PL.foco === 'igual' || ph === 0 || (it.k !== 'main' && it.k !== 'comp') || INFERIOR.has(it.ex) !== (PL.foco === 'inferior')) return rx;
+    return rx.replace(/^(\d+)/, (m) => String(Math.min(5, +m + 1)));
+  }
   /* alternativa de um item do plano: { id, sets, note }. A definida no treino vale mais que a do exercício. */
   function altOf(it) {
+    if (it.noAlt) return null;
     const src = it.alt ? it : EX[it.ex];
     return src && src.alt && EX[src.alt] ? { id: src.alt, sets: src.altSets || 0, note: src.altNote || '' } : null;
   }
@@ -1120,7 +1914,7 @@ const FIG = (function () {
     return null;
   }
   const hasReps = (e) => !!e && Array.isArray(e.reps) && e.reps.some((r) => Number.isFinite(r));
-  function rrText(p, k, ph) { if (k === 'core') return ''; if (ph === 0) return 'sobram 3–4'; if (ph === 1) return 'sobram 2–3'; return p === 'joao' ? 'sobram 1–2' : 'sobram 2–3'; }
+  function rrText(p, k, ph) { if (k === 'core') return ''; if (ph === 0) return 'sobram 3–4'; if (ph === 1) return 'sobram 2–3'; return 'sobram 1–2'; }
 
   /* ---------- registro ---------- */
   const fmtKg = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
@@ -1377,8 +2171,80 @@ const FIG = (function () {
 
   /* ---------- renderização ---------- */
   function renderPerson() {
-    $$('[data-act="person"]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === state.person)));
     $('#lede').textContent = PLAN[state.person].lede;
+    $('#conta-nome').textContent = PL.nome;
+    $('#m-pessoas').hidden = !PL.admin;
+    $('#m-perguntas').hidden = PL.modelo === 'joao';
+    renderPedidos();
+    renderSaude();
+    renderGuide();
+  }
+
+  /* respostas de saúde: aviso de médico, trocas por lesão e escala de dor (só a própria pessoa vê) */
+  function renderSaude() {
+    const S = PL.saude, box = $('#saude-box');
+    $('#aviso-novas').hidden = PL.modelo === 'joao' || S.respondida;
+    const partes = [];
+    if (S.triagem === 'pendente') {
+      partes.push('<p class="saude-alerta"><b>Antes de começar, passe por um médico.</b> Você marcou que um médico pediu cuidado com exercício, que tem doença do coração, diabetes ou doença nos rins, ou que sente dor no peito, tontura ou falta de ar fora do comum. Leve este treino na consulta. Quando o médico liberar, mude a resposta em Refazer as perguntas.</p>');
+    } else if (S.triagem === 'liberado') {
+      partes.push('<p>Siga o que o seu médico orientou. Se sentir dor no peito, tontura ou falta de ar fora do comum, pare o treino e procure atendimento.</p>');
+    }
+    if (S.lesoes.length) {
+      const trocas = [], vistos = {}, sairam = [];
+      daysOf(state.person).forEach((D) => {
+        D.items.forEach((it) => { if (!it.troca) return; const k = it.troca.de + '>' + it.ex; if (!vistos[k]) { vistos[k] = 1; trocas.push(EX[it.troca.de].n + ' → ' + EX[it.ex].n); } });
+        D.saiu.forEach((x) => { if (!vistos[x.de]) { vistos[x.de] = 1; sairam.push(EX[x.de].n + ' saiu do ' + D.title); } });
+      });
+      const lista = trocas.concat(sairam);
+      partes.push('<p class="dor"><b>Dor, de 0 a 10:</b> durante o exercício, até 4 dá para seguir. Chegou a 5, diminua a carga ou a amplitude, ou use a alternativa. A dor tem que passar até a manhã seguinte.</p>');
+      partes.push('<details><summary>O que mudou e os cuidados' + (lista.length ? ' (' + lista.length + (lista.length === 1 ? ' troca' : ' trocas') + ')' : '') + '</summary>' +
+        '<ul>' + S.lesoes.map((r) => '<li><b>' + esc(LESOES[r].nome.charAt(0).toUpperCase() + LESOES[r].nome.slice(1)) + ':</b> ' + esc(LESOES[r].geral) + '</li>').join('') + '</ul>' +
+        (lista.length ? '<p><b>Trocas no treino</b></p><ul>' + lista.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '') +
+        '<p>Escala de dor: 0 é nenhuma e 10 é a pior possível. Além de passar até a manhã seguinte, a dor não pode aumentar de uma semana para a outra. Cada exercício trocado tem uma marca no nome, e os que continuam têm um cuidado escrito no cartão.</p>' +
+        '<p>Mostre este treino ao seu fisioterapeuta ou médico e peça ao professor da academia para acompanhar as primeiras semanas.</p></details>');
+    }
+    if (!partes.length) { box.hidden = true; box.innerHTML = ''; return; }
+    const titulo = S.lesoes.length ? 'Treino adaptado: ' + juntarPt(S.lesoes.map((r) => LESOES[r].nome)) : 'Antes de treinar';
+    box.innerHTML = '<h2 id="h-saude"><span class="tape" aria-hidden="true"></span>' + esc(titulo) + '</h2>' + partes.join('');
+    box.setAttribute('role', 'region');
+    box.setAttribute('aria-labelledby', 'h-saude');
+    box.hidden = false;
+  }
+
+  /* pedidos de conta esperando liberação (só o administrador vê) */
+  let pedidos = typeof perfil.pendentes === 'number' ? perfil.pendentes : 0;
+  function renderPedidos() {
+    if (!PL.admin) return;
+    $('#m-pessoas').textContent = 'Pessoas' + (pedidos ? ' · ' + pedidos + (pedidos === 1 ? ' pedido' : ' pedidos') : '');
+    $('#aviso-pedidos').hidden = !pedidos;
+    $('#aviso-pedidos-txt').textContent = pedidos === 1 ? '1 pessoa pediu para entrar no Mr. Boom.' : pedidos + ' pessoas pediram para entrar no Mr. Boom.';
+  }
+  document.addEventListener('mrboom:pedidos', (ev) => { pedidos = +ev.detail || 0; renderPedidos(); });
+
+  /* "Como progredir" com as datas e a semana de quem entrou */
+  function renderGuide() {
+    const txt = [
+      '2 séries de 12–15 com carga leve: sobram 3–4 reps. É a hora de aprender a regular cada aparelho.',
+      '3 séries de 10–12 nos compostos e 12–15 nos isolados: sobram 2–3 reps.',
+      '3 séries de 8–12, e 4 nos exercícios principais: sobram 1–2 reps.'
+    ];
+    $('#fases-guia').innerHTML = PHASES.map((ph, i) => '<div><p class="pr-name"><b>' + esc(ph.label) + '</b>' + esc(ph.name) + '</p><p>' + txt[i] + '</p></div>').join('');
+    $('#fases-fim').textContent = 'A página troca de fase sozinha nessas datas. ' + PL.fim + ' Uma semana mais leve antes de recomeçar é opcional: faça só se estiver cansado.' +
+      (PL.foco !== 'igual' ? ' Como você quer dar mais atenção a ' + FOCO_NOME[PL.foco] + ', os exercícios principais dessa parte ganham uma série a mais a partir da fase Base.' : '');
+    const itens = daysOf(state.person).map((d) => ({ dow: d.dow, t: d.title }))
+      .concat(Object.keys(PL.other || {}).map((k) => ({ dow: +k, t: PL.other[k] })))
+      .sort((a, b) => ordemSemana(a.dow, b.dow));
+    $('#semana-guia').textContent = itens.map((x, i) => (i ? DOW_NAME[x.dow].toLowerCase() : DOW_NAME[x.dow]) + ', ' + x.t).join('; ') + '. ' + PL.semana;
+    /* proteína: 1,6 g por kg de peso por dia (Morton et al., 2018) */
+    const S = PL.saude, imc = S.peso && S.altura ? S.peso / Math.pow(S.altura / 100, 2) : null;
+    const maisQue = ' Comer mais do que isso não aumentou o ganho de músculo nos estudos.';
+    $('#proteina-txt').textContent = !S.peso
+      ? 'Para ganhar músculo, coma cerca de 1,6 g de proteína por kg do seu peso por dia: quem pesa 70 kg precisa de uns 110 g.' + maisQue + (PL.modelo === 'joao' ? '' : ' Responda o seu peso nas perguntas para ver a sua conta.')
+      : imc && imc >= 30
+        ? 'A referência para ganhar músculo é cerca de 1,6 g de proteína por kg de peso por dia. Com o seu peso e a sua altura, a conta pelo peso total pode passar do que você precisa: peça a um nutricionista o valor certo para você.'
+        : 'Para ganhar músculo, coma cerca de ' + Math.round(S.peso * 1.6 / 5) * 5 + ' g de proteína por dia: 1,6 g por kg, com os seus ' + fmtKg(S.peso) + ' kg.' + maisQue;
+    $('#proteina-sub').textContent = S.peso && !(imc && imc >= 30) ? 'Cerca de ' + Math.round(S.peso * 1.6 / 5) * 5 + ' g por dia' : 'Quanto comer por dia';
   }
 
   function renderWeek() {
@@ -1394,7 +2260,15 @@ const FIG = (function () {
     }).join('');
   }
 
+  /* semana do ciclo de 12 semanas, no rótulo das fases */
+  function semanaDoCiclo() {
+    const dia = (k) => { const q = k.split('-').map(Number); return Date.UTC(q[0], q[1] - 1, q[2]) / 86400000; };
+    if (!PL.ate) return '';
+    const ini = dia(PHASES[0].from), total = Math.round((dia(PL.ate) - ini + 1) / 7), n = Math.floor((dia(TODAY) - ini) / 7) + 1;
+    return n < 1 ? '' : n > total ? ' · ciclo concluído' : ' · semana ' + n + ' de ' + total;
+  }
   function renderPhase() {
+    $('#phase-label').textContent = 'Fase do plano' + semanaDoCiclo();
     $('#phase').innerHTML = PHASES.map((p, i) => '<button type="button" id="ph-' + i + '" data-act="phase" data-v="' + i + '" aria-pressed="' + (i === prefs.phase) + '"><b>' + p.label + '</b><span>' + p.name + '</span></button>').join('');
   }
 
@@ -1418,7 +2292,7 @@ const FIG = (function () {
     let hint = '';
     const adv = advice(last, rx);
     if (adv && adv.k === 'up') {
-      hint = '<p class="hint">' + ICON.up + '<span>' + (p === 'haniere' ? 'Pode subir a carga hoje, se a dor ficou em até 3 no último treino.' : 'Pode subir a carga hoje.') + '</span></p>';
+      hint = '<p class="hint">' + ICON.up + '<span>Pode subir a carga hoje.</span></p>';
     } else if (adv && adv.k === 'down') {
       const faixa = adv.rg[0] === adv.rg[1] ? 'da meta de ' + adv.rg[0] : 'da faixa de ' + adv.rg[0] + '–' + adv.rg[1];
       hint = '<p class="hint hint-down">' + ICON.down + '<span>Da última vez uma série ficou com ' + adv.min + (isSec(rx) ? ' s' : ' repetições') + ', abaixo ' + faixa + (isSec(rx) ? ' s' : '') + '. Hoje, baixe um pouco a carga: uns 10%, perto de ' + fmtKg(adv.sug) + ' kg.</span></p>';
@@ -1448,7 +2322,7 @@ const FIG = (function () {
       '<div class="kg-row"><label for="' + base + '-kg">Carga (kg)</label><input type="text" inputmode="decimal" maxlength="6" autocomplete="off" enterkeyhint="next" id="' + base + '-kg" data-log="kg" value="' + (Number.isFinite(e.kg) ? fmtKg(e.kg) : '') + '" placeholder="' + kgPh + '"' + (ro ? ' disabled' : '') + '></div>' +
       '<p class="reps-lab" id="' + base + '-rl">' + (isSec(rx) ? 'Segundos' : 'Repetições') + ' em cada série' + (goal ? '<span>meta: ' + esc(goal) + '</span>' : '') + '</p>' +
       '<div class="reps-row' + (need ? ' need' : '') + '" style="grid-template-columns:repeat(' + sets + ',minmax(0,1fr))" role="group" aria-labelledby="' + base + '-rl">' + reps + '</div>' +
-      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver: para anotar daqui, o João precisa te convidar como editor.' : flash ? esc(flash) : need ? (isSec(rx) ? 'Falta anotar os segundos de cada série.' : 'Falta anotar as repetições de cada série.') : noKg ? 'Faltou a carga. Se foi sem peso, pode deixar em branco.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
+      '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver.' : flash ? esc(flash) : need ? (isSec(rx) ? 'Falta anotar os segundos de cada série.' : 'Falta anotar as repetições de cada série.') : noKg ? 'Faltou a carga. Se foi sem peso, pode deixar em branco.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
       (alt.has && !ro ? mvBtn(TODAY, alt.on ? 'Anotou aqui por engano? Passar o registro de hoje para a principal' : 'Fez a alternativa? Passar o registro de hoje para ela', ' mv-today') : '') +
       (hist ? '<div><h4>Últimos treinos' + (alt.on ? ' da alternativa' : '') + '</h4><ul class="hist">' + hist + '</ul></div>' : '<p class="saved">Ainda sem registros anteriores ' + what + '.</p>') +
       evo +
@@ -1533,28 +2407,22 @@ const FIG = (function () {
   function renderDay() {
     flushSaves();
     running.clear();
-    const D = curDay(), p = state.person, other = p === 'joao' ? 'Haniere' : 'João';
+    const D = curDay();
     const isToday = D.dow === TODAY_DOW;
     const ds = doneSet(D);
     const el = $('#day');
     el.dataset.day = String(D.c);
-    const withNote = D.together
-      ? '<p class="note">' + ICON.pair + '<span><b>Treino todo juntos com o ' + other + '.</b> Revezem cada aparelho: um faz a série enquanto o outro descansa.</span></p>'
-      : D.solo ? '<p class="note">' + ICON.solo + '<span>' + esc(D.solo) + '</span></p>' : '';
-    const pain = p === 'haniere'
-      ? '<div class="pain"><p class="eyebrow">Escala de dor durante o treino</p><div class="pain-bar"><span class="pz-ok">0–3 siga</span><span class="pz-warn">4–5 alivie</span><span class="pz-stop">6+ pare</span></div></div>'
-      : '';
+    const withNote = D.solo ? '<p class="note">' + ICON.solo + '<span>' + esc(D.solo) + '</span></p>' : '';
     el.innerHTML =
       '<div class="day-head">' +
         '<svg class="plate" viewBox="0 0 58 58" aria-hidden="true"><circle class="p-body" cx="29" cy="29" r="28"/><circle class="p-lip" cx="29" cy="29" r="20"/><circle class="p-hole" cx="29" cy="29" r="7.5"/></svg>' +
         '<div>' +
-          '<p class="day-eyebrow"><span class="eyebrow">' + DOW_NAME[D.dow] + (D.together ? ' · juntos' : '') + '</span>' + (isToday ? '<span class="today-pill">Hoje</span>' : '') + '</p>' +
+          '<p class="day-eyebrow"><span class="eyebrow">' + DOW_NAME[D.dow] + '</span>' + (isToday ? '<span class="today-pill">Hoje</span>' : '') + '</p>' +
           '<h2 class="day-title">' + esc(D.title) + '</h2>' +
-          '<p class="day-focus">' + esc(D.focus) + ' · cerca de 60 min</p>' +
+          '<p class="day-focus">' + esc(D.focus) + ' · cerca de ' + (PL.curto ? '45' : '60') + ' min</p>' +
         '</div>' +
       '</div>' +
       '<div class="notes">' + withNote + '<p class="note">' + ICON.bike + '<span>' + esc(D.warm) + '</span></p>' + [].concat(D.extra || []).map((x) => '<p class="note">' + ICON.clock + '<span>' + esc(x) + '</span></p>').join('') + '</div>' +
-      pain +
       '<div class="prog"><div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div><span id="prog-text"></span></div>' +
       '<p class="tap-hint">Toque no nome do exercício para ver como fazer e anotar a carga.</p>' +
       '<ol class="ex-list" aria-label="Exercícios do treino ' + esc(D.title) + '">' + D.items.map((it, i) => renderItem(it, i, D, ds)).join('') + '</ol>' +
@@ -1569,9 +2437,9 @@ const FIG = (function () {
   function renderStats() {
     const box = $('#stats');
     if (!box) return;
-    const p = state.person, name = NAMES[p];
+    const p = state.person;
     const keys = Object.keys(logs).filter((k) => k.split('|')[0] === p && validKey(k) && Object.keys(logs[k] || {}).length);
-    if (!keys.length) { box.innerHTML = '<p>Ainda não há cargas anotadas do ' + name + '. Elas aparecem aqui assim que forem anotadas.</p>'; return; }
+    if (!keys.length) { box.innerHTML = '<p>Ainda não há cargas anotadas. Elas aparecem aqui assim que você anotar a primeira.</p>'; return; }
     const days = new Set();
     keys.forEach((k) => Object.keys(logs[k]).forEach((d) => days.add(d)));
     const first = Array.from(days).sort()[0], from = first > PLAN_FROM ? first : PLAN_FROM;
@@ -1639,7 +2507,8 @@ const FIG = (function () {
     const D = curDay(), s = doneSet(D), total = D.items.length;
     const n = D.items.filter((it) => s.has(it.ex)).length;
     const f = $('#prog-fill'); if (f) f.style.width = (total ? (n / total) * 100 : 0) + '%';
-    const t = $('#prog-text'); if (t) t.textContent = n + ' de ' + total + ' feitos';
+    /* quanto falta aparece junto: perto do fim, o esforço cresce (efeito do gradiente de meta) */
+    const t = $('#prog-text'); if (t) t.textContent = n && n === total ? 'Treino completo' : n + ' de ' + total + ' feitos' + (n ? ' · faltam ' + (total - n) : '');
   }
 
   function renderAll() { renderPerson(); renderWeek(); renderPhase(); renderDay(); }
@@ -1707,11 +2576,10 @@ const FIG = (function () {
         cloudWrite(key).then((ok) => {
           if (!msg || !msg.isConnected) return;
           if (ok) msg.textContent = !has ? 'Registro de hoje apagado.' : noReps ? 'Carga salva na nuvem. Agora anote as repetições de cada série.' + extra : 'Salvo na nuvem: já aparece nos outros aparelhos.' + extra;
-          else if (sync.mode === 'pin') msg.textContent = 'Guardado neste aparelho. Digite o código do treino lá em cima para mandar para a nuvem.';
           else msg.textContent = 'Sem conexão agora. A anotação ficou guardada neste aparelho e vai para a nuvem quando a conexão voltar.';
         });
       } else {
-        if (msg) msg.textContent = !has ? 'Registro de hoje apagado.' : (sync.mode === 'pin' ? 'Guardado neste aparelho. Digite o código do treino lá em cima para mandar para a nuvem.' : 'Guardado neste aparelho. Vai para a nuvem quando a conexão voltar.') + tipReps + extra;
+        if (msg) msg.textContent = !has ? 'Registro de hoje apagado.' : 'Guardado neste aparelho. Vai para a nuvem quando a conexão voltar.' + tipReps + extra;
         renderSync();
       }
     }
@@ -1755,14 +2623,15 @@ const FIG = (function () {
      outbox: anotações deste aparelho que a nuvem ainda não confirmou, no formato
      { "joao|leg45": { "2026-10-12": { kg, reps } | null } } (null = apagar o registro daquele dia).
      Ficam guardadas no aparelho até a nuvem confirmar e valem mais que a cópia da nuvem. */
-  const KEY_RE = /^(joao|haniere)\|[a-z0-9-]+$/;
+  const KEY_RE = /^[a-z0-9]{2,20}\|[a-z0-9-]+$/;
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
   const LS_OUT = 'jh-treino.outbox.v1';
   const LS_CACHE = 'jh-treino.cloud.v1';
   let outbox = {};
   let serverLogs = null;
   const clone = (o) => JSON.parse(JSON.stringify(o || {}));
-  const validKey = (k) => KEY_RE.test(k) && !!EX[baseOf(k).split('|')[1]];
+  /* só os registros de quem entrou */
+  const validKey = (k) => KEY_RE.test(k) && k.split('|')[0] === PL.id && !!EX[baseOf(k).split('|')[1]];
   const nReg = (n) => n + (n === 1 ? ' registro' : ' registros');
   function cleanEntries(src) {
     const out = {};
@@ -1893,27 +2762,7 @@ const FIG = (function () {
     sync.mode = m;
     refreshData();
   }
-  async function writeDoc(key) {
-    if (sync.kind === 'api') return apiWrite(key);
-    if (!sync.db) return false;
-    const parts = key.split('|');
-    const ref = sync.db.doc('logs/' + parts[0] + '__' + parts[1]);
-    for (let attempt = 0; attempt < 2; attempt++) {
-      const sent = clone(logs[key]);
-      try {
-        if (Object.keys(sent).length) await ref.set({ p: parts[0], ex: parts[1], e: sent });
-        else await ref.delete();
-        confirmSent(key, sent);
-        return true;
-      } catch (err) {
-        const code = err && err.code;
-        if (code === 'unavailable' && attempt === 0) { await new Promise((r) => setTimeout(r, 600 + Math.random() * 900)); continue; }
-        if (code === 'invalid_argument' || code === 'not_granted' || code === 'revoked') setMode('cloud-ro');
-        return false;
-      }
-    }
-    return false;
-  }
+  async function writeDoc(key) { return sync.kind === 'api' ? apiWrite(key) : false; }
   /* uma gravação por vez em cada registro; a última versão sempre vence */
   function cloudWrite(key) {
     const q = sync.queue[key] || (sync.queue[key] = { busy: null, again: false });
@@ -1949,26 +2798,16 @@ const FIG = (function () {
     renderSync();
   }
   function renderSync() {
-    const line = $('#sync-line'), txt = $('#sync-text'), msg = $('#store-msg'), imp = $('#btn-import'), rest = $('#btn-restore'), pinf = $('#pin-form');
-    const m = sync.mode, web = sync.kind === 'api', n = sync.kind ? obCount() : 0;
+    const line = $('#sync-line'), txt = $('#sync-text'), msg = $('#store-msg'), imp = $('#btn-import');
+    const m = sync.mode, n = sync.kind ? obCount() : 0;
     const vai = n === 1 ? 'vai' : 'vão';
     line.dataset.mode = m;
     line.dataset.off = (m === 'cloud' && (sync.offline || n > 0)) || (m === 'local' && !!sync.kind && sync.offline) ? '1' : '0';
-    pinf.hidden = m !== 'pin';
     if (m === 'cloud') {
       if (sync.offline) txt.textContent = n ? 'Sem conexão agora: ' + nReg(n) + ' deste aparelho ' + vai + ' para a nuvem quando a conexão voltar.' : 'Sem conexão agora: o que você anotar fica guardado neste aparelho e vai para a nuvem quando a conexão voltar.';
       else if (n) txt.textContent = sync.flushing ? 'Enviando ' + nReg(n) + ' para a nuvem…' : nReg(n) + ' deste aparelho ainda não ' + (n === 1 ? 'foi' : 'foram') + ' para a nuvem.';
-      else txt.textContent = 'Cargas na nuvem: aparecem em todos os aparelhos.';
-      msg.textContent = (web
-        ? 'As cargas funcionam como respostas de um formulário: tudo o que for anotado vai para a nuvem e aparece em qualquer celular que abrir este site.'
-        : 'As cargas funcionam como respostas de um formulário: tudo o que for anotado vai para a nuvem e aparece em qualquer aparelho que abrir esta página com acesso de editor.') +
-        ' Se faltar sinal na academia, a anotação fica guardada no celular e vai sozinha para a nuvem quando a conexão voltar.';
-    } else if (m === 'pin') {
-      txt.textContent = api.badPin ? 'Código incorreto. Digite de novo para salvar na nuvem.' : n ? 'Digite o código do treino: ' + nReg(n) + ' deste aparelho ' + vai + ' para a nuvem.' : 'Digite o código do treino para salvar as cargas na nuvem.';
-      msg.textContent = 'O site pede um código para gravar cargas. Até lá, o que você anotar fica guardado neste aparelho e vai para a nuvem quando o código for digitado.';
-    } else if (m === 'cloud-ro') {
-      txt.textContent = 'Cargas na nuvem, só para ver.';
-      msg.textContent = 'Você vê as cargas salvas na nuvem, mas não pode anotar deste aparelho. Para anotar, o João precisa te convidar como editor da página.';
+      else txt.textContent = 'Cargas na nuvem: aparecem em qualquer celular em que você entrar.';
+      msg.textContent = 'Suas cargas ficam na nuvem, ligadas à sua senha: aparecem em qualquer celular em que você entrar com ela, e só você vê. Se faltar sinal na academia, a anotação fica guardada no celular e vai sozinha para a nuvem quando a conexão voltar.';
     } else if (sync.kind) {
       txt.textContent = sync.offline ? 'Sem conexão agora: o que você anotar fica guardado neste aparelho e vai para a nuvem quando a conexão voltar.' : 'Conectando à nuvem…';
       msg.textContent = 'Enquanto a nuvem não responde, as cargas ficam guardadas neste aparelho e vão sozinhas para a nuvem quando a conexão voltar.';
@@ -1976,60 +2815,28 @@ const FIG = (function () {
       txt.textContent = 'Cargas salvas só neste aparelho.';
       msg.textContent = !storageOK
         ? 'Este navegador não está guardando dados desta página, então as cargas somem ao fechar. No fim de cada treino, use Copiar backup.'
-        : window.claude
-          ? 'Este aparelho não está ligado à nuvem, então as cargas ficam salvas só aqui. Para sincronizar, abra a página entrando numa conta do Claude com acesso de editor.'
-          : 'Este aparelho não está ligado à nuvem, então as cargas ficam salvas só aqui. Faça um backup de vez em quando.';
+        : 'Este aparelho não está ligado à nuvem, então as cargas ficam salvas só aqui. Faça um backup de vez em quando.';
     }
     imp.hidden = !(m === 'cloud' && n > 0 && !sync.flushing);
+    if (!imp.hidden) { const acc = imp.closest('details'); if (acc) acc.open = true; }
     if (!imp.hidden) imp.textContent = 'Enviar agora ' + nReg(n) + ' deste aparelho';
-    rest.hidden = m === 'cloud-ro' || m === 'pin';
-  }
-  async function connectCloud() {
-    const C = window.claude;
-    let db = null;
-    try { db = C && typeof C.use === 'function' ? await C.use('db') : null; } catch (e) { db = null; }
-    if (!db) { goLocal(); return; }
-    let canWrite = null;
-    try { const u = await C.use('user'); if (u) canWrite = await u.can('data.write'); } catch (e) { canWrite = null; }
-    sync.db = db;
-    let first = true;
-    try {
-      sync.unsub = db.collection('logs').onSnapshot((snap) => {
-        const next = {};
-        snap.docs.forEach((d) => {
-          const v = d.data();
-          if (!v || !/^(joao|haniere)$/.test(v.p) || typeof v.ex !== 'string' || !EX[baseOf(v.ex)]) return;
-          const ce = cleanEntries(v.e);
-          if (Object.keys(ce).length) next[v.p + '|' + v.ex] = ce;
-        });
-        keepRecent(next, null);
-        serverLogs = next;
-        if (first) { first = false; sync.mode = canWrite === false ? 'cloud-ro' : 'cloud'; }
-        if (sync.mode === 'cloud') adoptLegacy(next);
-        logs = sync.mode === 'cloud-ro' ? clone(serverLogs) : overlay(serverLogs);
-        refreshData();
-        if (sync.mode === 'cloud' && obCount()) flushOutbox();
-      }, () => { goLocal(); });
-    } catch (e) { goLocal(); }
   }
 
-  /* ---------- site próprio (Vercel): /api/logs ---------- */
-  const LS_PIN = 'jh-treino.pin.v1';
-  const api = { busy: false, needsPin: false, badPin: false };
+  /* ---------- site próprio (Vercel): /api/logs, com o cookie de quem entrou ---------- */
+  const api = { busy: false };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-  function getPin() { try { return window.localStorage.getItem(LS_PIN) || ''; } catch (e) { return ''; } }
-  function setPin(v) { try { if (v) window.localStorage.setItem(LS_PIN, v); else window.localStorage.removeItem(LS_PIN); } catch (e) { /* ok */ } }
   async function apiPost(body) {
-    const r = await fetch('/api/logs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const r = await fetch('/api/logs', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     return r.status;
   }
   async function apiWrite(key) {
     for (let attempt = 0; attempt < 2; attempt++) {
       const sent = clone(logs[key]);
       let st = 0;
-      try { st = await apiPost({ key: key, e: sent, pin: getPin() }); } catch (e) { st = 0; }
+      try { st = await apiPost({ key: key, e: sent }); } catch (e) { st = 0; }
       if (st >= 200 && st < 300) { sync.offline = false; confirmSent(key, sent); return true; }
-      if (st === 401) { setPin(''); api.badPin = true; setMode('pin'); return false; }
+      /* a sessão acabou (senha trocada ou pessoa removida): a anotação continua guardada no aparelho */
+      if (st === 401) { G.expirou(); return false; }
       if (attempt === 0 && (st === 0 || st >= 500)) { await wait(700 + Math.random() * 800); continue; }
       sync.offline = st === 0;
       return false;
@@ -2041,41 +2848,28 @@ const FIG = (function () {
     api.busy = true;
     const mark = sync.mut;
     try {
-      const r = await fetch('/api/logs', { cache: 'no-store', headers: { Accept: 'application/json' } });
+      const r = await fetch('/api/logs', { cache: 'no-store', credentials: 'same-origin', headers: { Accept: 'application/json' } });
+      if (r.status === 401 || r.status === 403) { G.expirou(); return; }
       if (r.status === 404) { goLocal(); return; }
       if (!r.ok) throw new Error('http ' + r.status);
       const j = await r.json();
+      if (PL.admin && j && typeof j.pendentes === 'number' && j.pendentes !== pedidos) { pedidos = j.pendentes; renderPedidos(); }
       const next = cleanLogs(j && j.logs);
       keepRecent(next, mark);
-      api.needsPin = !!(j && j.needsPin);
       sync.offline = false;
       serverLogs = next;
       lsSet(LS_CACHE, next);
-      sync.mode = api.needsPin && !getPin() ? 'pin' : 'cloud';
-      if (sync.mode === 'cloud') adoptLegacy(next);
+      sync.mode = 'cloud';
+      adoptLegacy(next);
       logs = overlay(serverLogs);
       refreshData();
-      if (sync.mode === 'cloud' && obCount()) flushOutbox();
+      if (obCount()) flushOutbox();
     } catch (e) {
       sync.offline = true;
       renderSync();
     } finally {
       api.busy = false;
     }
-  }
-  async function submitPin(v) {
-    let st = 0;
-    try { st = await apiPost({ check: true, pin: v }); } catch (e) { st = 0; }
-    if (st === 401) { api.badPin = true; renderSync(); $('#pin-in').focus(); return; }
-    if (st < 200 || st >= 300) { status('Não deu para falar com o servidor agora. Tente de novo em instantes.'); return; }
-    setPin(v); api.badPin = false;
-    $('#pin-in').value = '';
-    sync.mode = 'cloud';
-    adoptLegacy(serverLogs || {});
-    logs = overlay(serverLogs || {});
-    sync.sig = '';
-    refreshData();
-    flushOutbox(obCount() > 0);
   }
   function connectApi() {
     pullApi();
@@ -2085,17 +2879,13 @@ const FIG = (function () {
   }
   /* escolhe onde as cargas ficam e monta o que aparece antes da primeira resposta da nuvem */
   function initStore() {
-    const C = window.claude;
-    if (C && typeof C.use === 'function') sync.kind = 'artifact';
-    else if (/^https?:$/.test(location.protocol)) sync.kind = 'api';
+    if (/^https?:$/.test(location.protocol)) sync.kind = 'api';
     if (!sync.kind) { logs = localLogs; return; }
     outbox = obLoad();
-    const base = sync.kind === 'api' ? mergeLogs(cleanLogs(localLogs), cleanLogs(lsGet(LS_CACHE, {}))) : cleanLogs(localLogs);
-    logs = overlay(base);
+    logs = overlay(mergeLogs(cleanLogs(localLogs), cleanLogs(lsGet(LS_CACHE, {}))));
   }
   function startSync() {
-    if (sync.kind === 'artifact') connectCloud();
-    else if (sync.kind === 'api') connectApi();
+    if (sync.kind === 'api') connectApi();
   }
 
   /* ---------- cronômetro de descanso ---------- */
@@ -2170,7 +2960,7 @@ const FIG = (function () {
     flushSaves();
     const n = countEntries(logs);
     if (!n) { status('Ainda não há cargas registradas.'); return; }
-    const txt = JSON.stringify({ app: 'treino-joao-haniere', v: 1, em: new Date().toISOString(), logs: logs });
+    const txt = JSON.stringify({ app: 'mrboom', v: 1, pessoa: PL.id, em: new Date().toISOString(), logs: logs });
     const fb = $('#copy-fallback');
     const fallback = () => { fb.hidden = false; fb.value = txt; fb.focus(); fb.select(); status('Texto do backup selecionado: copie e guarde num lugar seguro, como uma conversa no WhatsApp.'); };
     try {
@@ -2184,7 +2974,7 @@ const FIG = (function () {
     flushSaves();
     const order = {};
     let n = 0;
-    ['joao', 'haniere'].forEach((p) => daysOf(p).forEach((D) => D.items.forEach((it) => { if (!(it.ex in order)) order[it.ex] = n++; })));
+    daysOf(state.person).forEach((D) => D.items.forEach((it) => { if (!(it.ex in order)) order[it.ex] = n++; }));
     const rows = [];
     Object.keys(logs).forEach((k) => {
       if (!validKey(k)) return;
@@ -2208,7 +2998,7 @@ const FIG = (function () {
     const blob = new Blob(['\ufeff' + lines.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'treino-cargas-' + TODAY + '.csv';
+    a.download = 'mrboom-cargas-' + TODAY + '.csv';
     document.body.appendChild(a);
     a.click();
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
@@ -2228,8 +3018,6 @@ const FIG = (function () {
     $('#ios-install').hidden = !(show && !installEvt);
   }
   function startApp() {
-    const csv = $('#btn-csv');
-    if (csv) csv.hidden = sync.kind === 'artifact';
     if (sync.kind !== 'api') return;
     window.addEventListener('beforeinstallprompt', (ev) => { ev.preventDefault(); installEvt = ev; renderInstall(); });
     window.addEventListener('appinstalled', () => { installEvt = null; prefs.noInstall = true; savePrefs(); renderInstall(); });
@@ -2275,18 +3063,39 @@ const FIG = (function () {
   }
 
   /* ---------- eventos ---------- */
+  /* menu da conta, no topo */
+  let sairConfirma = false;
+  function abrirMenu(on) {
+    $('#conta-btn').setAttribute('aria-expanded', String(on));
+    $('#conta-menu').hidden = !on;
+    if (!on) { sairConfirma = false; $('#sair-aviso').hidden = true; $('#m-sair').textContent = 'Sair'; }
+  }
+  function pedirSair() {
+    flushSaves();
+    const n = sync.kind ? obCount() : 0;
+    if (n && !sairConfirma) {
+      sairConfirma = true;
+      const av = $('#sair-aviso');
+      av.hidden = false;
+      av.textContent = 'Ainda ' + (n === 1 ? 'há 1 registro deste aparelho que não foi' : 'há ' + n + ' registros deste aparelho que não foram') + ' para a nuvem. Se sair agora, ' + (n === 1 ? 'ele se perde' : 'eles se perdem') + '.';
+      $('#m-sair').textContent = 'Sair mesmo assim';
+      return;
+    }
+    G.sair();
+  }
+
   document.addEventListener('click', (ev) => {
+    if (!ev.target.closest('.conta')) abrirMenu(false);
     const tg = ev.target.closest('.ex-toggle');
     if (tg) { toggleCard(tg.closest('.ex')); return; }
     const a = ev.target.closest('[data-act]');
     if (!a) return;
     const act = a.dataset.act;
-    if (act === 'person') {
-      if (state.person === a.dataset.v) return;
-      flushSaves();
-      state.person = a.dataset.v; prefs.person = state.person; savePrefs();
-      goDefault(state.person); renderAll();
-    } else if (act === 'day') { state.day = a.dataset.v; renderWeek(); renderDay(); }
+    if (act === 'menu') abrirMenu(a.getAttribute('aria-expanded') !== 'true');
+    else if (act === 'pessoas') { abrirMenu(false); G.abrirPessoas(); }
+    else if (act === 'perguntas') { abrirMenu(false); flushSaves(); G.abrirPerguntas(perfil); }
+    else if (act === 'sair') pedirSair();
+    else if (act === 'day') { state.day = a.dataset.v; renderWeek(); renderDay(); }
     else if (act === 'phase') { prefs.phase = +a.dataset.v; prefs.phaseAt = TODAY; savePrefs(); renderPhase(); renderDay(); }
     else if (act === 'alt') {
       const k = a.dataset.key, v = a.dataset.v;
@@ -2317,12 +3126,6 @@ const FIG = (function () {
     } else if (act === 'restore-do') doRestore();
     else if (act === 'restore-cancel') closeRestore();
   });
-  document.addEventListener('submit', (ev) => {
-    if (!ev.target || ev.target.id !== 'pin-form') return;
-    ev.preventDefault();
-    const v = $('#pin-in').value.trim();
-    if (v) submitPin(v);
-  });
   document.addEventListener('input', (ev) => {
     const inp = ev.target.closest && ev.target.closest('[data-log]');
     if (!inp) return;
@@ -2338,16 +3141,13 @@ const FIG = (function () {
     if (sync.dirty) setTimeout(() => { if (sync.dirty && !editing()) renderDay(); }, 0);
   });
   document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') { abrirMenu(false); return; }
     if (ev.key !== 'Enter') return;
     const inp = ev.target.closest && ev.target.closest('[data-log]');
     if (!inp) return;
     ev.preventDefault();
     const all = $$('[data-log]', inp.closest('.log')); const nx = all[all.indexOf(inp) + 1];
     if (nx) nx.focus(); else inp.blur();
-  });
-  window.addEventListener('hashchange', () => {
-    const h = hashPerson();
-    if (h && h !== state.person) { flushSaves(); state.person = h; prefs.person = h; savePrefs(); goDefault(h); renderAll(); }
   });
   window.addEventListener('pagehide', flushSaves);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushSaves(); });
@@ -2357,7 +3157,9 @@ const FIG = (function () {
   renderSync();
   startSync();
   startApp();
-})();
+}
+
+G.boot();
 </script>
 
 </body>

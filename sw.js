@@ -1,6 +1,6 @@
-// Treino João & Haniere: guarda o site no celular para abrir mesmo sem sinal na academia.
+// Mr. Boom: guarda o site no celular para abrir mesmo sem sinal na academia.
 // As cargas (/api/) sempre vão pela rede; o próprio site guarda o que não pôde ser enviado.
-const CACHE = 'treino-v1';
+const CACHE = 'mrboom-v3';
 const BASE = ['/', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (ev) => {
