@@ -25,23 +25,32 @@
   --ink:#151A21;
   --muted:#586371;
   --line:#D6DCE4;
+  /* bordas de campos e botões de marcar: 3:1 contra o fundo (WCAG 1.4.11); --line fica para divisórias */
+  --line-ctl:#7F8A99;
   --focus:#1D5FD1;
-  /* cores das anilhas olímpicas: azul 20 kg, amarela 15 kg, vermelha 25 kg, verde 10 kg */
+  /* cores das anilhas olímpicas: azul 20 kg, amarela 15 kg, vermelha 25 kg, verde 10 kg.
+     Vermelho mais fechado e verde puxado para o azul (como na paleta de Okabe e Ito): continuam anilhas, mas quem
+     tem daltonismo vermelho-verde consegue separar o treino C do D. O amarelo não chega a 3:1 no branco, então
+     ganha uma borda escura (--d2-edge) onde a cor é a única marca (bolinha da semana, botão de feito, barra). */
   --d1:#1D5FD1; --on-d1:#FFFFFF;
-  --d2:#E3A800; --on-d2:#151A21;
-  --d3:#C8322A; --on-d3:#FFFFFF;
-  --d4:#137A4B; --on-d4:#FFFFFF;
+  --d2:#E3A800; --on-d2:#151A21; --d2-edge:#8A6400;
+  --d3:#B5300F; --on-d3:#FFFFFF;
+  --d4:#00806B; --on-d4:#FFFFFF;
   --ok-bg:#E1F3E8; --ok-ink:#17693A;
   --warn-bg:#FBEFD6; --warn-ink:#875400;
-  --brand:#F2701E; --on-brand:#151A21; --brand-ink:#A84206;
+  --brand:#EA6A1C; --on-brand:#151A21; --brand-ink:#A84206;
   --stop-bg:#FBE3E1; --stop-ink:#A5251E;
+  /* desempenho: um tom só, quente (o laranja da marca, um pouco mais fechado para passar de 3:1 também no fundo
+     cinza), e o quanto vale aparece no tamanho do anel e no número. Tristeza se liga a cinza e preto, não ao tom:
+     por isso o cinza fica só para "Parado". Vermelho fica só para alerta de saúde. */
+  --perf:#DE6112; --perf-bg:#FCE6D8; --perf-ink:#9A3C05; --ring-track:#E6DED6;
   --tape-a:#F2C200; --tape-b:#151A21;
   --eq:#C3CBD6;
   --timer-bg:#151A21; --timer-ink:#F1F3F6;
   --shadow:0 1px 2px rgba(21,26,33,.06),0 3px 12px rgba(21,26,33,.07);
   --display:"Big Shoulders Display","Arial Narrow","Roboto Condensed",Impact,sans-serif;
   --body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --day:var(--d1); --on-day:var(--on-d1);
+  --day:var(--d1); --on-day:var(--on-d1); --day-edge:var(--day);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -49,8 +58,10 @@
     --bg:#0E1115; --surface:#161B21; --surface-2:#1F252D; --ink:#E7EBF0; --muted:#9BA5B2; --line:#2B323C; --focus:#7AA6FF;
     --d1:#5B8FFF; --on-d1:#0E1115;
     --d2:#F0C33C; --on-d2:#0E1115;
-    --d3:#FF6B5E; --on-d3:#0E1115;
-    --d4:#3CC784; --on-d4:#0E1115;
+    --d3:#FF6B4A; --on-d3:#0E1115;
+    --d4:#2EC4A0; --on-d4:#0E1115;
+    --d2-edge:#F0C33C; --line-ctl:#636D7A;
+    --perf:#FF8A3D; --perf-bg:#3A2416; --perf-ink:#FFB27D; --ring-track:#3A3530;
     --ok-bg:#132A1D; --ok-ink:#62D596;
     --warn-bg:#2D2410; --warn-ink:#F2BC52;
     --brand:#FF8A3D; --on-brand:#0E1115; --brand-ink:#FF9A52;
@@ -66,8 +77,10 @@
   --bg:#0E1115; --surface:#161B21; --surface-2:#1F252D; --ink:#E7EBF0; --muted:#9BA5B2; --line:#2B323C; --focus:#7AA6FF;
   --d1:#5B8FFF; --on-d1:#0E1115;
   --d2:#F0C33C; --on-d2:#0E1115;
-  --d3:#FF6B5E; --on-d3:#0E1115;
-  --d4:#3CC784; --on-d4:#0E1115;
+  --d3:#FF6B4A; --on-d3:#0E1115;
+  --d4:#2EC4A0; --on-d4:#0E1115;
+  --d2-edge:#F0C33C; --line-ctl:#636D7A;
+  --perf:#FF8A3D; --perf-bg:#3A2416; --perf-ink:#FFB27D; --ring-track:#3A3530;
   --ok-bg:#132A1D; --ok-ink:#62D596;
   --warn-bg:#2D2410; --warn-ink:#F2BC52;
   --brand:#FF8A3D; --on-brand:#0E1115; --brand-ink:#FF9A52;
@@ -77,10 +90,10 @@
   --timer-bg:#E7EBF0; --timer-ink:#0E1115;
   --shadow:0 1px 2px rgba(0,0,0,.45),0 4px 16px rgba(0,0,0,.35);
 }
-[data-day="1"]{--day:var(--d1);--on-day:var(--on-d1)}
-[data-day="2"]{--day:var(--d2);--on-day:var(--on-d2)}
-[data-day="3"]{--day:var(--d3);--on-day:var(--on-d3)}
-[data-day="4"]{--day:var(--d4);--on-day:var(--on-d4)}
+[data-day="1"]{--day:var(--d1);--on-day:var(--on-d1);--day-edge:var(--d1)}
+[data-day="2"]{--day:var(--d2);--on-day:var(--on-d2);--day-edge:var(--d2-edge)}
+[data-day="3"]{--day:var(--d3);--on-day:var(--on-d3);--day-edge:var(--d3)}
+[data-day="4"]{--day:var(--d4);--on-day:var(--on-d4);--day-edge:var(--d4)}
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -122,9 +135,9 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .wd.act .lb{font-weight:700;color:var(--ink)}
 .wd.today .ab{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}
 .wd[aria-pressed="true"]{--cell:var(--surface);background:var(--surface);border-color:var(--line);box-shadow:var(--shadow)}
-.pl{position:relative;width:20px;height:20px;border-radius:50%;background:var(--day);box-shadow:inset 0 0 0 3px rgba(0,0,0,.16)}
+.pl{position:relative;width:20px;height:20px;border-radius:50%;background:var(--day);box-shadow:inset 0 0 0 2px var(--day-edge),inset 0 0 0 3px rgba(0,0,0,.16)}
 .pl::after{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--cell)}
-.pl.off{background:transparent;box-shadow:inset 0 0 0 2px var(--line)}
+.pl.off{background:transparent;box-shadow:inset 0 0 0 2px var(--line-ctl)}
 .pl.off::after{display:none}
 
 /* fase */
@@ -159,7 +172,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .note svg{flex:none;margin-top:3px;color:var(--muted)}
 .prog{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 .prog-track{flex:1;height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
-.prog-fill{height:100%;width:0;background:var(--day);transition:width .3s ease}
+.prog-fill{height:100%;width:0;background:var(--day);box-shadow:inset 0 0 0 1px var(--day-edge);transition:width .3s ease}
 .tap-hint{font-size:14px;color:var(--muted)}
 
 /* escala de dor */
@@ -186,9 +199,9 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .ex-rx b{font-family:var(--display);font-weight:800;font-size:24px;line-height:1;letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .rx-more{font-size:14px;font-weight:700}
 .rr{font-size:14px;color:var(--muted)}
-.check{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--muted)}
+.check{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;border:2px solid var(--line-ctl);background:transparent;color:var(--muted)}
 .check svg{opacity:.45}
-.check[aria-pressed="true"]{background:var(--day);border-color:var(--day);color:var(--on-day)}
+.check[aria-pressed="true"]{background:var(--day);border-color:var(--day-edge);color:var(--on-day)}
 .check[aria-pressed="true"] svg{opacity:1}
 .ex-sub{display:grid;gap:8px;padding:9px 12px 14px 48px}
 .chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
@@ -213,7 +226,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .reps-row{display:grid;gap:8px;max-width:330px}
 .reps-row.need input{border-color:var(--warn-ink);box-shadow:inset 0 0 0 1px var(--warn-ink)}
 .field{display:grid;gap:3px;min-width:0;font-size:12px;font-weight:700;color:var(--muted);text-align:center}
-.log input{width:100%;height:52px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.log input{width:100%;height:52px;border:1px solid var(--line-ctl);border-radius:10px;background:var(--surface);font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
 .log input::placeholder{color:var(--muted);opacity:.6}
 .kg-row input{width:92px}
 .hint{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:var(--ok-bg);color:var(--ok-ink);font-size:14px;font-weight:700}
@@ -289,7 +302,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .restore{display:grid;gap:8px}
 .restore label{font-size:14px;font-weight:700}
-textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:14px;line-height:1.4;resize:vertical}
+textarea{width:100%;padding:10px 12px;border:1px solid var(--line-ctl);border-radius:11px;background:var(--surface);font-size:14px;line-height:1.4;resize:vertical}
 .status{min-height:1.3em;font-size:14px;font-weight:700}
 .tip{font-size:15px;color:var(--muted)}
 /* evolução, recordes e progresso */
@@ -307,7 +320,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 .cal{display:grid;gap:5px;max-width:330px}
 .cal-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;justify-items:center}
 .cal-h{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
-.cal-d{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);box-sizing:border-box;display:grid;place-items:center;font-size:11px;font-weight:700;line-height:1;color:var(--muted);font-variant-numeric:tabular-nums}
+.cal-d{width:28px;height:28px;border-radius:50%;border:2px solid var(--line-ctl);box-sizing:border-box;display:grid;place-items:center;font-size:11px;font-weight:700;line-height:1;color:var(--muted);font-variant-numeric:tabular-nums}
 .cal-d.plan{border-style:dashed;color:var(--ink)}
 .cal-d.on{background:var(--ok-ink);border-color:var(--ok-ink);color:var(--surface)}
 .cal-d.miss{border-color:var(--warn-ink);color:var(--warn-ink)}
@@ -352,7 +365,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 .gate-title{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;letter-spacing:.01em;text-transform:uppercase;text-wrap:balance}
 .gate-form{display:grid;gap:8px;width:100%}
 .gate-form label,.pform label,.pinline label{font-size:14px;font-weight:700}
-.gate-form input,.pform input:not([type="checkbox"]),.pinline input{width:100%;height:48px;padding:0 14px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:18px}
+.gate-form input,.pform input:not([type="checkbox"]),.pinline input{width:100%;height:48px;padding:0 14px;border:1px solid var(--line-ctl);border-radius:11px;background:var(--surface);font-size:18px}
 .gate-form .btn{margin-top:4px}
 #form-perguntas{display:grid;gap:22px;width:100%}
 .q{margin:0;padding:0;border:0;display:grid;gap:8px;min-width:0}
@@ -361,7 +374,7 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 .opts.col{display:grid}
 .opt{position:relative;display:block}
 .opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
-.opt span{display:block;min-height:48px;padding:12px 14px;border-radius:11px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:15px;cursor:pointer}
+.opt span{display:block;min-height:48px;padding:12px 14px;border-radius:11px;border:1px solid var(--line-ctl);background:var(--surface);font-weight:700;font-size:15px;cursor:pointer}
 .opts.dias .opt span{min-width:50px;text-align:center;padding-inline:8px}
 .opt input:checked + span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .opt input:focus-visible + span{outline:3px solid var(--focus);outline-offset:2px}
@@ -376,8 +389,10 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius
 .conta-menu button:hover{background:var(--surface-2)}
 .conta-menu .tip{padding:4px 12px 8px;max-width:260px}
 /* pessoas (só o administrador) */
-.sheet{position:fixed;inset:0;z-index:40;background:rgba(14,17,21,.5);display:grid;justify-items:center;align-items:end;overflow-y:auto}
-.sheet-in{width:100%;max-width:680px;margin-top:48px;min-height:70vh;padding:18px 16px calc(28px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0;background:var(--bg);display:grid;gap:14px;align-content:start}
+/* flex + margin-top:auto encosta a folha embaixo quando ela é curta; quando é maior que a tela, o topo continua alcançável pela rolagem
+   (com grid e align-items:end, o topo ia para fora da tela e não dava para rolar até o Fechar) */
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(14,17,21,.5);display:flex;flex-direction:column;align-items:center;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-top:48px}
+.sheet-in{flex:0 0 auto;width:100%;max-width:680px;margin-top:auto;min-height:70vh;padding:18px 16px calc(28px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0;background:var(--bg);display:grid;gap:14px;align-content:start}
 .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .sheet-head h2{font-family:var(--display);font-weight:800;font-size:32px;line-height:1;letter-spacing:.01em;text-transform:uppercase}
 .pform{display:grid;gap:8px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
@@ -393,12 +408,64 @@ body.travado{overflow:hidden}
 .pgrupo{display:grid;gap:10px}
 .pgrupo h3{font-size:17px;font-weight:700}
 .p-user{color:var(--muted);font-size:14px}
+/* desempenho: anel de frequência no ícone de cada pessoa e a janela com os detalhes */
+.p-top{display:flex;align-items:center;gap:12px}
+.p-top > div{min-width:0}
+.p-av{flex:none;display:grid;place-items:center;width:58px;height:58px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--ink)}
+button.p-av{cursor:pointer}
+button.p-av:hover .ring-track{stroke:var(--line-ctl)}
+.p-av svg{display:block;width:58px;height:58px}
+.ring-track{fill:none;stroke:var(--ring-track)}
+.ring-track.vazio{stroke:var(--line-ctl);stroke-dasharray:3 4}
+.ring-arc{fill:none;stroke:var(--perf);stroke-linecap:round}
+.ring-txt{fill:var(--ink);font-family:var(--body);font-weight:700;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:6px;justify-self:start;padding:3px 10px 3px 7px;border-radius:999px;font-size:14px;font-weight:700;line-height:1.35}
+.chip svg{flex:none;width:16px;height:16px}
+.chip.em-dia{background:var(--perf-bg);color:var(--perf-ink)}
+.chip.irregular{background:transparent;color:var(--perf-ink);box-shadow:inset 0 0 0 1.5px var(--perf)}
+.chip.parado,.chip.sem-registro,.chip.sem-plano{background:var(--surface-2);color:var(--muted)}
+.p-perf{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.p-perf .tip{margin:0}
+.desemp{width:calc(100% - 24px);max-width:560px;max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:18px;background:var(--bg);color:var(--ink);box-shadow:0 10px 40px rgba(0,0,0,.35);overflow-y:auto;overscroll-behavior:contain}
+.desemp::backdrop{background:rgba(14,17,21,.55)}
+.desemp[data-fallback]{position:fixed;inset:16px 0 auto;margin:0 auto;z-index:60}
+.dp-in{display:grid;gap:16px;padding:18px 16px 22px}
+.dp-head{display:flex;align-items:center;gap:12px}
+.dp-head > div{flex:1;min-width:0}
+.dp-head h2{font-family:var(--display);font-weight:800;font-size:28px;line-height:1.05;letter-spacing:.01em;text-transform:uppercase;overflow-wrap:anywhere}
+.dp-head .p-av,.dp-head .p-av svg{width:72px;height:72px}
+.dp-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dp-kpis div{display:grid;gap:2px;align-content:start;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.dp-kpis b{font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}
+.dp-kpis span{font-size:13px;color:var(--muted);line-height:1.3}
+.dp-sec{display:grid;gap:8px}
+.dp-sec h3{font-size:17px;font-weight:700}
+.dp-graf{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.dp-graf .bar{fill:var(--perf)}
+.dp-graf .bar.abaixo{fill:url(#dp-listra);stroke:var(--perf);stroke-width:1.5}
+.dp-graf .bar.atual{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3}
+.dp-graf .meta{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:6 4}
+.dp-graf .eixo{stroke:var(--line-ctl);stroke-width:1}
+.dp-graf text{fill:var(--ink);font-family:var(--body);font-size:14px;font-variant-numeric:tabular-nums}
+.dp-graf text.sub{fill:var(--muted);font-size:11.5px}
+.dp-graf .listra{stroke:var(--perf);stroke-width:2}
+.dp-leg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+.dp-leg span{display:inline-flex;align-items:center;gap:6px}
+.dp-leg svg{flex:none}
+.dp-ex{list-style:none;margin:0;padding:0;display:grid;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.dp-ex li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:4px 10px;padding:10px 12px;border-top:1px solid var(--line);font-size:15px}
+.dp-ex li:first-child{border-top:0}
+.dp-ex .nm{min-width:0;overflow-wrap:anywhere}
+.dp-ex .kg{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.dp-ex .vr{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:64px;text-align:right}
+.dp-ex .vr.sobe{color:var(--perf-ink)}
+.dp-alerta{padding:10px 12px;border-radius:12px;background:var(--warn-bg);color:var(--warn-ink);font-size:15px}
 .aviso-pedidos{padding:10px 14px;border-radius:12px;background:var(--warn-bg);color:var(--ink);font-size:15px}
 /* perguntas de saúde */
 .priv{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:15px}
 .medidas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;max-width:340px}
 .mfield{display:grid;gap:4px;font-size:14px;font-weight:700}
-.mfield input{width:100%;height:48px;padding:0 12px;border:1px solid var(--line);border-radius:11px;background:var(--surface);font-size:18px;font-variant-numeric:tabular-nums}
+.mfield input{width:100%;height:48px;padding:0 12px;border:1px solid var(--line-ctl);border-radius:11px;background:var(--surface);font-size:18px;font-variant-numeric:tabular-nums}
 .q-lista{margin:0;padding-left:20px;display:grid;gap:4px;font-size:15px}
 /* saúde, no alto do treino */
 .saude-box{display:grid;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font-size:15px}
@@ -448,6 +515,7 @@ body.travado{overflow:hidden}
     </div>
     <div class="gate-bloco" id="bloco-cadastro" hidden>
       <p class="lede">Escolha seu usuário e sua senha. Depois, o administrador do Mr. Boom libera o seu acesso e o seu treino aparece aqui.</p>
+      <p class="tip">O administrador acompanha seus treinos e as cargas que você anota, para ajudar na sua evolução. As respostas sobre saúde ficam só com você.</p>
       <form class="gate-form" id="form-cadastro">
         <label for="cad-nome">Seu nome</label>
         <input id="cad-nome" name="nome" autocomplete="name" maxlength="30" required>
@@ -717,7 +785,7 @@ body.travado{overflow:hidden}
       <h2 id="h-pessoas">Pessoas</h2>
       <button type="button" class="btn ghost" data-pa="fechar">Fechar</button>
     </div>
-    <p>Quem quer usar o Mr. Boom cria a própria conta na tela de entrada, com usuário e senha. Os pedidos aparecem aqui: libere quem você conhece. Depois de liberada, a pessoa responde as perguntas que montam o treino dela, e cada uma vê só o próprio treino e as próprias cargas. As respostas sobre peso, altura, lesões e saúde ficam só com a pessoa: não aparecem nesta lista.</p>
+    <p>Quem quer usar o Mr. Boom cria a própria conta na tela de entrada, com usuário e senha. Os pedidos aparecem aqui: libere quem você conhece. Depois de liberada, a pessoa responde as perguntas que montam o treino dela, e cada uma vê só o próprio treino e as próprias cargas. Aqui você vê o desempenho de cada uma, calculado pelos treinos e cargas anotados. As respostas sobre peso, altura, lesões e saúde ficam só com a pessoa: não aparecem nesta lista nem no desempenho.</p>
     <p class="status" id="pessoas-msg" role="status" aria-live="polite"></p>
     <div class="pgrupo" id="grupo-pedidos" hidden>
       <h3>Pedidos para entrar</h3>
@@ -727,9 +795,14 @@ body.travado{overflow:hidden}
       <h3>Com acesso</h3>
       <ul class="plist" id="pessoas-lista"></ul>
     </div>
+    <p class="tip">Toque no anel de cada pessoa para ver o desempenho dela: treinos por semana e como as cargas evoluíram.</p>
     <p class="tip">Você entra com o usuário <b>joao</b> e o código do treino. Para trocar o código, mude TREINO_PIN na Vercel: todos os celulares em que você entrou pedem o código novo.</p>
   </div>
 </div>
+
+<dialog class="desemp" id="desemp" aria-labelledby="dp-nome">
+  <div class="dp-in" id="dp-in"></div>
+</dialog>
 
 <div class="timer" id="timer" data-day="1" hidden>
   <div class="timer-track"><div class="timer-fill" id="t-fill"></div></div>
@@ -1692,6 +1765,7 @@ const G = (function () {
     setTimeout(() => { try { $('#pessoas [data-pa="fechar"]').focus(); } catch (e) { /* ok */ } }, 60);
   }
   function fecharPessoas() {
+    if (dlgDp().open) fecharDesempenho();
     $('#pessoas').hidden = true;
     document.body.classList.remove('travado');
   }
@@ -1716,7 +1790,7 @@ const G = (function () {
       '<div class="btn-row"><button type="button" class="btn" data-pa="liberar">Liberar</button><button type="button" class="btn ghost" data-pa="recusar">Recusar</button></div></li>').join('');
     $('#pessoas-lista').innerHTML = !ok.length ? '<li class="tip">Ninguém com acesso ainda, além de você.</li>' : ok.map((p) => {
       const id = esc(p.id), nome = esc(p.nome);
-      return '<li data-id="' + id + '">' + cab(p, p.plano ? resumoPlano(p.plano) : 'Ainda não respondeu as perguntas') +
+      return '<li data-id="' + id + '">' + cabAtivo(p) +
         '<div class="btn-row"><button type="button" class="btn ghost" data-pa="senha">Trocar senha</button><button type="button" class="btn ghost" data-pa="remover">Remover</button></div>' +
         '<form class="pinline" data-pf="senha" hidden><label for="ps-' + id + '">Nova senha de ' + nome + '</label>' +
           '<input id="ps-' + id + '" type="password" maxlength="40" minlength="6" autocomplete="new-password" required>' +
@@ -1728,6 +1802,185 @@ const G = (function () {
     }).join('');
     avisarApp();
   }
+  /* ---------- desempenho de cada pessoa (só o administrador) ----------
+     Um tom só para a quantidade (o anel e as barras, em laranja), e o significado sempre também em texto, ícone
+     ou textura: Em dia é o selo cheio, Irregular só o contorno, Parado em cinza. Cerca de 8% dos homens não
+     separam vermelho de verde, então nada aqui depende só da cor. */
+  const ICO = {
+    ok: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.2 8.6l3 3 6.6-7.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    meio: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="5.8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 2.2a5.8 5.8 0 0 1 0 11.6z" fill="currentColor"/></svg>',
+    pausa: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="4" y="3" width="2.6" height="10" rx="1" fill="currentColor"/><rect x="9.4" y="3" width="2.6" height="10" rx="1" fill="currentColor"/></svg>',
+    nada: '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 8h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>'
+  };
+  const STATUS = {
+    'em-dia': { t: 'Em dia', ic: ICO.ok },
+    'irregular': { t: 'Irregular', ic: ICO.meio },
+    'parado': { t: 'Parado', ic: ICO.pausa },
+    'sem-registro': { t: 'Sem cargas anotadas', ic: ICO.nada },
+    'sem-plano': { t: 'Ainda não respondeu as perguntas', ic: ICO.nada }
+  };
+  const num = (n, c) => Number(n).toLocaleString('pt-BR', { maximumFractionDigits: c === undefined ? 1 : c });
+  const ddmm = (d) => (d ? d.slice(8, 10) + '/' + d.slice(5, 7) : '');
+  const diaMs = (d) => Date.UTC(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8, 10));
+  const iniciais = (nome) => { const w = String(nome || '').trim().split(/\s+/).filter(Boolean); return ((w[0] || '?').charAt(0) + (w.length > 1 ? w[w.length - 1].charAt(0) : '')).toUpperCase(); };
+  const temFreq = (dp) => !!dp && dp.status !== 'sem-plano' && typeof dp.freq === 'number';
+  const janelaTxt = (dp) => (dp.diasJanela >= 28 ? 'nas últimas 4 semanas' : 'em ' + dp.diasJanela + (dp.diasJanela === 1 ? ' dia' : ' dias') + ', desde o começo');
+  /* o anel: quanto dos treinos combinados a pessoa fez (sem o plano, só as iniciais) */
+  function anel(dp, nome) {
+    const c = 2 * Math.PI * 24, f = temFreq(dp) ? Math.max(0, Math.min(1, dp.freq)) : null;
+    const txt = f === null ? iniciais(nome) : Math.round(f * 100) + '%';
+    const arco = f ? '<circle class="ring-arc" cx="29" cy="29" r="24" stroke-width="6" stroke-dasharray="' + (c * f).toFixed(1) + ' ' + c.toFixed(1) + '" transform="rotate(-90 29 29)"/>' : '';
+    return '<svg viewBox="0 0 58 58" aria-hidden="true" focusable="false"><circle class="ring-track' + (f === null ? ' vazio' : '') + '" cx="29" cy="29" r="24" stroke-width="6"/>' + arco +
+      '<text class="ring-txt" x="29" y="29" text-anchor="middle" dominant-baseline="central" font-size="' + (txt.length > 3 ? 13 : 15) + '">' + esc(txt) + '</text></svg>';
+  }
+  const chip = (st) => { const S = STATUS[st] || STATUS['sem-registro']; return '<span class="chip ' + esc(st) + '">' + S.ic + esc(S.t) + '</span>'; };
+  function fraseResumo(dp) {
+    if (!temFreq(dp)) return '';
+    return dp.feitos + ' de ' + dp.meta + (dp.meta === 1 ? ' treino ' : ' treinos ') + janelaTxt(dp) + (dp.ultimo ? ' · último em ' + ddmm(dp.ultimo) : '');
+  }
+  function rotuloAnel(p) {
+    const dp = p.desempenho, S = STATUS[(dp && dp.status) || 'sem-registro'] || STATUS['sem-registro'];
+    return 'Ver o desempenho de ' + p.nome + ': ' + S.t.toLowerCase() + (temFreq(dp) ? ', ' + fraseResumo(dp) : '');
+  }
+  /* cabeçalho de quem tem acesso: o anel abre a janela de desempenho */
+  function cabAtivo(p) {
+    const dp = p.desempenho;
+    return '<div class="p-top"><button type="button" class="p-av" data-pa="desempenho" aria-haspopup="dialog" aria-label="' + esc(rotuloAnel(p)) + '">' + anel(dp, p.nome) + '</button>' +
+      '<div><p class="p-nome">' + esc(p.nome) + '</p><p class="p-user">@' + esc(p.usuario) + '</p></div></div>' +
+      '<div class="p-perf">' + chip(dp ? dp.status : (p.plano ? 'sem-registro' : 'sem-plano')) + (temFreq(dp) ? '<p class="tip">' + esc(fraseResumo(dp)) + '</p>' : '') + '</div>' +
+      (p.plano ? '<p class="tip">' + esc(resumoPlano(p.plano)) + '</p>' : '');
+  }
+  /* nome do exercício de um registro "pessoa|exercício" ou "pessoa|exercício--alternativa" */
+  function nomeExercicio(key) {
+    const ex = String(key).split('|')[1] || '', i = ex.indexOf('--'), base = i < 0 ? ex : ex.slice(0, i), suf = i < 0 ? '' : ex.slice(i + 2);
+    const E = EX[base];
+    if (!E) return base;
+    if (!suf) return E.n;
+    if (EX[suf]) return EX[suf].n;
+    return E.alt && EX[E.alt] ? EX[E.alt].n : E.n + ' (alternativa)';
+  }
+  /* treinos por semana: barras na meta são cheias; abaixo da meta, listradas; a semana atual tem contorno tracejado */
+  function grafSemanas(d) {
+    const W = 340, H = 190, L0 = 8, R0 = 8, T0 = 24, B0 = 40, n = d.semanas.length, meta = d.porSemana || 0;
+    const top = Math.max(meta, 1, ...d.semanas.map((s) => s.treinos));
+    const ph = H - T0 - B0, slot = (W - L0 - R0) / n, bw = Math.min(40, slot * 0.62);
+    const y = (v) => T0 + ph - (v / top) * ph;
+    let g = '<defs><pattern id="dp-listra" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" style="fill:var(--surface)"/><line class="listra" x1="1.5" y1="0" x2="1.5" y2="7"/></pattern></defs>';
+    g += '<line class="eixo" x1="' + L0 + '" x2="' + (W - R0) + '" y1="' + (T0 + ph) + '" y2="' + (T0 + ph) + '"/>';
+    const partes = [];
+    d.semanas.forEach((s, i) => {
+      const atual = i === n - 1, x = L0 + slot * i + (slot - bw) / 2, yy = y(s.treinos), h = T0 + ph - yy;
+      const cls = 'bar' + (meta && s.treinos < meta ? ' abaixo' : '') + (atual ? ' atual' : '');
+      if (s.treinos > 0) g += '<rect class="' + cls + '" x="' + x.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="3"/>';
+      else if (atual) g += '<rect class="bar atual" style="fill:none" x="' + x.toFixed(1) + '" y="' + (T0 + ph - 6) + '" width="' + bw.toFixed(1) + '" height="6" rx="2"/>';
+      const cx = (x + bw / 2).toFixed(1);
+      g += '<text x="' + cx + '" y="' + (yy - 6).toFixed(1) + '" text-anchor="middle" font-weight="700">' + s.treinos + '</text>';
+      g += '<text class="sub" x="' + cx + '" y="' + (T0 + ph + 16) + '" text-anchor="middle">' + ddmm(s.inicio) + '</text>';
+      if (atual) g += '<text class="sub" x="' + cx + '" y="' + (T0 + ph + 30) + '" text-anchor="middle">esta</text>';
+      partes.push('semana de ' + ddmm(s.inicio) + ': ' + s.treinos + (atual ? ' (em andamento)' : ''));
+    });
+    if (meta) g += '<line class="meta" x1="' + L0 + '" x2="' + (W - R0) + '" y1="' + y(meta).toFixed(1) + '" y2="' + y(meta).toFixed(1) + '"/>';
+    const rot = 'Treinos por semana nas últimas ' + n + ' semanas' + (meta ? ', meta de ' + meta + ' por semana' : '') + '. ' + partes.join('; ') + '.';
+    const leg = '<p class="dp-leg">' +
+      '<span><svg width="14" height="14" aria-hidden="true"><rect width="14" height="14" rx="2" style="fill:var(--perf)"/></svg>Bateu a meta</span>' +
+      (meta ? '<span><svg width="14" height="14" aria-hidden="true"><rect x=".75" y=".75" width="12.5" height="12.5" rx="2" style="fill:url(#dp-listra);stroke:var(--perf);stroke-width:1.5"/></svg>Abaixo da meta</span>' +
+        '<span><svg width="22" height="14" aria-hidden="true"><line x1="0" x2="22" y1="7" y2="7" style="stroke:var(--ink);stroke-width:1.5;stroke-dasharray:6 4"/></svg>Meta: ' + meta + ' por semana</span>' : '') +
+      '<span><svg width="14" height="14" aria-hidden="true"><rect x=".75" y=".75" width="12.5" height="12.5" rx="2" style="fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 3"/></svg>Semana atual, em andamento</span></p>';
+    return '<svg class="dp-graf" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(rot) + '">' + g + '</svg>' + leg;
+  }
+  function cabJanela(p, dp) {
+    return '<div class="dp-head"><span class="p-av">' + anel(dp, p.nome) + '</span><div><h2 id="dp-nome">' + esc(p.nome) + '</h2><p class="p-user">@' + esc(p.usuario || '') + '</p>' +
+      (p.plano ? '<p class="tip">' + esc(resumoPlano(p.plano)) + '</p>' : '') + '</div><button type="button" class="btn ghost" data-dp="fechar">Fechar</button></div>';
+  }
+  function corpoJanela(p, d) {
+    const out = [cabJanela(p, d)];
+    out.push('<div class="p-perf">' + chip(d.status) + '</div>');
+    if (d.status === 'sem-plano') {
+      out.push('<p>' + esc(p.nome) + ' ainda não respondeu as perguntas do treino. O desempenho aparece depois que o plano estiver montado e as primeiras cargas forem anotadas.</p>');
+      return out.join('');
+    }
+    const dias = d.ultimo ? Math.round((diaMs(d.hoje) - diaMs(d.ultimo)) / 86400000) : null;
+    const quando = dias === null ? '—' : dias <= 0 ? 'Hoje' : dias === 1 ? 'Ontem' : 'Há ' + dias + ' dias';
+    out.push('<div class="dp-kpis">' +
+      '<div><b>' + d.feitos + ' de ' + d.meta + '</b><span>treinos ' + esc(janelaTxt(d)) + '</span></div>' +
+      '<div><b>' + quando + '</b><span>' + (d.ultimo ? 'último treino anotado (' + ddmm(d.ultimo) + ')' : 'nenhum treino anotado') + '</span></div>' +
+      '<div><b>' + d.seguidas + '</b><span>' + (d.seguidas === 1 ? 'semana seguida' : 'semanas seguidas') + ' na meta</span></div></div>');
+    /* abaixo de 2 treinos por semana nas 4 semanas fechadas: menos que o mínimo de fortalecimento da OMS */
+    const fechadas = d.semanas.slice(-5, -1), media = fechadas.reduce((s, x) => s + x.treinos, 0) / Math.max(1, fechadas.length);
+    const desde = p.plano && p.plano.inicio ? p.plano.inicio : '';
+    if (d.ultimo && media < 2 && (!desde || diaMs(d.hoje) - diaMs(desde) >= 35 * 86400000)) {
+      out.push('<p class="dp-alerta">Média de ' + num(media) + ' treino' + (media >= 1 && media < 2 ? '' : 's') + ' por semana nas últimas 4 semanas. A OMS recomenda fortalecimento muscular em pelo menos 2 dias por semana.</p>');
+    }
+    out.push('<section class="dp-sec" aria-labelledby="dp-h-sem"><h3 id="dp-h-sem">Treinos por semana</h3>' + grafSemanas(d));
+    const v4 = d.semanas.slice(-5, -1).reduce((s, x) => s + x.volume, 0), v4a = d.semanas.slice(0, 4).reduce((s, x) => s + x.volume, 0);
+    if (v4 || v4a) {
+      const varV = v4a ? Math.round((v4 - v4a) / v4a * 100) : null;
+      out.push('<p class="tip">Volume (carga × repetições) nas 4 semanas fechadas mais recentes: <b>' + num(v4, 0) + ' kg</b>' +
+        (varV === null ? '.' : '; nas 4 anteriores: ' + num(v4a, 0) + ' kg (' + (varV > 0 ? '+' : varV < 0 ? '−' : '') + Math.abs(varV) + '%).') + '</p>');
+    }
+    out.push('</section>');
+    const pr = d.progressao, ex = d.exercicios;
+    let carga = '<section class="dp-sec" aria-labelledby="dp-h-carga"><h3 id="dp-h-carga">Cargas desde o começo do plano</h3>';
+    if (!ex.length) carga += '<p class="tip">Nenhuma carga anotada ainda.</p>';
+    else {
+      const comp = pr.subiram + pr.iguais + pr.cairam;
+      if (comp) carga += '<p>' + pr.subiram + (pr.subiram === 1 ? ' exercício subiu' : ' exercícios subiram') + ', ' + pr.iguais + (pr.iguais === 1 ? ' ficou igual' : ' ficaram iguais') + ' e ' + pr.cairam + (pr.cairam === 1 ? ' caiu' : ' caíram') +
+        (pr.media !== null ? '. Em média, ' + (pr.media >= 0 ? '+' : '−') + num(Math.abs(pr.media)) + '% de carga.' : '.') + '</p>';
+      carga += '<ul class="dp-ex">' + ex.map((x) => {
+        const kg = x.registros > 1 ? num(x.primeira.kg) + ' → ' + num(x.ultima.kg) + ' kg' : num(x.ultima.kg) + ' kg';
+        let vr;
+        if (x.variacao === null) vr = '<span class="vr" style="font-weight:400;color:var(--muted)">1 registro</span>';
+        else if (x.variacao > 0) vr = '<span class="vr sobe"><span aria-hidden="true">▲ </span>+' + num(x.variacao) + '%</span>';
+        else if (x.variacao < 0) vr = '<span class="vr"><span aria-hidden="true">▼ </span>−' + num(Math.abs(x.variacao)) + '%</span>';
+        else vr = '<span class="vr"><span aria-hidden="true">= </span>0%</span>';
+        return '<li><span class="nm">' + esc(nomeExercicio(x.key)) + '</span><span class="kg">' + kg + '</span>' + vr + '</li>';
+      }).join('') + '</ul>';
+      if (d.totalExercicios > ex.length) carga += '<p class="tip">Mostrando os ' + ex.length + ' exercícios com mais registros, de ' + d.totalExercicios + '.</p>';
+    }
+    out.push(carga + '</section>');
+    out.push('<p class="tip">Como é calculado: um treino conta quando há carga ou repetição anotada no dia, então treino feito sem anotar não aparece. A meta são os dias por semana que ' + esc(p.nome.split(' ')[0]) +
+      ' escolheu. Em dia: 75% ou mais dos treinos combinados nas últimas 4 semanas. Parado: nada anotado há mais de 14 dias. Para quem está começando, o ACSM recomenda 2 a 3 treinos por semana e aumentar a carga de 2% a 10% quando sobram 1 ou 2 repetições.</p>');
+    return out.join('');
+  }
+  let dpVolta = null, dpPedido = 0;
+  const dlgDp = () => $('#desemp');
+  function fecharDesempenho() {
+    const dlg = dlgDp();
+    dpPedido++;
+    if (dlg.hasAttribute('data-fallback')) { dlg.removeAttribute('open'); dlg.removeAttribute('data-fallback'); voltarFoco(); }
+    else if (dlg.open) dlg.close();
+  }
+  function voltarFoco() { const b = dpVolta; dpVolta = null; if (b && b.isConnected) { try { b.focus(); } catch (e) { /* ok */ } } }
+  const focarFechar = () => { try { $('#desemp [data-dp="fechar"]').focus(); } catch (e) { /* ok */ } };
+  async function abrirDesempenho(id, btn) {
+    const dlg = dlgDp(), box = $('#dp-in'), p = pessoas.find((x) => x.id === id) || { id: id, nome: '', usuario: '' };
+    dpVolta = btn || null;
+    box.innerHTML = cabJanela(p, p.desempenho) + '<p class="tip">Carregando o desempenho…</p>';
+    if (!dlg.open) {
+      if (typeof dlg.showModal === 'function') dlg.showModal();
+      else { dlg.setAttribute('data-fallback', ''); dlg.setAttribute('open', ''); }
+    }
+    dlg.scrollTop = 0;
+    focarFechar();
+    const n = ++dpPedido;
+    let r = null;
+    try { r = await conta(null, '?desempenho=' + encodeURIComponent(id)); } catch (e) { r = null; }
+    if (n !== dpPedido || !dlg.open) return;
+    if (r && r.st === 401) { fecharDesempenho(); fecharPessoas(); expirou(); return; }
+    if (!r || r.st !== 200 || !r.j.desempenho) {
+      box.innerHTML = cabJanela(p, p.desempenho) + '<p class="tip">' + esc(!r ? 'Sem conexão: o desempenho aparece quando a internet voltar.' : r.j.erro || 'Não deu para abrir o desempenho agora.') + '</p>';
+      focarFechar();
+      return;
+    }
+    box.innerHTML = corpoJanela(Object.assign({}, p, r.j.pessoa), r.j.desempenho);
+    dlg.scrollTop = 0;
+    focarFechar();
+  }
+  dlgDp().addEventListener('click', (ev) => {
+    if (ev.target === ev.currentTarget || ev.target.closest('[data-dp="fechar"]')) fecharDesempenho();
+  });
+  dlgDp().addEventListener('close', () => { dpPedido++; voltarFoco(); });
+
   $('#pessoas').addEventListener('click', async (ev) => {
     if (ev.target === ev.currentTarget) { fecharPessoas(); return; }
     const b = ev.target.closest('[data-pa]');
@@ -1737,6 +1990,7 @@ const G = (function () {
     const li = b.closest('li[data-id]');
     if (!li) return;
     const id = li.dataset.id, p = pessoas.find((x) => x.id === id) || { nome: '' };
+    if (pa === 'desempenho') { abrirDesempenho(id, b); return; }
     const fs = li.querySelector('[data-pf="senha"]'), fr = li.querySelector('[data-pf="remover"]');
     if (pa === 'senha') { fs.hidden = false; fr.hidden = true; fs.querySelector('input').focus(); }
     else if (pa === 'remover') { fr.hidden = false; fs.hidden = true; }
@@ -1760,7 +2014,12 @@ const G = (function () {
     if (r.ok) { inp.value = ''; f.hidden = true; aviso('Senha trocada. Nos celulares em que a pessoa já tinha entrado, ela vai digitar a senha nova uma vez.'); }
     else if (r.msg) aviso(r.msg);
   });
-  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('#pessoas').hidden) fecharPessoas(); });
+  /* Esc fecha primeiro a janela de desempenho, e só depois a lista de Pessoas */
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Escape' || $('#pessoas').hidden) return;
+    if (dlgDp().open) { if (dlgDp().hasAttribute('data-fallback')) fecharDesempenho(); return; }
+    fecharPessoas();
+  });
 
   return { boot: boot, expirou: expirou, sair: sair, abrirPessoas: abrirPessoas, abrirPerguntas: abrirPerguntas };
 })();

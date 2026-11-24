@@ -1,6 +1,7 @@
 // Mr. Boom: conta de cada pessoa.
 // GET  /api/conta                                       -> { pessoa } (e renova o cookie) ou 401; o administrador recebe também { pendentes }
-// GET  /api/conta?pessoas=1                             -> { pessoas } (só o administrador)
+// GET  /api/conta?pessoas=1                             -> { pessoas } (só o administrador), cada uma com o resumo do desempenho
+// GET  /api/conta?desempenho=<id>                       -> { pessoa, desempenho } (só o administrador): treinos por semana e cargas
 // POST /api/conta { acao: 'cadastrar', nome, usuario, senha } -> cria a conta, que fica esperando liberação, e já deixa logado
 // POST /api/conta { acao: 'entrar', usuario, senha }    -> { pessoa } e grava o cookie
 // POST /api/conta { acao: 'sair' }                      -> apaga o cookie
@@ -12,6 +13,7 @@
 
 const crypto = require('crypto');
 const L = require('./_lib');
+const D = require('./_desempenho');
 
 const MODELOS = { c2: 2, c3: 3, ul4: 4 };
 const NIVEIS = ['novo', 'menos1', 'mais1'];
@@ -80,10 +82,20 @@ module.exports = async function handler(req, res) {
       if (!p) return res.status(401).json({ entrar: true });
       await L.abrirSessao(req, res, p);
       const q = new URL(req.url || '/', 'http://local').searchParams;
+      if (q.get('desempenho')) {
+        if (!p.admin) return res.status(403).json({ erro: 'Só o administrador vê o desempenho das pessoas.' });
+        const alvo = await L.lerPessoa(String(q.get('desempenho')));
+        if (!alvo || alvo.id === 'joao' || pendente(alvo)) return res.status(404).json({ erro: 'Pessoa não encontrada.' });
+        const cargas = (await D.cargasPorPessoa())[alvo.id] || {};
+        /* só nome, usuário, plano e cargas: as respostas de saúde ficam de fora */
+        return res.status(200).json({ pessoa: L.publico(alvo), desempenho: D.detalhe(alvo, cargas) });
+      }
       if (q.get('pessoas')) {
         if (!p.admin) return res.status(403).json({ erro: 'Só o administrador vê a lista de pessoas.' });
+        const cargas = await D.cargasPorPessoa(), hoje = L.hoje();
         const lista = (await L.lerPessoas())
-          .map((x) => ({ id: x.id, nome: x.nome, usuario: x.usuario || '', status: pendente(x) ? 'pendente' : 'ativo', criado: x.criado || null, plano: x.plano || null }))
+          .map((x) => ({ id: x.id, nome: x.nome, usuario: x.usuario || '', status: pendente(x) ? 'pendente' : 'ativo', criado: x.criado || null, plano: x.plano || null,
+            desempenho: pendente(x) ? null : D.resumo(x, cargas[x.id], hoje) }))
           .sort((a, b) => (a.status === b.status ? a.nome.localeCompare(b.nome, 'pt-BR') : a.status === 'pendente' ? -1 : 1));
         return res.status(200).json({ pessoas: lista });
       }
