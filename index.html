@@ -1787,8 +1787,9 @@ const G = (function () {
   const marcado = (name) => { const r = $('#form-perguntas input[name="' + name + '"]:checked'); return r ? r.value : ''; };
   const nDias = () => +marcado('ndias') || 0;
   const diasMarcados = () => $$('#form-perguntas input[name="dia"]:checked').map((i) => +i.value);
-  function dicaDias() {
+  function dicaDias(aviso) {
     const n = nDias(), m = diasMarcados().length, d = $('#dias-dica');
+    if (aviso) { d.textContent = aviso; return; }
     if (!n) { d.textContent = 'Escolha primeiro quantos dias.'; return; }
     const folga = n < 4 ? ' Com um dia de folga entre eles, o corpo recupera melhor.' : ' Os treinos de pernas e de parte de cima se alternam nesses dias.';
     d.textContent = (m === n ? 'Pronto: ' + n + ' dias escolhidos.' : 'Escolha ' + n + ' dias' + (m ? ' (marcados agora: ' + m + ').' : '.')) + folga;
@@ -1836,6 +1837,12 @@ const G = (function () {
       const n = nDias();
       if (diasMarcados().length !== n) $$('#form-perguntas input[name="dia"]').forEach((i) => { i.checked = DIAS_SUGERIDOS[n].indexOf(+i.value) >= 0; });
     }
+    /* não deixa marcar mais dias do que o escolhido na pergunta 1: avisa na hora, em vez de só no fim */
+    if (ev.target.name === 'dia' && ev.target.checked && nDias() && diasMarcados().length > nDias()) {
+      ev.target.checked = false;
+      dicaDias('Você escolheu ' + nDias() + ' dias na pergunta 1. Para trocar um dia, desmarque outro antes. Para treinar mais dias, mude a pergunta 1.');
+      return;
+    }
     /* "Não tenho" não combina com as outras respostas da pergunta 7 */
     if (ev.target.name === 'lesao' && ev.target.checked) {
       $$('#form-perguntas input[name="lesao"]').forEach((i) => { if (ev.target.value === 'nenhuma' ? i.value !== 'nenhuma' : i.value === 'nenhuma') i.checked = false; });
@@ -1846,7 +1853,10 @@ const G = (function () {
     ev.preventDefault();
     const n = nDias(), dias = diasMarcados(), msg = $('#perg-msg');
     const lesoes = $$('#form-perguntas input[name="lesao"]:checked').map((i) => i.value);
-    const falta = !n ? 'quantos dias por semana' : dias.length !== n ? 'quais são os ' + n + ' dias' : !marcado('nivel') ? 'há quanto tempo você faz musculação'
+    /* dias a mais ou a menos na pergunta 2: diz exatamente o que fazer */
+    if (n && dias.length > n) { msg.textContent = 'Você marcou ' + dias.length + ' dias na pergunta 2, mas escolheu ' + n + ' na pergunta 1. Desmarque ' + (dias.length - n) + (dias.length - n === 1 ? ' dia' : ' dias') + ' ou mude a pergunta 1.'; return; }
+    if (n && dias.length < n) { msg.textContent = 'Falta marcar ' + (n - dias.length) + (n - dias.length === 1 ? ' dia' : ' dias') + ' na pergunta 2: você escolheu ' + n + ' na pergunta 1.'; return; }
+    const falta = !n ? 'quantos dias por semana' : !marcado('nivel') ? 'há quanto tempo você faz musculação'
       : !marcado('tempo') ? 'quanto tempo você tem em cada treino' : !marcado('foco') ? 'se quer dar mais atenção a alguma parte'
       : !lesoes.length ? 'se você tem alguma lesão ou limitação (pergunta 7)' : !marcado('triagem') ? 'a pergunta 8, sobre a sua saúde' : '';
     if (falta) { msg.textContent = 'Falta responder ' + falta + '.'; return; }
