@@ -272,12 +272,10 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .demo-erro .demo-seg button[aria-pressed="true"]{background:var(--stop-ink);color:var(--surface)}
 .demo-vista{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;min-height:34px;padding:0 4px;border:0;background:none;color:var(--focus);font-size:13.5px;font-weight:700}
 .demo-erro svg.fig{border-color:var(--stop-ink)}
-.fase{display:grid;gap:5px}
-.fase-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:14px}
-.fase-top span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.fase-bar{display:flex;gap:3px;height:6px}
-.fase-bar i{border-radius:3px;background:var(--line)}
-.fase-bar i.on{background:var(--ink)}
+.fase{margin:0;font-size:14px;line-height:1.45;color:var(--muted);font-variant-numeric:tabular-nums}
+.fase span{transition:color .25s}
+.fase span.on{color:var(--ink)}
+.fase em{font-style:normal}
 .fase-txt,.demo-cap,.demo-mus{margin:0;font-size:14px;line-height:1.45;color:var(--muted)}
 .demo-erro .demo-cap{color:var(--stop-ink)}
 .demo-mus{display:flex;gap:8px;align-items:baseline}
@@ -3004,8 +3002,7 @@ function iniciarApp(perfil) {
     const cap = erro ? d.err.txt : (d.cap || (d.still ? 'Segure a posição' : ''));
     const anda = !d.still && !REDUCE;
     const fase = d.still ? '' : anda
-      ? '<div class="fase" aria-hidden="true"><div class="fase-top"><b data-fase>' + esc(fs[0].n) + '</b><span data-fase-s>' + fmtS(fs[0].d) + (vel < 1 ? ' · câmera lenta' : '') + '</span></div>' +
-        '<div class="fase-bar">' + fs.map((f, i) => '<i style="flex:' + f.d + '"' + (i ? '' : ' class="on"') + '></i>').join('') + '</div></div>'
+      ? '<p class="fase" aria-hidden="true">' + fs.map((f, i) => '<span data-i="' + i + '"' + (i ? '' : ' class="on"') + '>' + esc(f.n) + ' ' + fmtS(f.d) + '</span>').join(' · ') + (vel < 1 ? ' <em>(em câmera lenta)</em>' : '') + '</p>'
       : '<p class="fase-txt">Ritmo: ' + esc(ritmoTxt(fs)) + '. Em cinza, a posição final.</p>';
     const resumo = (erro ? 'Erro comum: ' : '') + (cap || '') + (d.still ? '' : (cap ? '. ' : '') + 'Ritmo: ' + ritmoTxt(fs)) + (d.m && !erro ? '. Músculo: ' + d.m[0] : '');
     return '<figure class="demo' + (erro ? ' demo-erro' : '') + '" data-fig="' + id + '" data-name="' + esc(name) + '" data-erro="' + (erro ? 1 : 0) + '" data-vel="' + vel + '">' +
@@ -3031,8 +3028,6 @@ function iniciarApp(perfil) {
     const i = faseAt(st.fs, st.sim);
     if (i === st.fi) return;
     st.fi = i;
-    if (st.lab) st.lab.textContent = st.fs[i].n;
-    if (st.seg) st.seg.textContent = fmtS(st.fs[i].d) + (st.vel < 1 ? ' · câmera lenta' : '');
     st.bars.forEach((b, j) => b.classList.toggle('on', j === i));
   }
   function tickFigs(now) {
@@ -3054,7 +3049,7 @@ function iniciarApp(perfil) {
     }
     const now = performance.now();
     const st = { d: d, svg: svg, erro: erro, vel: Number(fig.dataset.vel) || 1, sim: 0, last: now, paused: false,
-      fs: fasesOf(d, erro), fi: -1, lab: $('[data-fase]', fig), seg: $('[data-fase-s]', fig), bars: $$('.fase-bar i', fig) };
+      fs: fasesOf(d, erro), fi: -1, bars: $$('.fase [data-i]', fig) };
     running.set(fig, st);
     paintFig(st, now);
     if (!rafId) rafId = requestAnimationFrame(tickFigs);

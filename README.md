@@ -37,7 +37,7 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 
 Cada exercício tem um boneco animado (54 animações, contando as vistas extras) com:
 
-- **Fase e tempo:** embaixo do boneco aparece o que fazer agora (*Empurre*, *Segure*, *Volte devagar*…) e uma barra com o tempo de cada fase.
+- **Ritmo:** embaixo do boneco, uma linha parada com as fases e o tempo de cada uma (*Suba 1 s · Segure 0,5 s · Desça devagar 2,2 s*). A fase do momento fica mais escura, sem barra andando, para não tirar a atenção do boneco.
 - **Músculo-alvo:** em magenta no boneco, com uma dica curta para pensar no músculo. Para hipertrofia, pensar no músculo que trabalha deu mais crescimento num estudo com 12 semanas de treino (Schoenfeld et al., 2018, PubMed 29533715).
 - **Erro comum:** o botão *Erro comum* mostra, em vermelho, o erro mais frequente daquele exercício e marca o ponto do erro. Ver o erro ao lado do certo, sabendo qual é qual, ajuda a aprender o que evitar (Tang et al., 2022; Andrieux e Proteau, 2016).
 - **Câmera lenta:** deixa o movimento na metade da velocidade. É opcional porque os estudos não mostram vantagem clara da câmera lenta para todo mundo.
