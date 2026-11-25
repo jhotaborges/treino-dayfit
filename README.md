@@ -35,9 +35,9 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 
 ## Carga total ou por lado
 
-Ao lado da carga há dois botões: **Total** e **Por lado**. Use *Por lado* quando anotar o peso de um lado só (uma anilha de cada lado, um halter em cada mão). O app guarda o que você digitou e, para comparar os treinos (gráfico, maior carga, recorde, sugestão de subir ou baixar, desempenho em Pessoas), soma os dois lados.
+Ao lado da carga há um botão pequeno, **por lado**. Marque quando anotar o peso de um lado só (uma anilha de cada lado, um halter em cada mão). O app guarda o que você digitou e, para comparar os treinos (gráfico, maior carga, recorde, sugestão de subir ou baixar, desempenho em Pessoas), soma os dois lados.
 
-- O botão já vem no mesmo modo do último treino daquele exercício.
+- Desmarcado, a carga é o total. O botão já vem como estava no último treino daquele exercício.
 - Nos últimos treinos, **Era por lado** / **Era o total** corrige um registro antigo anotado do jeito errado.
 - Os registros de antes desta mudança contam como total.
 - A planilha ganhou as colunas *Carga é* (total ou por lado) e *Carga total (kg)*.
