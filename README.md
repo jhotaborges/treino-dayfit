@@ -33,6 +33,18 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 - **Repetições que sobram.** Diminuem a cada fase: 2–3 na Adaptação (para acertar a técnica), 1–2 na Base e, na Progressão, 1–2 nos compostos e 0–1 nos isolados e nas máquinas. Séries mais perto da falha dão mais hipertrofia (Robinson et al., 2024), parar a 1–2 da falha rende o mesmo que ir até ela e cansa menos (Refalo et al., 2024), e chegar perto da falha é mais seguro em isolados e máquinas.
 - **Amplitude.** O leg press pede para descer o máximo possível sem tirar o quadril do banco, e os tríceps na polia voltam até as mãos chegarem perto do peito, que é a parte em que o músculo fica alongado (Kassiano et al., 2023; Wolf et al., 2025). As versões para quem tem dor no joelho continuam com a descida limitada.
 
+## Animações dos exercícios
+
+Cada exercício tem um boneco animado (54 animações, contando as vistas extras) com:
+
+- **Fase e tempo:** embaixo do boneco aparece o que fazer agora (*Empurre*, *Segure*, *Volte devagar*…) e uma barra com o tempo de cada fase.
+- **Músculo-alvo:** em magenta no boneco, com uma dica curta para pensar no músculo. Para hipertrofia, pensar no músculo que trabalha deu mais crescimento num estudo com 12 semanas de treino (Schoenfeld et al., 2018, PubMed 29533715).
+- **Erro comum:** o botão *Erro comum* mostra, em vermelho, o erro mais frequente daquele exercício e marca o ponto do erro. Ver o erro ao lado do certo, sabendo qual é qual, ajuda a aprender o que evitar (Tang et al., 2022; Andrieux e Proteau, 2016).
+- **Câmera lenta:** deixa o movimento na metade da velocidade. É opcional porque os estudos não mostram vantagem clara da câmera lenta para todo mundo.
+- **Outra vista:** agachamento com halter, agachamento no Smith e afundo também aparecem de frente (dá para ver o joelho entrando), e o desenvolvimento na máquina aparece de lado (dá para ver a lombar saindo do encosto).
+
+Boneco em vez de vídeo: nos estudos, aprender vendo um boneco ou pontos de luz deu o mesmo resultado que ver um vídeo (Horn, Williams e Scott, 2002), e o boneco é leve, funciona sem internet e segue as cores do app. Quem usa *reduzir movimento* no celular vê o boneco parado, com a posição final em cinza e o ritmo escrito.
+
 ## Carga total ou por lado
 
 Ao lado da carga há uma escolha pequena: **total** ou **por lado**. Marque *por lado* quando anotar o peso de um lado só (uma anilha de cada lado, um halter em cada mão). O app guarda o que você digitou e, para comparar os treinos (gráfico, maior carga, recorde, sugestão de subir ou baixar, desempenho em Pessoas), soma os dois lados.
