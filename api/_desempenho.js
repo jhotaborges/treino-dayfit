@@ -37,6 +37,8 @@ async function cargasPorPessoa() {
 }
 
 const reps = (e) => (e.reps || []).reduce((s, n) => s + (Number.isFinite(n) ? n : 0), 0);
+/* carga total: quem anotou por lado tem o dobro */
+const tot = (e) => (e.lado ? e.kg * 2 : e.kg);
 
 /* resumo que aparece no ícone de cada pessoa */
 function resumo(p, cargas, hoje) {
@@ -80,7 +82,7 @@ function detalhe(p, cargas, hoje) {
     if (i < 0) return;
     diasSemana[i].add(d);
     const e = cargas[k][d];
-    if (Number.isFinite(e.kg)) semanas[i].volume += Math.round(e.kg * reps(e));
+    if (Number.isFinite(e.kg)) semanas[i].volume += Math.round(tot(e) * reps(e));
   }));
   semanas.forEach((s, i) => { s.treinos = diasSemana[i].size; });
   /* semanas seguidas batendo a meta, sem contar a semana atual, que ainda não acabou */
@@ -92,7 +94,7 @@ function detalhe(p, cargas, hoje) {
   const exercicios = Object.keys(cargas).map((k) => {
     const datas = Object.keys(cargas[k]).filter((d) => d >= inicioPlano && d <= hoje && Number.isFinite(cargas[k][d].kg)).sort();
     if (!datas.length) return null;
-    const a = datas[0], b = datas[datas.length - 1], ka = cargas[k][a].kg, kb = cargas[k][b].kg;
+    const a = datas[0], b = datas[datas.length - 1], ka = tot(cargas[k][a]), kb = tot(cargas[k][b]);
     return { key: k, registros: datas.length, primeira: { d: a, kg: ka }, ultima: { d: b, kg: kb },
       variacao: datas.length > 1 && ka > 0 ? Math.round((kb - ka) / ka * 1000) / 10 : null };
   }).filter(Boolean).sort((x, y) => y.registros - x.registros || (y.ultima.d < x.ultima.d ? -1 : 1));

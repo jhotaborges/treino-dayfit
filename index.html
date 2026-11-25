@@ -234,12 +234,20 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .log input{width:100%;height:52px;border:1px solid var(--line-ctl);border-radius:10px;background:var(--surface);font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
 .log input::placeholder{color:var(--muted);opacity:.6}
 .kg-row input{width:92px}
+/* carga total ou por lado: o app soma os dois lados para comparar */
+.kg-row{flex-wrap:wrap}
+.lado{display:inline-flex;border:1px solid var(--line-ctl);border-radius:10px;overflow:hidden}
+.lado button{min-height:44px;padding:0 12px;border:0;background:var(--surface);color:var(--ink);font-size:14px;font-weight:700}
+.lado button + button{border-left:1px solid var(--line-ctl)}
+.lado button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.lado-tip{margin:-2px 0 0;font-size:13.5px;color:var(--muted)}
 .hint{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:var(--ok-bg);color:var(--ok-ink);font-size:14px;font-weight:700}
 .hint-reps{background:var(--warn-bg);color:var(--warn-ink);font-weight:400}
 .hint-plato{background:var(--warn-bg);color:var(--warn-ink);font-weight:400}
 .saved{min-height:1.2em;font-size:13px;color:var(--muted)}
 .hist{margin:0;padding:0;list-style:none;display:grid;gap:2px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
 .hist li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 12px}
+.hist .acts{display:flex;flex-wrap:wrap;gap:0 18px}
 .alt-tog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;max-width:330px}
 .alt-tog button{min-height:48px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:14px;font-weight:700}
 .alt-tog button[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:var(--shadow)}
@@ -2538,9 +2546,12 @@ function iniciarApp(perfil) {
 
   /* ---------- registro ---------- */
   const fmtKg = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
+  /* carga por lado (uma anilha de cada lado, ou um halter em cada mão): para comparar, o app soma os dois lados */
+  const kgTot = (e) => (e && Number.isFinite(e.kg) ? (e.lado ? e.kg * 2 : e.kg) : null);
+  const ladoTxt = (e) => (e && e.lado ? ' por lado' : '');
   function fmtEntry(e) {
     const reps = (e.reps || []).filter((r) => Number.isFinite(r));
-    const kg = Number.isFinite(e.kg) ? fmtKg(e.kg) + ' kg' : 'sem carga';
+    const kg = Number.isFinite(e.kg) ? fmtKg(e.kg) + ' kg' + ladoTxt(e) : 'sem carga';
     return reps.length ? kg + ' · ' + reps.join('/') : kg;
   }
   function prevEntries(key) { const m = logs[key] || {}; return Object.keys(m).filter((d) => d !== TODAY).sort().reverse().map((d) => [d, m[d]]); }
@@ -2916,9 +2927,9 @@ function iniciarApp(perfil) {
       hint = '<p class="hint">' + ICON.up + '<span>Pode subir a carga hoje.</span></p>';
     } else if (adv && adv.k === 'down') {
       const faixa = adv.rg[0] === adv.rg[1] ? 'da meta de ' + adv.rg[0] : 'da faixa de ' + adv.rg[0] + '–' + adv.rg[1];
-      hint = '<p class="hint hint-down">' + ICON.down + '<span>Da última vez uma série ficou com ' + adv.min + (isSec(rx) ? ' s' : ' repetições') + ', abaixo ' + faixa + (isSec(rx) ? ' s' : '') + '. Hoje, baixe um pouco a carga: uns 10%, perto de ' + fmtKg(adv.sug) + ' kg.</span></p>';
+      hint = '<p class="hint hint-down">' + ICON.down + '<span>Da última vez uma série ficou com ' + adv.min + (isSec(rx) ? ' s' : ' repetições') + ', abaixo ' + faixa + (isSec(rx) ? ' s' : '') + '. Hoje, baixe um pouco a carga: uns 10%, perto de ' + fmtKg(adv.sug) + ' kg' + ladoTxt(last) + '.</span></p>';
     }
-    const ks = prev.slice(0, 3).map((x) => x[1].kg), rgp = rangeOf(rx);
+    const ks = prev.slice(0, 3).map((x) => kgTot(x[1])), rgp = rangeOf(rx);
     if (!hint && !ro && rgp && rr && ks.length === 3 && ks.every((k) => Number.isFinite(k) && k > 0 && k === ks[0])) {
       hint = '<p class="hint hint-plato"><span>Mesma carga nos últimos 3 treinos. Hoje, faça cada série até sobrarem só ' + rr.replace('sobram ', '') + ' repetições, mesmo que passe de ' + rgp[1] + '. Se passar, suba a carga no próximo treino.</span></p>';
     }
@@ -2928,7 +2939,10 @@ function iniciarApp(perfil) {
     const need = !ro && Number.isFinite(e.kg) && !hasReps(e);
     const noKg = !ro && hasToday && !Number.isFinite(e.kg) && hasReps(e);
     const series = Object.keys(logs[key] || {}).sort().map((d) => [d, logs[key][d]]).filter((x) => Number.isFinite(x[1].kg));
-    const evo = series.length >= 2 ? '<div class="evo"><h4>Evolução da carga' + (alt.on ? ' na alternativa' : '') + '</h4>' + sparkSvg(series.slice(-12)) + bestLine(series) + '</div>' : '';
+    const somaLados = series.some((x) => x[1].lado);
+    const evo = series.length >= 2 ? '<div class="evo"><h4>Evolução da carga' + (alt.on ? ' na alternativa' : '') + (somaLados ? ' (total, somando os dois lados)' : '') + '</h4>' + sparkSvg(series.slice(-12)) + bestLine(series) + '</div>' : '';
+    /* total ou por lado: o de hoje, se já anotou; senão, o mesmo do último treino */
+    const lado = hasToday ? !!e.lado : !!(last && last.lado);
     const base = 'lg-' + p + '-' + D.id + '-' + i;
     const kgPh = last && Number.isFinite(last.kg) ? fmtKg(last.kg) : '';
     const reps = Array.from({ length: sets }, (_, k) => {
@@ -2936,11 +2950,14 @@ function iniciarApp(perfil) {
       const ph = last && last.reps && Number.isFinite(last.reps[k]) ? last.reps[k] : '';
       return '<label class="field" for="' + base + '-r' + k + '">Série ' + (k + 1) + '<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" enterkeyhint="next" id="' + base + '-r' + k + '" data-log="rep" data-k="' + k + '" value="' + v + '" placeholder="' + ph + '"' + (ro ? ' disabled' : '') + '></label>';
     }).join('');
-    const hist = prev.slice(0, 3).map(([d, en]) => '<li><span>' + dshort(d) + ' · ' + esc(fmtEntry(en)) + '</span>' + (alt.has && !ro ? mvBtn(d, mvLabel) : '') + '</li>').join('');
+    const ladoBtn = (d, en) => (!ro && Number.isFinite(en.kg) ? '<button type="button" class="mv" data-act="lado-hist" data-key="' + esc(key) + '" data-d="' + d + '">' + (en.lado ? 'Era o total' : 'Era por lado') + '</button>' : '');
+    const hist = prev.slice(0, 3).map(([d, en]) => '<li><span>' + dshort(d) + ' · ' + esc(fmtEntry(en)) + '</span>' + (function (ac) { return ac ? '<span class="acts">' + ac + '</span>' : ''; })(ladoBtn(d, en) + (alt.has && !ro ? mvBtn(d, mvLabel) : '')) + '</li>').join('');
     const what = alt.on ? 'da alternativa' : 'deste exercício';
-    return '<div class="log" data-key="' + esc(key) + '">' +
+    return '<div class="log" data-key="' + esc(key) + '" data-lado="' + (lado ? '1' : '0') + '">' +
       '<h4>Registro de hoje · ' + dshort(TODAY) + '</h4>' + hint +
-      '<div class="kg-row"><label for="' + base + '-kg">Carga (kg)</label><input type="text" inputmode="decimal" maxlength="6" autocomplete="off" enterkeyhint="next" id="' + base + '-kg" data-log="kg" value="' + (Number.isFinite(e.kg) ? fmtKg(e.kg) : '') + '" placeholder="' + kgPh + '"' + (ro ? ' disabled' : '') + '></div>' +
+      '<div class="kg-row"><label for="' + base + '-kg">Carga (kg)</label><input type="text" inputmode="decimal" maxlength="6" autocomplete="off" enterkeyhint="next" id="' + base + '-kg" data-log="kg" value="' + (Number.isFinite(e.kg) ? fmtKg(e.kg) : '') + '" placeholder="' + kgPh + '"' + (ro ? ' disabled' : '') + '>' +
+        '<div class="lado" role="group" aria-label="A carga anotada é"><button type="button" data-act="lado" data-v="0" aria-pressed="' + !lado + '"' + (ro ? ' disabled' : '') + '>Total</button><button type="button" data-act="lado" data-v="1" aria-pressed="' + lado + '"' + (ro ? ' disabled' : '') + '>Por lado</button></div></div>' +
+      '<p class="lado-tip"' + (lado ? '' : ' hidden') + '>Por lado: o peso de um lado só, ou de um halter. Para comparar os treinos, o app soma os dois lados.</p>' +
       '<p class="reps-lab" id="' + base + '-rl">' + (isSec(rx) ? 'Segundos' : 'Repetições') + ' em cada série' + (goal ? '<span>meta: ' + esc(goal) + '</span>' : '') + '</p>' +
       '<div class="reps-row' + (need ? ' need' : '') + '" style="grid-template-columns:repeat(' + sets + ',minmax(0,1fr))" role="group" aria-labelledby="' + base + '-rl">' + reps + '</div>' +
       '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver.' : flash ? esc(flash) : need ? (isSec(rx) ? 'Falta anotar os segundos de cada série.' : 'Falta anotar as repetições de cada série.') : noKg ? 'Faltou a carga. Se foi sem peso, pode deixar em branco.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
@@ -2953,21 +2970,21 @@ function iniciarApp(perfil) {
   /* gráfico pequeno da carga em cada treino (os últimos 12) */
   function sparkSvg(pts) {
     const W = 300, H = 84, px = 20, top = 22, bot = 22, n = pts.length;
-    const ks = pts.map((x) => x[1].kg), lo = Math.min.apply(null, ks), hi = Math.max.apply(null, ks);
+    const ks = pts.map((x) => kgTot(x[1])), lo = Math.min.apply(null, ks), hi = Math.max.apply(null, ks);
     const X = (i) => (n === 1 ? W / 2 : px + (i * (W - 2 * px)) / (n - 1));
     const Y = (k) => (hi === lo ? (top + H - bot) / 2 : H - bot - ((k - lo) / (hi - lo)) * (H - top - bot));
     const f1 = (v) => v.toFixed(1);
-    const line = pts.map((x, i) => f1(X(i)) + ',' + f1(Y(x[1].kg))).join(' ');
-    const dots = pts.map((x, i) => '<circle cx="' + f1(X(i)) + '" cy="' + f1(Y(x[1].kg)) + '" r="3.5"/>').join('');
+    const line = pts.map((x, i) => f1(X(i)) + ',' + f1(Y(kgTot(x[1])))).join(' ');
+    const dots = pts.map((x, i) => '<circle cx="' + f1(X(i)) + '" cy="' + f1(Y(kgTot(x[1]))) + '" r="3.5"/>').join('');
     const when = (d) => (d === TODAY ? 'hoje' : dshort(d));
-    const lab = (i, a) => '<text x="' + f1(X(i)) + '" y="' + f1(Math.max(12, Y(pts[i][1].kg) - 8)) + '" text-anchor="' + a + '">' + fmtKg(pts[i][1].kg) + '</text>' +
+    const lab = (i, a) => '<text x="' + f1(X(i)) + '" y="' + f1(Math.max(12, Y(kgTot(pts[i][1])) - 8)) + '" text-anchor="' + a + '">' + fmtKg(kgTot(pts[i][1])) + '</text>' +
       '<text class="dt" x="' + f1(X(i)) + '" y="' + (H - 4) + '" text-anchor="' + a + '">' + when(pts[i][0]) + '</text>';
-    const desc = pts.map((x) => fmtKg(x[1].kg) + ' kg em ' + when(x[0])).join(', ');
+    const desc = pts.map((x) => fmtKg(kgTot(x[1])) + ' kg em ' + when(x[0])).join(', ');
     return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Carga em cada treino: ' + esc(desc) + '"><polyline points="' + line + '"/>' + dots + lab(0, 'start') + lab(n - 1, 'end') + '</svg>';
   }
   function bestLine(series) {
-    const b = series.reduce((m, x) => (!m || x[1].kg > m[1].kg ? x : m), null);
-    return b ? '<p class="best">Maior carga: <b>' + fmtKg(b[1].kg) + ' kg</b> (' + (b[0] === TODAY ? 'hoje' : dshort(b[0])) + ')</p>' : '';
+    const b = series.reduce((m, x) => (!m || kgTot(x[1]) > kgTot(m[1]) ? x : m), null);
+    return b ? '<p class="best">Maior carga: <b>' + fmtKg(kgTot(b[1])) + ' kg</b>' + (b[1].lado ? ' no total (' + fmtKg(b[1].kg) + ' por lado)' : '') + ' (' + (b[0] === TODAY ? 'hoje' : dshort(b[0])) + ')</p>' : '';
   }
 
   function renderItem(it, i, D, ds) {
@@ -3089,7 +3106,7 @@ function iniciarApp(perfil) {
     const rows = keys.map((k) => {
       const bk = baseOf(k), ex = bk.split('|')[1], idx = order.indexOf(ex);
       const pts = Object.keys(logs[k]).sort().map((d) => [d, logs[k][d]]);
-      const kg = pts.filter((x) => Number.isFinite(x[1].kg)).map((x) => x[1].kg);
+      const kg = pts.filter((x) => Number.isFinite(x[1].kg)).map((x) => kgTot(x[1]));
       return { k: k, ex: ex, alt: k !== bk, name: nameOfKey(k), n: pts.length, first: kg.length ? kg[0] : null, lastKg: kg.length ? kg[kg.length - 1] : null, last: pts[pts.length - 1][1], idx: idx < 0 ? 999 : idx };
     }).sort((a, b) => a.idx - b.idx || (a.alt ? 1 : 0) - (b.alt ? 1 : 0) || a.ex.localeCompare(b.ex));
     const up = [], down = [];
@@ -3099,9 +3116,9 @@ function iniciarApp(perfil) {
       if (!it || (r.alt && r.k !== altKeyOf(baseOf(r.k)))) return;
       const A = r.alt ? altOf(it) : null;
       const a = advice(r.last, A ? altRx(p, it, prefs.phase, A) : rxFor(p, it, prefs.phase));
-      const label = r.name + (r.alt ? ' (alternativa)' : '') + (Number.isFinite(r.last.kg) ? ', ' + fmtKg(r.last.kg) + ' kg' : '');
+      const label = r.name + (r.alt ? ' (alternativa)' : '') + (Number.isFinite(r.last.kg) ? ', ' + fmtKg(r.last.kg) + ' kg' + ladoTxt(r.last) : '');
       if (a && a.k === 'up') up.push(label);
-      else if (a && a.k === 'down') down.push(label + ': perto de ' + fmtKg(a.sug) + ' kg');
+      else if (a && a.k === 'down') down.push(label + ': perto de ' + fmtKg(a.sug) + ' kg' + ladoTxt(r.last));
     });
     const list = rows.map((r) => {
       let val = r.lastKg === null ? 'sem carga' : fmtKg(r.lastKg) + ' kg';
@@ -3171,14 +3188,15 @@ function iniciarApp(perfil) {
     if (!Number.isFinite(kg) || kg < 0 || kg > 1000) kg = null;
     const reps = $$('[data-log="rep"]', box).map((inp) => { const v = parseInt(inp.value, 10); return Number.isFinite(v) && v >= 0 && v <= 300 ? v : null; });
     const has = kg !== null || reps.some((r) => r !== null);
-    const entry = has ? { kg: kg, reps: reps } : null;
+    const lado = box.dataset.lado === '1' && kg !== null;
+    const entry = has ? Object.assign({ kg: kg, reps: reps }, lado ? { lado: true } : {}) : null;
     /* só a carga, sem nenhuma repetição: destaca os campos e lembra de anotar */
     const noReps = kg !== null && reps.length > 0 && reps.every((r) => r === null);
     const row = $('.reps-row', box);
     if (row) row.classList.toggle('need', noReps);
     const tipReps = noReps ? ' Agora anote as repetições de cada série.' : '';
-    const prevKgs = Object.keys(logs[key] || {}).filter((d) => d !== TODAY).map((d) => logs[key][d].kg).filter((v) => Number.isFinite(v));
-    const isPR = kg !== null && prevKgs.length > 0 && kg > Math.max.apply(null, prevKgs);
+    const prevKgs = Object.keys(logs[key] || {}).filter((d) => d !== TODAY).map((d) => kgTot(logs[key][d])).filter((v) => Number.isFinite(v));
+    const isPR = kg !== null && prevKgs.length > 0 && kgTot(entry) > Math.max.apply(null, prevKgs);
     const noKg = kg === null && reps.some((r) => r !== null);
     const extra = (isPR ? ' Novo recorde de carga neste exercício!' : '') + (noKg ? ' Faltou a carga: se foi sem peso, pode deixar em branco.' : '');
     if (has) { if (!logs[key]) logs[key] = {}; logs[key][TODAY] = entry; }
@@ -3214,6 +3232,22 @@ function iniciarApp(perfil) {
   }
 
   /* passa um registro da principal para a alternativa, ou o contrário */
+  /* corrige um registro antigo: a carga anotada era por lado, ou era o total */
+  function ladoAntigo(key, d) {
+    if (sync.mode === 'cloud-ro' || !validKey(key) || d === TODAY) return;
+    flushSaves();
+    const e = (logs[key] || {})[d];
+    if (!e || !Number.isFinite(e.kg)) return;
+    const novo = Object.assign({}, e);
+    if (e.lado) delete novo.lado; else novo.lado = true;
+    logs[key] = Object.assign({}, logs[key], { [d]: novo });
+    touch(key);
+    if (!sync.kind) lsSet(LS_LOGS, logs);
+    else { obPut(key, d, novo); if (sync.mode === 'cloud') cloudWrite(key); else renderSync(); }
+    sync.flash = { base: baseOf(key), text: 'O registro de ' + dshort(d) + ' agora é ' + (novo.lado ? fmtKg(novo.kg) + ' kg por lado (' + fmtKg(novo.kg * 2) + ' kg no total).' : fmtKg(novo.kg) + ' kg no total.') };
+    sync.sig = '';
+    renderDay();
+  }
   function moveEntry(from, to, d) {
     if (sync.mode === 'cloud-ro' || !validKey(from) || !validKey(to) || baseOf(from) !== baseOf(to) || from === to) return;
     flushSaves();
@@ -3264,6 +3298,7 @@ function iniciarApp(perfil) {
       const reps = Array.isArray(e.reps) ? e.reps.slice(0, 6).map((r) => (Number.isFinite(r) && r >= 0 && r <= 300 ? Math.round(r) : null)) : [];
       if (kg === null && !reps.some((r) => r !== null)) return;
       out[d] = { kg: kg, reps: reps };
+      if (e.lado === true && kg !== null) out[d].lado = true;
     });
     return out;
   }
@@ -3300,9 +3335,9 @@ function iniciarApp(perfil) {
     return out;
   }
   function obSave() { return lsSet(LS_OUT, outbox); }
-  function obPut(key, d, e) { (outbox[key] || (outbox[key] = {}))[d] = e ? { kg: e.kg, reps: e.reps.slice() } : null; obSave(); }
+  function obPut(key, d, e) { (outbox[key] || (outbox[key] = {}))[d] = e ? Object.assign({ kg: e.kg, reps: e.reps.slice() }, e.lado ? { lado: true } : {}) : null; obSave(); }
   function obCount() { let n = 0; Object.keys(outbox).forEach((k) => { n += Object.keys(outbox[k]).length; }); return n; }
-  const sameEntry = (a, b) => !!a && !!b && a.kg === b.kg && JSON.stringify(a.reps || []) === JSON.stringify(b.reps || []);
+  const sameEntry = (a, b) => !!a && !!b && a.kg === b.kg && !!a.lado === !!b.lado && JSON.stringify(a.reps || []) === JSON.stringify(b.reps || []);
   /* o que aparece na tela: a cópia da nuvem com as anotações ainda não confirmadas por cima */
   function overlay(base) {
     const out = {};
@@ -3607,13 +3642,14 @@ function iniciarApp(perfil) {
     const ord = (ex) => (ex in order ? order[ex] : 999);
     rows.sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0) || a.p.localeCompare(b.p) || ord(a.ex) - ord(b.ex) || (a.alt ? 1 : 0) - (b.alt ? 1 : 0));
     const maxSets = Math.max.apply(null, [4].concat(rows.map((r) => (r.e.reps || []).length)));
-    const head = ['Data', 'Pessoa', 'Exercício', 'Opção', 'Carga (kg)'];
+    const head = ['Data', 'Pessoa', 'Exercício', 'Opção', 'Carga (kg)', 'Carga é', 'Carga total (kg)'];
     for (let i = 1; i <= maxSets; i++) head.push('Série ' + i);
     const cell = (v) => (/[;"\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v);
     const lines = [head].concat(rows.map((r) => {
       const reps = (r.e.reps || []).slice(0, maxSets);
       while (reps.length < maxSets) reps.push(null);
-      return [dshort(r.d) + '/' + r.d.slice(0, 4), NAMES[r.p], r.name, r.alt ? 'alternativa' : 'principal', Number.isFinite(r.e.kg) ? String(r.e.kg).replace('.', ',') : '']
+      return [dshort(r.d) + '/' + r.d.slice(0, 4), NAMES[r.p], r.name, r.alt ? 'alternativa' : 'principal', Number.isFinite(r.e.kg) ? String(r.e.kg).replace('.', ',') : '',
+        Number.isFinite(r.e.kg) ? (r.e.lado ? 'por lado' : 'total') : '', Number.isFinite(r.e.kg) ? String(kgTot(r.e)).replace('.', ',') : '']
         .concat(reps.map((x) => (Number.isFinite(x) ? String(x) : '')));
     })).map((r) => r.map(cell).join(';'));
     const blob = new Blob(['\ufeff' + lines.join('\r\n') + '\r\n'], { type: 'text/csv;charset=utf-8' });
@@ -3726,6 +3762,17 @@ function iniciarApp(perfil) {
       if (b) b.focus({ preventScroll: true });
     }
     else if (act === 'move') moveEntry(a.dataset.from, a.dataset.to, a.dataset.d);
+    else if (act === 'lado') {
+      /* total ou por lado no registro de hoje: troca o botão e salva, se já tem carga anotada */
+      const box = a.closest('.log');
+      if (!box || sync.mode === 'cloud-ro') return;
+      const on = a.dataset.v === '1';
+      box.dataset.lado = on ? '1' : '0';
+      $$('[data-act="lado"]', box).forEach((x) => x.setAttribute('aria-pressed', String((x.dataset.v === '1') === on)));
+      const tip = $('.lado-tip', box); if (tip) tip.hidden = !on;
+      if ($('[data-log="kg"]', box).value.trim()) scheduleSave(box);
+    }
+    else if (act === 'lado-hist') ladoAntigo(a.dataset.key, a.dataset.d);
     else if (act === 'done') setDone(a.closest('.ex'), a.getAttribute('aria-pressed') !== 'true');
     else if (act === 'rest') startTimer(+a.dataset.sec || 60, a.dataset.name || '');
     else if (act === 'fig-pause') figPause(a.closest('.demo'), a);

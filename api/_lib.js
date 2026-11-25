@@ -175,6 +175,8 @@ function limparEntradas(src) {
     const reps = Array.isArray(e.reps) ? e.reps.slice(0, 6).map((n) => (Number.isFinite(n) && n >= 0 && n <= 300 ? Math.round(n) : null)) : [];
     if (kg === null && !reps.some((n) => n !== null)) continue;
     out[d] = { kg, reps };
+    /* lado: a carga anotada é de um lado só (ou de um halter); o total é o dobro */
+    if (e.lado === true && kg !== null) out[d].lado = true;
   }
   return out;
 }

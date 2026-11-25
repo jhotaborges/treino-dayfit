@@ -33,6 +33,15 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 - **Repetições que sobram.** Diminuem a cada fase: 2–3 na Adaptação (para acertar a técnica), 1–2 na Base e, na Progressão, 1–2 nos compostos e 0–1 nos isolados e nas máquinas. Séries mais perto da falha dão mais hipertrofia (Robinson et al., 2024), parar a 1–2 da falha rende o mesmo que ir até ela e cansa menos (Refalo et al., 2024), e chegar perto da falha é mais seguro em isolados e máquinas.
 - **Amplitude.** O leg press pede para descer o máximo possível sem tirar o quadril do banco, e os tríceps na polia voltam até as mãos chegarem perto do peito, que é a parte em que o músculo fica alongado (Kassiano et al., 2023; Wolf et al., 2025). As versões para quem tem dor no joelho continuam com a descida limitada.
 
+## Carga total ou por lado
+
+Ao lado da carga há dois botões: **Total** e **Por lado**. Use *Por lado* quando anotar o peso de um lado só (uma anilha de cada lado, um halter em cada mão). O app guarda o que você digitou e, para comparar os treinos (gráfico, maior carga, recorde, sugestão de subir ou baixar, desempenho em Pessoas), soma os dois lados.
+
+- O botão já vem no mesmo modo do último treino daquele exercício.
+- Nos últimos treinos, **Era por lado** / **Era o total** corrige um registro antigo anotado do jeito errado.
+- Os registros de antes desta mudança contam como total.
+- A planilha ganhou as colunas *Carga é* (total ou por lado) e *Carga total (kg)*.
+
 ## Saúde e lesões
 
 - **Lesões e limitações.** Para cada parte marcada (pescoço, ombro, cotovelo ou punho, lombar, quadril, joelho, tornozelo ou pé, osteoporose), o treino troca os exercícios que costumam forçar aquela parte, sem repetir exercício no mesmo dia, e escreve um cuidado no cartão dos que continuam. O exercício trocado mostra no nome o que ele substituiu. No alto do treino aparecem a escala de dor e a lista do que mudou. Em **Outra**, o app não troca nada e pede para a pessoa perguntar ao fisioterapeuta ou ao professor.
