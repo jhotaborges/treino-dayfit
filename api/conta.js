@@ -10,6 +10,9 @@
 //   Ficam fora da lista do administrador e da resposta de liberar.
 // POST /api/conta { acao: 'liberar' | 'recusar' | 'remover', id }  -> administrador
 // POST /api/conta { acao: 'senha', id, senha }          -> administrador troca a senha de alguém que esqueceu
+// POST /api/conta { acao: 'avatar', avatar }             -> a própria pessoa escolhe a foto de perfil:
+//   { tipo: 'iniciais', cor } | { tipo: 'icone', icone, cor } | { tipo: 'foto', foto: 'data:image/jpeg;base64,...' }
+// GET  /api/conta?foto=<id>&v=<versão>                  -> a foto (JPEG), só para a própria pessoa e para o administrador
 
 const crypto = require('crypto');
 const L = require('./_lib');
@@ -23,6 +26,47 @@ const FOCOS = ['igual', 'inferior', 'superior'];
 const LESOES = ['pescoco', 'ombro', 'cotovelo', 'lombar', 'quadril', 'joelho', 'tornozelo', 'osteo', 'outra'];
 const TRIAGENS = ['nao', 'liberado', 'pendente'];
 const MAX_PESSOAS = 60, MAX_PEDIDOS = 30;
+
+/* foto de perfil: o celular já recorta e reduz para 192 px antes de mandar; aqui só confere */
+const AVATARES = 'mrboom:avatares'; // id -> { tipo, icone, cor, v }: pequeno, vai junto com a lista de Pessoas
+const FOTOS = 'mrboom:fotos';       // id -> JPEG em base64: só sai pela rota da foto
+const CORES = ['laranja', 'azul', 'verde', 'roxo', 'vinho', 'grafite'];
+const ICONES = ['halter', 'anilha', 'kettlebell', 'raio', 'chama', 'estrela', 'coroa', 'montanha', 'coracao', 'trofeu', 'alvo', 'boom'];
+const FOTO_MAX = 60000;             // bytes da imagem: 192 x 192 em JPEG fica bem abaixo disso
+
+function lerAvatarJSON(raw) {
+  try {
+    const a = JSON.parse(raw);
+    if (!a || !['iniciais', 'icone', 'foto'].includes(a.tipo)) return null;
+    return { tipo: a.tipo, icone: ICONES.includes(a.icone) ? a.icone : null, cor: CORES.includes(a.cor) ? a.cor : null, v: /^[a-f0-9]{8}$/.test(a.v) ? a.v : null };
+  } catch (e) { return null; }
+}
+async function lerAvatar(id) { const raw = await L.redis(['HGET', AVATARES, id]); return raw ? lerAvatarJSON(raw) : null; }
+async function lerAvatares() {
+  const flat = (await L.redis(['HGETALL', AVATARES])) || [], out = {};
+  for (let i = 0; i + 1 < flat.length; i += 2) { const a = lerAvatarJSON(flat[i + 1]); if (a) out[flat[i]] = a; }
+  return out;
+}
+/* confere o que veio do celular; devolve { meta, foto } ou { erro } */
+function limparAvatar(src) {
+  if (!src || typeof src !== 'object') return { erro: 'Escolha uma foto, um ícone ou as iniciais.' };
+  const v = crypto.randomBytes(4).toString('hex');
+  if (src.tipo === 'iniciais') return { meta: { tipo: 'iniciais', icone: null, cor: CORES.includes(src.cor) ? src.cor : 'grafite', v } };
+  if (src.tipo === 'icone') {
+    if (!ICONES.includes(src.icone)) return { erro: 'Escolha um dos ícones.' };
+    return { meta: { tipo: 'icone', icone: src.icone, cor: CORES.includes(src.cor) ? src.cor : 'laranja', v } };
+  }
+  if (src.tipo === 'foto') {
+    const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/]+={0,2})$/.exec(String(src.foto || ''));
+    if (!m) return { erro: 'A foto não chegou certa. Tente escolher de novo.' };
+    const buf = Buffer.from(m[1], 'base64');
+    /* JPEG de verdade (começa com FF D8 FF) e pequeno */
+    if (buf.length < 300 || buf[0] !== 0xff || buf[1] !== 0xd8 || buf[2] !== 0xff) return { erro: 'A foto precisa ser uma imagem.' };
+    if (buf.length > FOTO_MAX) return { erro: 'A foto ficou grande demais. Tente outra.' };
+    return { meta: { tipo: 'foto', icone: null, cor: null, v }, foto: m[1] };
+  }
+  return { erro: 'Escolha uma foto, um ícone ou as iniciais.' };
+}
 
 function limparPlano(src, antigo) {
   if (!src || typeof src !== 'object') return null;
@@ -67,6 +111,8 @@ async function apagarCargas(id) {
 }
 async function apagarPessoa(p) {
   await L.redis(['HDEL', L.PESSOAS, p.id]);
+  await L.redis(['HDEL', AVATARES, p.id]);
+  await L.redis(['HDEL', FOTOS, p.id]);
   if (p.usuario) {
     const dono = await L.redis(['HGET', L.USUARIOS, p.usuario]);
     if (dono === p.id) await L.redis(['HDEL', L.USUARIOS, p.usuario]);
@@ -80,26 +126,41 @@ module.exports = async function handler(req, res) {
     if (req.method === 'GET') {
       const p = await L.sessao(req);
       if (!p) return res.status(401).json({ entrar: true });
-      await L.abrirSessao(req, res, p);
       const q = new URL(req.url || '/', 'http://local').searchParams;
+      if (q.get('foto')) {
+        /* a foto sai como imagem: só para a própria pessoa e para o administrador */
+        const id = String(q.get('foto'));
+        if (id !== p.id && !p.admin) return res.status(403).json({ erro: 'Sem acesso a essa foto.' });
+        const b64 = await L.redis(['HGET', FOTOS, id]);
+        if (!b64) return res.status(404).json({ erro: 'Sem foto.' });
+        const buf = Buffer.from(String(b64), 'base64');
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.setHeader('Content-Length', String(buf.length));
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        /* o endereço muda a cada foto nova (?v=), então pode guardar no aparelho, mas só no do próprio usuário */
+        res.setHeader('Cache-Control', q.get('v') ? 'private, max-age=31536000, immutable' : 'private, no-cache');
+        return res.end(buf);
+      }
+      await L.abrirSessao(req, res, p);
       if (q.get('desempenho')) {
         if (!p.admin) return res.status(403).json({ erro: 'Só o administrador vê o desempenho das pessoas.' });
         const alvo = await L.lerPessoa(String(q.get('desempenho')));
         if (!alvo || alvo.id === 'joao' || pendente(alvo)) return res.status(404).json({ erro: 'Pessoa não encontrada.' });
         const cargas = (await D.cargasPorPessoa())[alvo.id] || {};
         /* só nome, usuário, plano e cargas: as respostas de saúde ficam de fora */
-        return res.status(200).json({ pessoa: L.publico(alvo), desempenho: D.detalhe(alvo, cargas) });
+        return res.status(200).json({ pessoa: Object.assign(L.publico(alvo), { avatar: await lerAvatar(alvo.id) }), desempenho: D.detalhe(alvo, cargas) });
       }
       if (q.get('pessoas')) {
         if (!p.admin) return res.status(403).json({ erro: 'Só o administrador vê a lista de pessoas.' });
-        const cargas = await D.cargasPorPessoa(), hoje = L.hoje();
+        const cargas = await D.cargasPorPessoa(), hoje = L.hoje(), avs = await lerAvatares();
         const lista = (await L.lerPessoas())
           .map((x) => ({ id: x.id, nome: x.nome, usuario: x.usuario || '', status: pendente(x) ? 'pendente' : 'ativo', criado: x.criado || null, plano: x.plano || null,
-            desempenho: pendente(x) ? null : D.resumo(x, cargas[x.id], hoje) }))
+            avatar: avs[x.id] || null, desempenho: pendente(x) ? null : D.resumo(x, cargas[x.id], hoje) }))
           .sort((a, b) => (a.status === b.status ? a.nome.localeCompare(b.nome, 'pt-BR') : a.status === 'pendente' ? -1 : 1));
         return res.status(200).json({ pessoas: lista });
       }
-      const out = { pessoa: proprio(p) };
+      const out = { pessoa: Object.assign(proprio(p), { avatar: await lerAvatar(p.id) }) };
       if (p.admin) out.pendentes = (await L.lerPessoas()).filter(pendente).length;
       return res.status(200).json(out);
     }
@@ -117,7 +178,7 @@ module.exports = async function handler(req, res) {
       const p = await L.acharPorLogin(body.usuario, body.senha);
       if (!p) { await L.somar(t.k, 900); return res.status(401).json({ erro: 'Usuário ou senha incorretos.' }); }
       await L.abrirSessao(req, res, p);
-      return res.status(200).json({ pessoa: proprio(p) });
+      return res.status(200).json({ pessoa: Object.assign(proprio(p), { avatar: await lerAvatar(p.id) }) });
     }
 
     if (acao === 'cadastrar') {
@@ -151,6 +212,15 @@ module.exports = async function handler(req, res) {
     const eu = await L.sessao(req);
     if (!eu) return res.status(401).json({ entrar: true });
 
+    if (acao === 'avatar') {
+      const a = limparAvatar(body.avatar);
+      if (a.erro) return res.status(400).json({ erro: a.erro });
+      if (a.foto) await L.redis(['HSET', FOTOS, eu.id, a.foto]);
+      else await L.redis(['HDEL', FOTOS, eu.id]);
+      await L.redis(['HSET', AVATARES, eu.id, JSON.stringify(a.meta)]);
+      return res.status(200).json({ avatar: a.meta });
+    }
+
     if (acao === 'plano') {
       if (eu.id === 'joao') return res.status(400).json({ erro: 'O treino do João é montado à parte.' });
       if (!L.ativo(eu)) return res.status(403).json({ erro: 'Seu acesso ainda não foi liberado.', aguardando: true });
@@ -164,7 +234,7 @@ module.exports = async function handler(req, res) {
       }
       eu.plano = plano;
       await L.salvarPessoa(eu);
-      return res.status(200).json({ pessoa: proprio(eu) });
+      return res.status(200).json({ pessoa: Object.assign(proprio(eu), { avatar: await lerAvatar(eu.id) }) });
     }
 
     if (!eu.admin) return res.status(403).json({ erro: 'Só o administrador mexe nas contas.' });

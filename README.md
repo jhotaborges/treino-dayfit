@@ -35,9 +35,16 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 - **Menos coisa na tela.** Como progredir, Proteína, Cuidados, Por que o treino é assim e Registro de cargas começam recolhidas e abrem com um toque. O Registro abre sozinho quando há cargas esperando para ir à nuvem.
 - **Progresso.** O treino do dia mostra quanto falta, e a fase mostra a semana do ciclo.
 
+## Foto de perfil
+
+- **Onde escolher.** No menu da conta, **Foto de perfil**. Dá para usar uma foto, um dos 12 ícones (halter, anilha, kettlebell, raio, chama, estrela, coroa, montanha, coração, troféu, alvo e o símbolo do Mr. Boom) ou as iniciais, os dois últimos com 6 cores de fundo. Sem escolha, aparecem as iniciais, numa cor tirada do usuário.
+- **Onde aparece.** No botão da conta e, para o administrador, dentro do anel de desempenho em **Pessoas** (a porcentagem vai para um selo embaixo do anel) e no alto da janela de desempenho.
+- **A foto.** O celular corta o meio da foto em quadrado e reduz para 192 × 192 px em JPEG antes de enviar, então ela fica com poucos kB. O servidor só aceita JPEG de até 60 kB. A foto fica no Redis (`mrboom:fotos`), separada do resto (`mrboom:avatares` guarda só o tipo, o ícone e a cor), e sai pelo endereço `/api/conta?foto=<id>`, que só responde para a própria pessoa e para o administrador. Trocar para ícone ou iniciais apaga a foto, e remover a pessoa apaga tudo.
+- **Contraste.** O branco dos ícones e das iniciais tem pelo menos 5,2:1 sobre todas as cores de fundo.
+
 ## Desempenho em Pessoas (só o administrador)
 
-- **No ícone.** Cada pessoa com acesso tem um anel: o número no meio é quanto dos treinos combinados ela fez nas últimas 4 semanas (ou desde o começo, se começou há menos tempo). Ao lado aparece a situação, com ícone e texto: **Em dia** (75% ou mais), **Irregular**, **Parado** (nada anotado há mais de 14 dias), **Sem cargas anotadas** ou **Ainda não respondeu as perguntas**.
+- **No ícone.** Cada pessoa com acesso tem um anel em volta da foto de perfil, com um selo embaixo: o número do selo é quanto dos treinos combinados ela fez nas últimas 4 semanas (ou desde o começo, se começou há menos tempo). Ao lado aparece a situação, com ícone e texto: **Em dia** (75% ou mais), **Irregular**, **Parado** (nada anotado há mais de 14 dias), **Sem cargas anotadas** ou **Ainda não respondeu as perguntas**.
 - **Na janela.** Tocar no anel abre uma janela com os treinos por semana (8 semanas, com a meta tracejada), o último treino, as semanas seguidas na meta, o volume (carga × repetições) e a carga de cada exercício desde o começo do plano.
 - **Como conta.** Um treino conta quando há carga ou repetição anotada no dia: treino feito sem anotar não aparece. A meta são os dias por semana que a pessoa escolheu. Se a média das últimas 4 semanas fica abaixo de 2 treinos, a janela lembra que a OMS recomenda fortalecimento muscular em pelo menos 2 dias por semana. Acompanhar o próprio progresso ajuda a chegar na meta (Harkin et al., 2016, *Psychological Bulletin*, meta-análise de 138 estudos).
 
