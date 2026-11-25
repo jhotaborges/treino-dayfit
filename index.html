@@ -383,7 +383,10 @@ textarea{width:100%;padding:10px 12px;border:1px solid var(--line-ctl);border-ra
 /* conta, no topo */
 .conta{position:relative}
 .conta-btn{display:inline-flex;align-items:center;gap:6px;min-height:46px;max-width:190px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:15px}
-.conta-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* só o nome é cortado com reticências; a foto de perfil fica inteira */
+.conta-btn #conta-nome{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#conta-av{display:inline-flex;flex:none}
+#conta-av:empty{display:none}
 .conta-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:230px;display:grid;padding:6px;border-radius:14px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
 .conta-menu button{min-height:44px;padding:10px 12px;border:0;border-radius:9px;background:transparent;text-align:left;font-weight:700}
 .conta-menu button:hover{background:var(--surface-2)}
@@ -423,7 +426,7 @@ button.p-av:hover .ring-track{stroke:var(--line-ctl)}
 .av svg{width:56%;height:56%;fill:currentColor}
 .av-foto{background:var(--surface-2)}
 .av-foto img{display:block;width:100%;height:100%;object-fit:cover}
-.conta-btn .av{width:28px;height:28px;font-size:11px;margin-left:-4px}
+.conta-btn .av{width:28px;height:28px;font-size:11px}
 .avd .av-grande .av{width:72px;height:72px;font-size:26px}
 .av-tipos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .av-tipos button,.av-grade button{min-height:48px;border:1px solid var(--line-ctl);border-radius:12px;background:var(--surface);color:var(--ink);font-weight:700}
