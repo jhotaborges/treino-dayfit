@@ -303,6 +303,12 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .refs li{display:grid;gap:3px}
 .src{font-size:14px;color:var(--muted)}
 .btn-row{display:flex;flex-wrap:wrap;gap:8px}
+/* editar perfil: seus dados em cima, e títulos separando treino e saúde */
+.perg-sec{display:grid;gap:14px}
+.perg-h{font-size:21px;font-weight:800;line-height:1.2;padding-top:6px;border-top:1px solid var(--line)}
+.perg-h:first-child{border-top:0;padding-top:0}
+.perg-sec .mfield input{font-variant-numeric:normal}
+.perg-senha{display:grid;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .btn{min-height:48px;padding:10px 18px;border-radius:12px;border:1px solid var(--brand);background:var(--brand);color:var(--on-brand);font-weight:700}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .restore{display:grid;gap:8px}
@@ -589,6 +595,31 @@ button.p-av:hover .ring-track{stroke:var(--line-ctl)}
     <h1 class="gate-title" id="h-perguntas">Vamos montar o seu treino</h1>
     <p class="lede">São 8 perguntas rápidas. Com as respostas, o Mr. Boom escolhe o modelo de treino e a quantidade de séries, e troca os exercícios que podem forçar alguma lesão. Dá para mudar depois, no menu.</p>
     <form id="form-perguntas" novalidate>
+      <section class="perg-sec" id="perg-dados" hidden aria-label="Seus dados">
+        <h2 class="perg-h">Seus dados</h2>
+        <label class="mfield" for="perg-nome">Nome
+          <input id="perg-nome" type="text" autocomplete="name" maxlength="30" spellcheck="false">
+        </label>
+        <p class="tip">Usuário para entrar: <b id="perg-usuario"></b>. Ele não muda.</p>
+        <div class="btn-row">
+          <button type="button" class="btn ghost" id="perg-foto">Foto de perfil</button>
+          <button type="button" class="btn ghost" id="perg-senha-btn" aria-expanded="false" aria-controls="perg-senha">Trocar senha</button>
+        </div>
+        <div class="perg-senha" id="perg-senha" hidden>
+          <label class="mfield" for="perg-senha-atual">Senha atual
+            <input id="perg-senha-atual" type="password" autocomplete="current-password" maxlength="40">
+          </label>
+          <label class="mfield" for="perg-senha-nova">Senha nova (6 a 40 caracteres)
+            <input id="perg-senha-nova" type="password" autocomplete="new-password" maxlength="40">
+          </label>
+          <label class="mfield" for="perg-senha-conf">Repita a senha nova
+            <input id="perg-senha-conf" type="password" autocomplete="new-password" maxlength="40">
+          </label>
+          <div class="btn-row"><button type="button" class="btn" id="perg-senha-salvar">Salvar senha</button></div>
+          <p class="status" id="perg-senha-msg" role="status" aria-live="polite"></p>
+        </div>
+        <h2 class="perg-h">Treino</h2>
+      </section>
       <fieldset class="q">
         <legend>1. Quantos dias por semana você consegue treinar?</legend>
         <div class="opts">
@@ -635,7 +666,7 @@ button.p-av:hover .ring-track{stroke:var(--line-ctl)}
         </div>
       </fieldset>
       <div class="priv" id="perg-priv">
-        <p><b>As próximas 3 perguntas são sobre a sua saúde.</b> As respostas aparecem só para você. Na lista do administrador aparecem apenas o seu nome, o usuário e o modelo de treino.</p>
+        <p><b>As próximas 3 perguntas são sobre a sua saúde.</b> As respostas aparecem só para você. O administrador vê o seu nome, o usuário, a foto de perfil, o modelo de treino e o desempenho (treinos e cargas anotados), nunca estas respostas.</p>
       </div>
       <fieldset class="q">
         <legend>6. Qual o seu peso e a sua altura?</legend>
@@ -692,7 +723,7 @@ button.p-av:hover .ring-track{stroke:var(--line-ctl)}
       <div class="conta-menu" id="conta-menu" hidden>
         <button type="button" data-act="avatar" id="m-avatar">Foto de perfil</button>
         <button type="button" data-act="pessoas" id="m-pessoas" hidden>Pessoas</button>
-        <button type="button" data-act="perguntas" id="m-perguntas" hidden>Refazer as perguntas</button>
+        <button type="button" data-act="perguntas" id="m-perguntas" hidden>Editar perfil</button>
         <button type="button" data-act="sair" id="m-sair">Sair</button>
         <p class="tip" id="sair-aviso" hidden></p>
       </div>
@@ -1395,7 +1426,7 @@ function montarPlano(perfil) {
       { label: dCurta(base) + ' a ' + dCurta(dataMais(prog, -1)), name: 'Base', from: base },
       { label: dCurta(prog) + ' a ' + dCurta(fim), name: 'Progressão', from: prog }
     ],
-    from: ini, ate: fim, fim: 'Depois de ' + dCurta(fim) + ', refaça as perguntas no menu para montar o próximo ciclo de 12 semanas.',
+    from: ini, ate: fim, fim: 'Depois de ' + dCurta(fim) + ', abra Editar perfil no menu e marque o ciclo novo para montar as próximas 12 semanas.',
     semana: M.semana, foco: FOCO_NOME[pl.foco] ? pl.foco : 'igual', curto: pl.tempo === 'curto', saude: lerSaude(perfil.saude)
   };
 }
@@ -1837,7 +1868,16 @@ const G = (function () {
     const pl = p.plano && MODELOS[p.plano.modelo] ? p.plano : null;
     tela('perguntas');
     $('#perg-ola').textContent = 'Olá, ' + primeiroNome(p) + '!';
-    $('#h-perguntas').textContent = pl ? 'Mudar as respostas' : 'Vamos montar o seu treino';
+    $('#h-perguntas').textContent = pl ? 'Editar perfil' : 'Vamos montar o seu treino';
+    /* editar perfil: nome, foto e senha em cima; o texto e o botão falam em salvar, não em montar do zero */
+    $('#perg-dados').hidden = !pl;
+    $('#perg-nome').value = p.nome || '';
+    $('#perg-usuario').textContent = '@' + (p.usuario || '');
+    senhaAberta(false);
+    $('#tela-perguntas .lede').textContent = pl
+      ? 'Mude o que precisar e toque em Salvar alterações. As cargas anotadas continuam; as fases só recomeçam se você marcar o ciclo novo, no fim.'
+      : 'São 8 perguntas rápidas. Com as respostas, o Mr. Boom escolhe o modelo de treino e a quantidade de séries, e troca os exercícios que podem forçar alguma lesão. Dá para mudar depois, no menu, em Editar perfil.';
+    $('#perg-btn').textContent = pl ? 'Salvar alterações' : 'Montar meu treino';
     $('#perg-cancelar').hidden = !pl;
     $('#novo-ciclo-wrap').hidden = !pl;
     $('#novo-ciclo').checked = false;
@@ -1902,9 +1942,19 @@ const G = (function () {
     if (altura === undefined) { msg.textContent = 'Confira a altura: um número em centímetros, entre 100 e 250, ou deixe em branco.'; $('#perg-altura').focus(); return; }
     const saude = { peso: peso, altura: altura, lesoes: lesoes.filter((x) => x !== 'nenhuma'), triagem: marcado('triagem') };
     const plano = { modelo: MODELO_DIAS[n], dias: dias, nivel: marcado('nivel'), tempo: marcado('tempo'), foco: marcado('foco'), inicio: hoje(), novoCiclo: $('#novo-ciclo').checked };
-    const btn = $('#perg-btn');
+    const btn = $('#perg-btn'), editando = !$('#perg-dados').hidden;
+    /* nome: só quando a pessoa está editando o perfil e mudou */
+    const nomeNovo = $('#perg-nome').value.replace(/\s+/g, ' ').trim();
+    if (editando && (nomeNovo.length < 2 || nomeNovo.length > 30)) { msg.textContent = 'Escreva seu nome, com 2 a 30 letras.'; $('#perg-nome').focus(); return; }
     btn.disabled = true;
-    msg.textContent = 'Montando o seu treino…';
+    msg.textContent = editando ? 'Salvando…' : 'Montando o seu treino…';
+    if (editando && perfilAtual && nomeNovo !== perfilAtual.nome) {
+      let rn = null;
+      try { rn = await conta({ acao: 'perfil', nome: nomeNovo }); } catch (e) { rn = null; }
+      if (rn && rn.st === 401) { btn.disabled = false; expirou(); return; }
+      if (!rn || rn.st !== 200) { btn.disabled = false; msg.textContent = !rn ? 'Sem conexão: nada foi salvo. Tente de novo quando a internet voltar.' : rn.j.erro || 'Não deu para salvar o nome agora.'; return; }
+      perfilAtual.nome = rn.j.pessoa.nome;
+    }
     let r = null;
     try { r = await conta({ acao: 'plano', plano: plano, saude: saude }); } catch (e) { r = null; }
     btn.disabled = false;
@@ -1913,6 +1963,36 @@ const G = (function () {
     msg.textContent = !r ? 'Sem conexão: as respostas não foram salvas. Tente de novo quando a internet voltar.' : r.j.erro || 'Não deu para salvar agora. Tente de novo.';
   });
   $('#perg-cancelar').addEventListener('click', () => { tela('app'); });
+  /* foto de perfil e senha, de dentro do Editar perfil */
+  $('#perg-foto').addEventListener('click', () => { abrirAvatar($('#perg-foto')); });
+  function senhaAberta(on) {
+    $('#perg-senha').hidden = !on;
+    $('#perg-senha-btn').setAttribute('aria-expanded', String(on));
+    if (!on) { ['#perg-senha-atual', '#perg-senha-nova', '#perg-senha-conf'].forEach((x) => { $(x).value = ''; }); $('#perg-senha-msg').textContent = ''; }
+  }
+  $('#perg-senha-btn').addEventListener('click', () => { const on = $('#perg-senha').hidden; senhaAberta(on); if (on) $('#perg-senha-atual').focus(); });
+  async function salvarSenha() {
+    const atual = $('#perg-senha-atual').value, nova = $('#perg-senha-nova').value.trim(), conf = $('#perg-senha-conf').value.trim(), m = $('#perg-senha-msg');
+    if (!atual) { m.textContent = 'Digite a senha atual.'; $('#perg-senha-atual').focus(); return; }
+    if (nova.length < 6 || nova.length > 40) { m.textContent = 'A senha nova precisa ter de 6 a 40 caracteres.'; $('#perg-senha-nova').focus(); return; }
+    if (nova !== conf) { m.textContent = 'As duas senhas novas não são iguais.'; $('#perg-senha-conf').focus(); return; }
+    const b = $('#perg-senha-salvar');
+    b.disabled = true; m.textContent = 'Salvando…';
+    let r = null;
+    try { r = await conta({ acao: 'minha-senha', atual: atual, nova: nova }); } catch (e) { r = null; }
+    b.disabled = false;
+    if (r && r.st === 401) { expirou(); return; }
+    if (!r || r.st !== 200) {
+      m.textContent = !r ? 'Sem conexão: a senha não foi trocada.' : r.j.erro || 'Não deu para trocar a senha agora.';
+      if (r && r.j.campo === 'atual') { $('#perg-senha-atual').value = ''; $('#perg-senha-atual').focus(); }
+      return;
+    }
+    ['#perg-senha-atual', '#perg-senha-nova', '#perg-senha-conf'].forEach((x) => { $(x).value = ''; });
+    m.textContent = 'Senha trocada. Neste celular você continua logado; nos outros aparelhos, entre de novo com a senha nova.';
+  }
+  $('#perg-senha-salvar').addEventListener('click', salvarSenha);
+  /* Enter nos campos de senha salva a senha, e não o perfil inteiro */
+  $('#perg-senha').addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); salvarSenha(); } });
 
   /* ---------- pessoas (só o administrador) ---------- */
   const aviso = (t) => { $('#pessoas-msg').textContent = t; };
@@ -2157,7 +2237,7 @@ const G = (function () {
     $('#avatar-dlg [data-av="arquivo"]').textContent = temFoto ? 'Trocar a foto' : 'Escolher foto';
   }
   function avMsg(t) { $('#av-msg').textContent = t || ''; }
-  function abrirAvatar() {
+  function abrirAvatar(volta) {
     const p = perfilAtual || {}, a = p.avatar || null;
     avRasc = { tipo: a ? a.tipo : 'iniciais', icone: (a && a.icone) || 'halter', cor: (a && a.cor) || avCorPadrao(p.id), foto: null };
     if (!$('#av-grade').children.length) {
@@ -2166,8 +2246,8 @@ const G = (function () {
     }
     avMsg('');
     avPintar();
-    /* a janela abre pelo menu da conta, que fecha antes: o foco volta para o botão da conta */
-    avVolta = $('#conta-btn');
+    /* pelo menu da conta, que fecha antes, o foco volta para o botão da conta; pelo Editar perfil, para o botão de lá */
+    avVolta = volta || $('#conta-btn');
     const dlg = avDlg();
     if (!dlg.open) { if (typeof dlg.showModal === 'function') dlg.showModal(); else { dlg.setAttribute('data-fallback', ''); dlg.setAttribute('open', ''); } }
     dlg.scrollTop = 0;
@@ -2724,7 +2804,7 @@ function iniciarApp(perfil) {
     $('#aviso-novas').hidden = PL.modelo === 'joao' || S.respondida;
     const partes = [];
     if (S.triagem === 'pendente') {
-      partes.push('<p class="saude-alerta"><b>Antes de começar, passe por um médico.</b> Você marcou que um médico pediu cuidado com exercício, que tem doença do coração, diabetes ou doença nos rins, ou que sente dor no peito, tontura ou falta de ar fora do comum. Leve este treino na consulta. Quando o médico liberar, mude a resposta em Refazer as perguntas.</p>');
+      partes.push('<p class="saude-alerta"><b>Antes de começar, passe por um médico.</b> Você marcou que um médico pediu cuidado com exercício, que tem doença do coração, diabetes ou doença nos rins, ou que sente dor no peito, tontura ou falta de ar fora do comum. Leve este treino na consulta. Quando o médico liberar, mude a resposta no menu, em Editar perfil.</p>');
     } else if (S.triagem === 'liberado') {
       partes.push('<p>Siga o que o seu médico orientou. Se sentir dor no peito, tontura ou falta de ar fora do comum, pare o treino e procure atendimento.</p>');
     }

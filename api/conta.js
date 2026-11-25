@@ -10,6 +10,8 @@
 //   Ficam fora da lista do administrador e da resposta de liberar.
 // POST /api/conta { acao: 'liberar' | 'recusar' | 'remover', id }  -> administrador
 // POST /api/conta { acao: 'senha', id, senha }          -> administrador troca a senha de alguém que esqueceu
+// POST /api/conta { acao: 'perfil', nome }              -> a própria pessoa muda o nome que aparece no app
+// POST /api/conta { acao: 'minha-senha', atual, nova }  -> a própria pessoa troca a senha (os outros aparelhos saem)
 // POST /api/conta { acao: 'avatar', avatar }             -> a própria pessoa escolhe a foto de perfil:
 //   { tipo: 'iniciais', cor } | { tipo: 'icone', icone, cor } | { tipo: 'foto', foto: 'data:image/jpeg;base64,...' }
 // GET  /api/conta?foto=<id>&v=<versão>                  -> a foto (JPEG), só para a própria pessoa e para o administrador
@@ -211,6 +213,29 @@ module.exports = async function handler(req, res) {
 
     const eu = await L.sessao(req);
     if (!eu) return res.status(401).json({ entrar: true });
+
+    if (acao === 'perfil') {
+      if (eu.id === 'joao') return res.status(400).json({ erro: 'O nome do administrador é fixo.' });
+      const nome = nomeLimpo(body.nome);
+      if (nome.length < 2 || nome.length > 30) return res.status(400).json({ erro: 'Escreva seu nome, com 2 a 30 letras.', campo: 'nome' });
+      eu.nome = nome;
+      await L.salvarPessoa(eu);
+      return res.status(200).json({ pessoa: Object.assign(proprio(eu), { avatar: await lerAvatar(eu.id) }) });
+    }
+
+    if (acao === 'minha-senha') {
+      if (eu.id === 'joao') return res.status(400).json({ erro: 'A senha do administrador é a variável TREINO_PIN da Vercel.' });
+      const t = await L.contador(req, 'erros');
+      if (t.n >= 10) return res.status(429).json({ erro: 'Muitas tentativas erradas. Espere 15 minutos e tente de novo.' });
+      const nova = String(body.nova || '').trim();
+      if (!(await L.acharPorLogin(eu.usuario, body.atual))) { await L.somar(t.k, 900); return res.status(400).json({ erro: 'A senha atual não confere.', campo: 'atual' }); }
+      if (nova.length < 6 || nova.length > 40) return res.status(400).json({ erro: 'A senha nova precisa ter de 6 a 40 caracteres.', campo: 'nova' });
+      eu.senha = L.novaSenha(nova);
+      await L.salvarPessoa(eu);
+      /* a senha nova muda a versão da sessão: este aparelho ganha um cookie novo, os outros pedem a senha de novo */
+      await L.abrirSessao(req, res, eu);
+      return res.status(200).json({ ok: true });
+    }
 
     if (acao === 'avatar') {
       const a = limparAvatar(body.avatar);

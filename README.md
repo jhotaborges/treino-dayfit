@@ -17,6 +17,7 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 - Quem já tinha treino antes das perguntas de saúde vê um aviso no alto do treino para responder as 3 perguntas novas. O começo do ciclo não muda.
 - A senha é digitada uma vez em cada celular. O site grava um cookie que vale 400 dias e se renova a cada uso, então a pessoa continua logada até tocar em **Sair**.
 - Cada pessoa vê e grava só as próprias cargas.
+- **Editar perfil** (menu da conta) abre as respostas já marcadas e, em cima, **Seus dados**: nome, foto de perfil e troca de senha. Dá para mudar dias por semana, quais dias, tempo, foco, peso, altura, lesões e saúde sem perder as cargas; as fases só recomeçam se a pessoa marcar o ciclo novo. O usuário de entrar não muda. Ao trocar a senha, o celular em uso continua logado e os outros aparelhos pedem a senha nova.
 - Se alguém esquecer a senha, o administrador define uma nova em **Pessoas → Trocar senha**. Os celulares dessa pessoa pedem a senha nova uma vez.
 - Depois de 10 senhas erradas seguidas, o site espera 15 minutos antes de aceitar novas tentativas daquele endereço. Cada conexão cria no máximo 10 contas por hora, e ficam no máximo 30 pedidos esperando.
 
