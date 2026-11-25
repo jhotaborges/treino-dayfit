@@ -24,9 +24,14 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 ## Treino de 5 dias
 
 - **Mesmo volume, treinos mais curtos.** São os mesmos 30 exercícios e as mesmas séries do treino de 4 dias, divididos em 5: **Inferior A**, **Superior A**, **Inferior B** (sem a panturrilha em pé), **Superior B** (só peito e costas) e **Ombros e braços** (elevação lateral, crucifixo invertido, rosca Scott, tríceps na barra, panturrilha em pé e prancha lateral). Cada músculo continua treinado duas vezes por semana.
-- **Por quê.** Com o mesmo número de séries, treinar mais vezes por semana não deu mais músculo (Schoenfeld, Grgic e Krieger, 2019, meta-análise de 25 estudos), mas treinar cada músculo pelo menos 2 vezes por semana é melhor que 1 (Schoenfeld et al., 2016). O quinto dia serve para quem prefere treinos mais curtos, não para fazer mais.
+- **Por quê.** Com o mesmo número de séries, treinar mais vezes por semana não deu mais músculo (Schoenfeld, Grgic e Krieger, 2019, meta-análise de 25 estudos), e o que pesa é o total de séries. Por isso o quinto dia serve para quem prefere treinos mais curtos, não para fazer mais, e cada músculo continua em 2 dias só para dividir as séries.
 - **Duração.** O plano de 5 dias mostra a duração de cada treino pelo número de exercícios (8 min de aquecimento + uns 7,4 min por exercício): de 40 a 60 min, ou de 30 a 45 min no treino curto.
 - **Cor.** O dia de ombros e braços usa a anilha branca (5 kg), com borda escura para aparecer no fundo claro.
+
+## Esforço e amplitude
+
+- **Repetições que sobram.** Diminuem a cada fase: 2–3 na Adaptação (para acertar a técnica), 1–2 na Base e, na Progressão, 1–2 nos compostos e 0–1 nos isolados e nas máquinas. Séries mais perto da falha dão mais hipertrofia (Robinson et al., 2024), parar a 1–2 da falha rende o mesmo que ir até ela e cansa menos (Refalo et al., 2024), e chegar perto da falha é mais seguro em isolados e máquinas.
+- **Amplitude.** O leg press pede para descer o máximo possível sem tirar o quadril do banco, e os tríceps na polia voltam até as mãos chegarem perto do peito, que é a parte em que o músculo fica alongado (Kassiano et al., 2023; Wolf et al., 2025). As versões para quem tem dor no joelho continuam com a descida limitada.
 
 ## Saúde e lesões
 
