@@ -13,12 +13,19 @@ Site de treino de hipertrofia: cada pessoa cria a própria conta, espera a liber
 
 - Quem quer usar o Mr. Boom toca em **Criar conta** na tela de entrada e escolhe nome, usuário e senha. A conta fica esperando liberação.
 - O administrador entra com o usuário `joao` e a senha que é a variável `TREINO_PIN` da Vercel. No menu **Pessoas**, ele vê os pedidos e toca em **Liberar** ou **Recusar**. Enquanto houver pedidos, aparece um aviso no topo do treino dele.
-- Depois de liberada, a pessoa responde 8 perguntas: quantos dias e quais dias treina, há quanto tempo faz musculação, quanto tempo tem por treino, se quer dar mais atenção a alguma parte do corpo, peso e altura (se quiser), se tem lesão ou limitação e se tem alguma situação de saúde que pede liberação médica. Com 2 ou 3 dias, o treino é de corpo inteiro; com 4, é dividido em parte de cima e pernas. As fases contam a partir do dia em que ela começa.
+- Depois de liberada, a pessoa responde 8 perguntas: quantos dias e quais dias treina, há quanto tempo faz musculação, quanto tempo tem por treino, se quer dar mais atenção a alguma parte do corpo, peso e altura (se quiser), se tem lesão ou limitação e se tem alguma situação de saúde que pede liberação médica. Com 2 ou 3 dias, o treino é de corpo inteiro; com 4 ou 5, é dividido em parte de cima e pernas. As fases contam a partir do dia em que ela começa.
 - Quem já tinha treino antes das perguntas de saúde vê um aviso no alto do treino para responder as 3 perguntas novas. O começo do ciclo não muda.
 - A senha é digitada uma vez em cada celular. O site grava um cookie que vale 400 dias e se renova a cada uso, então a pessoa continua logada até tocar em **Sair**.
 - Cada pessoa vê e grava só as próprias cargas.
 - Se alguém esquecer a senha, o administrador define uma nova em **Pessoas → Trocar senha**. Os celulares dessa pessoa pedem a senha nova uma vez.
 - Depois de 10 senhas erradas seguidas, o site espera 15 minutos antes de aceitar novas tentativas daquele endereço. Cada conexão cria no máximo 10 contas por hora, e ficam no máximo 30 pedidos esperando.
+
+## Treino de 5 dias
+
+- **Mesmo volume, treinos mais curtos.** São os mesmos 30 exercícios e as mesmas séries do treino de 4 dias, divididos em 5: **Inferior A**, **Superior A**, **Inferior B** (sem a panturrilha em pé), **Superior B** (só peito e costas) e **Ombros e braços** (elevação lateral, crucifixo invertido, rosca Scott, tríceps na barra, panturrilha em pé e prancha lateral). Cada músculo continua treinado duas vezes por semana.
+- **Por quê.** Com o mesmo número de séries, treinar mais vezes por semana não deu mais músculo (Schoenfeld, Grgic e Krieger, 2019, meta-análise de 25 estudos), mas treinar cada músculo pelo menos 2 vezes por semana é melhor que 1 (Schoenfeld et al., 2016). O quinto dia serve para quem prefere treinos mais curtos, não para fazer mais.
+- **Duração.** O plano de 5 dias mostra a duração de cada treino pelo número de exercícios (8 min de aquecimento + uns 7,4 min por exercício): de 40 a 60 min, ou de 30 a 45 min no treino curto.
+- **Cor.** O dia de ombros e braços usa a anilha branca (5 kg), com borda escura para aparecer no fundo claro.
 
 ## Saúde e lesões
 

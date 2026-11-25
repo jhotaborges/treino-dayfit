@@ -36,6 +36,8 @@
   --d2:#E3A800; --on-d2:#151A21; --d2-edge:#8A6400;
   --d3:#B5300F; --on-d3:#FFFFFF;
   --d4:#00806B; --on-d4:#FFFFFF;
+  /* anilha branca (5 kg), do treino de ombros e braços no plano de 5 dias: borda escura porque o branco some no fundo claro */
+  --d5:#CDD3DA; --on-d5:#151A21; --d5-edge:#5C6671;
   --ok-bg:#E1F3E8; --ok-ink:#17693A;
   --warn-bg:#FBEFD6; --warn-ink:#875400;
   --brand:#EA6A1C; --on-brand:#151A21; --brand-ink:#A84206;
@@ -60,6 +62,7 @@
     --d2:#F0C33C; --on-d2:#0E1115;
     --d3:#FF6B4A; --on-d3:#0E1115;
     --d4:#2EC4A0; --on-d4:#0E1115;
+    --d5:#E7EBF0; --on-d5:#0E1115; --d5-edge:#E7EBF0;
     --d2-edge:#F0C33C; --line-ctl:#636D7A;
     --perf:#FF8A3D; --perf-bg:#3A2416; --perf-ink:#FFB27D; --ring-track:#3A3530;
     --ok-bg:#132A1D; --ok-ink:#62D596;
@@ -79,6 +82,7 @@
   --d2:#F0C33C; --on-d2:#0E1115;
   --d3:#FF6B4A; --on-d3:#0E1115;
   --d4:#2EC4A0; --on-d4:#0E1115;
+  --d5:#E7EBF0; --on-d5:#0E1115; --d5-edge:#E7EBF0;
   --d2-edge:#F0C33C; --line-ctl:#636D7A;
   --perf:#FF8A3D; --perf-bg:#3A2416; --perf-ink:#FFB27D; --ring-track:#3A3530;
   --ok-bg:#132A1D; --ok-ink:#62D596;
@@ -94,6 +98,7 @@
 [data-day="2"]{--day:var(--d2);--on-day:var(--on-d2);--day-edge:var(--d2-edge)}
 [data-day="3"]{--day:var(--d3);--on-day:var(--on-d3);--day-edge:var(--d3)}
 [data-day="4"]{--day:var(--d4);--on-day:var(--on-d4);--day-edge:var(--d4)}
+[data-day="5"]{--day:var(--d5);--on-day:var(--on-d5);--day-edge:var(--d5-edge)}
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -160,7 +165,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .day{display:grid;gap:14px}
 .day-head{display:flex;align-items:center;gap:14px}
 .plate{flex:none;width:58px;height:58px}
-.p-body{fill:var(--day)}
+.p-body{fill:var(--day);stroke:var(--day-edge);stroke-width:2}
 .p-lip{fill:none;stroke:var(--on-day);stroke-opacity:.28;stroke-width:2}
 .p-hole{fill:var(--bg);stroke:var(--on-day);stroke-opacity:.32;stroke-width:1.5}
 .day-eyebrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
@@ -590,6 +595,7 @@ button.p-av:hover .ring-track{stroke:var(--line-ctl)}
           <label class="opt"><input type="radio" name="ndias" value="2"><span>2 dias</span></label>
           <label class="opt"><input type="radio" name="ndias" value="3"><span>3 dias</span></label>
           <label class="opt"><input type="radio" name="ndias" value="4"><span>4 dias</span></label>
+          <label class="opt"><input type="radio" name="ndias" value="5"><span>5 dias</span></label>
         </div>
       </fieldset>
       <fieldset class="q" id="q-dias">
@@ -1072,6 +1078,34 @@ const WORKOUTS = {
       { ex: 'triceps-barra', k: 'iso', alt: 'triceps-uni' },
       { ex: 'prancha-lat', k: 'core', x45: true }
     ] },
+  /* 5 dias: os mesmos exercícios e séries do plano de 4 dias, redistribuídos. O quinto dia leva os isolados de
+     ombros, braços e panturrilha que saem do Inferior B e do Superior B, então cada treino fica mais curto, o volume
+     da semana é o mesmo e cada músculo continua treinado duas vezes por semana. */
+  IB5: { title: 'Inferior B', short: 'Inf B', c: 4, focus: 'Posteriores, glúteos e quadríceps',
+    items: [
+      Object.assign({}, STIFF),
+      { ex: 'elev-pelvica', k: 'main' },
+      { ex: 'hack', k: 'comp' },
+      { ex: 'afundo', k: 'comp' },
+      { ex: 'mesa-flexora', k: 'iso' },
+      { ex: 'abd-maq', k: 'iso', x45: true }
+    ] },
+  UB5: { title: 'Superior B', short: 'Sup B', c: 3, focus: 'Peito e costas',
+    items: [
+      { ex: 'supino-incl-halter', k: 'main' },
+      { ex: 'puxada-neutra', k: 'comp', alt: 'pulldown-reto' },
+      { ex: 'remada-unilateral', k: 'comp', x45: true },
+      { ex: 'voador', k: 'iso' }
+    ] },
+  BO5: { title: 'Ombros e braços', short: 'Braços', c: 5, focus: 'Ombros, bíceps, tríceps e panturrilha',
+    items: [
+      { ex: 'elev-lateral', k: 'iso' },
+      { ex: 'crucifixo-inv', k: 'iso' },
+      { ex: 'rosca-scott', k: 'iso' },
+      { ex: 'triceps-barra', k: 'iso', alt: 'triceps-uni' },
+      { ex: 'pant-pe', k: 'iso' },
+      { ex: 'prancha-lat', k: 'core', x45: true }
+    ] },
   /* corpo inteiro em 3 dias: cada músculo 3 vezes por semana */
   C3A: { title: 'Corpo inteiro A', short: 'Corpo A', c: 1, focus: 'Pernas, peito, costas, ombros e bíceps',
     items: [
@@ -1158,10 +1192,12 @@ const MODELOS = {
   c3: { nome: 'Corpo inteiro', dias: 3, seq: ['C3A', 'C3B', 'C3C'], lede: 'Hipertrofia · corpo inteiro, 3 treinos por semana',
     semana: 'Cada treino trabalha o corpo todo, com exercícios diferentes em cada dia, e cada músculo é treinado três vezes por semana.' },
   ul4: { nome: 'Superior e inferior', dias: 4, seq: ['IA', 'UA', 'IB', 'UB'], lede: 'Hipertrofia · 4 treinos por semana, com pernas e parte de cima em dias separados',
-    semana: 'Pernas e parte de cima nunca ficam no mesmo dia, e cada músculo é treinado duas vezes por semana.' }
+    semana: 'Pernas e parte de cima nunca ficam no mesmo dia, e cada músculo é treinado duas vezes por semana.' },
+  ul5: { nome: 'Superior, inferior e braços', dias: 5, seq: ['IA', 'UA', 'IB5', 'UB5', 'BO5'], lede: 'Hipertrofia · 5 treinos por semana, mais curtos, com um dia de ombros e braços',
+    semana: 'São os mesmos exercícios e séries do treino de 4 dias, divididos em 5 treinos mais curtos: pernas e parte de cima em dias separados e um dia de ombros, braços e panturrilha. Cada músculo continua treinado duas vezes por semana.' }
 };
-const MODELO_DIAS = { 2: 'c2', 3: 'c3', 4: 'ul4' };
-const DIAS_SUGERIDOS = { 2: [1, 4], 3: [1, 3, 5], 4: [1, 2, 4, 5] };
+const MODELO_DIAS = { 2: 'c2', 3: 'c3', 4: 'ul4', 5: 'ul5' };
+const DIAS_SUGERIDOS = { 2: [1, 4], 3: [1, 3, 5], 4: [1, 2, 4, 5], 5: [1, 2, 3, 4, 5] };
 /* semanas de adaptação conforme a experiência; depois vêm 4 semanas de base e a progressão até a semana 12 */
 const ADAPTA_SEMANAS = { novo: 3, menos1: 2, mais1: 1 };
 const FOCO_NOME = { inferior: 'pernas e glúteos', superior: 'parte de cima' };
@@ -1348,7 +1384,7 @@ function montarPlano(perfil) {
   const dias = (Array.isArray(pl.dias) && pl.dias.length === M.dias ? pl.dias : DIAS_SUGERIDOS[M.dias]).slice().sort(ordemSemana);
   const slots = dias.map((dow, i) => {
     const w = M.seq[i % M.seq.length];
-    return { dow: dow, w: w, warm: WARM, end: pl.modelo === 'ul4' && w.charAt(0) === 'U' && pl.tempo !== 'curto' ? CARDIO : undefined };
+    return { dow: dow, w: w, warm: WARM, end: (pl.modelo === 'ul4' || pl.modelo === 'ul5') && w.charAt(0) === 'U' && pl.tempo !== 'curto' ? CARDIO : undefined };
   });
   const ini = /^\d{4}-\d{2}-\d{2}$/.test(pl.inicio || '') ? pl.inicio : dataMais(new Date().toISOString().slice(0, 10), 0);
   const base = dataMais(ini, 7 * (ADAPTA_SEMANAS[pl.nivel] || 3)), prog = dataMais(base, 28), fim = dataMais(ini, 83);
@@ -1791,7 +1827,8 @@ const G = (function () {
     const n = nDias(), m = diasMarcados().length, d = $('#dias-dica');
     if (aviso) { d.textContent = aviso; return; }
     if (!n) { d.textContent = 'Escolha primeiro quantos dias.'; return; }
-    const folga = n < 4 ? ' Com um dia de folga entre eles, o corpo recupera melhor.' : ' Os treinos de pernas e de parte de cima se alternam nesses dias.';
+    const folga = n < 4 ? ' Com um dia de folga entre eles, o corpo recupera melhor.' : n === 4 ? ' Os treinos de pernas e de parte de cima se alternam nesses dias.'
+      : ' Pernas e parte de cima se alternam, e o último dia é de ombros e braços.';
     d.textContent = (m === n ? 'Pronto: ' + n + ' dias escolhidos.' : 'Escolha ' + n + ' dias' + (m ? ' (marcados agora: ' + m + ').' : '.')) + folga;
   }
   function abrirPerguntas(p) {
@@ -2344,6 +2381,13 @@ function iniciarApp(perfil) {
   const state = { person: PL.id, day: null };
   const openSet = new Set();
   const daysOf = (p) => DAYS[p];
+  /* duração do treino: 60 min (45 no treino curto) nos planos de sempre. No de 5 dias, os treinos têm de 3 a 7
+     exercícios, então a conta é pelo número deles: 8 min de aquecimento + uns 7,4 min por exercício, a mesma
+     média dos treinos de 7 exercícios em 60 min e de 5 em 45 min. */
+  function minutosDoDia(D) {
+    if (PL.modelo !== 'ul5') return PL.curto ? 45 : 60;
+    return Math.max(30, Math.round((8 + 7.4 * D.items.length) / 5) * 5);
+  }
   /* o item do plano com este exercício, na versão da pessoa, mesmo de um treino que ela não faz nesta semana
      (a alternativa reaproveita avisos e marcações dele) */
   const ITEMS = { [PL.id]: [] };
@@ -2913,7 +2957,7 @@ function iniciarApp(perfil) {
         '<div>' +
           '<p class="day-eyebrow"><span class="eyebrow">' + DOW_NAME[D.dow] + '</span>' + (isToday ? '<span class="today-pill">Hoje</span>' : '') + '</p>' +
           '<h2 class="day-title">' + esc(D.title) + '</h2>' +
-          '<p class="day-focus">' + esc(D.focus) + ' · cerca de ' + (PL.curto ? '45' : '60') + ' min</p>' +
+          '<p class="day-focus">' + esc(D.focus) + ' · cerca de ' + minutosDoDia(D) + ' min</p>' +
         '</div>' +
       '</div>' +
       '<div class="notes">' + withNote + '<p class="note">' + ICON.bike + '<span>' + esc(D.warm) + '</span></p>' + [].concat(D.extra || []).map((x) => '<p class="note">' + ICON.clock + '<span>' + esc(x) + '</span></p>').join('') + '</div>' +

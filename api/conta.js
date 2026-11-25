@@ -18,7 +18,7 @@ const crypto = require('crypto');
 const L = require('./_lib');
 const D = require('./_desempenho');
 
-const MODELOS = { c2: 2, c3: 3, ul4: 4 };
+const MODELOS = { c2: 2, c3: 3, ul4: 4, ul5: 5 };
 const NIVEIS = ['novo', 'menos1', 'mais1'];
 const TEMPOS = ['curto', 'normal'];
 const FOCOS = ['igual', 'inferior', 'superior'];
