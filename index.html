@@ -224,7 +224,7 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .c-warn h4{color:var(--ink)}
 .log{display:grid;gap:10px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg)}
 .log h4{margin-bottom:0}
-.kg-row{display:flex;align-items:center;gap:10px}
+.kg-row{display:flex;align-items:center;gap:8px}
 .kg-row label{font-size:14px;font-weight:700}
 .reps-lab{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin:2px 0 -4px;font-size:14px;font-weight:700}
 .reps-lab span{font-size:13px;font-weight:400;color:var(--muted)}
@@ -233,11 +233,12 @@ code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:5
 .field{display:grid;gap:3px;min-width:0;font-size:12px;font-weight:700;color:var(--muted);text-align:center}
 .log input{width:100%;height:52px;border:1px solid var(--line-ctl);border-radius:10px;background:var(--surface);font-size:18px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
 .log input::placeholder{color:var(--muted);opacity:.6}
-.kg-row input{width:92px}
+.kg-row input{width:80px}
 /* carga por lado: um botão discreto na linha da carga; o app soma os dois lados para comparar */
-.lado-tg{min-height:36px;padding:0 10px;border:1px solid var(--line-ctl);border-radius:999px;background:none;color:var(--muted);font-size:13px;font-weight:600}
-.lado-tg[aria-pressed="true"]{color:var(--ink);border-color:var(--ink)}
-.lado-tg[aria-pressed="true"]::before{content:"✓ "}
+.lado-seg{display:inline-flex;padding:2px;border:1px solid var(--line-ctl);border-radius:999px}
+.lado-seg button{min-height:34px;padding:0 10px;border:0;border-radius:999px;background:none;color:var(--muted);font-size:13px;font-weight:600}
+.lado-seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.lado-soma{margin:-4px 0 0;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .mv.mv-sutil{color:var(--muted);font-weight:600;font-size:13px}
 .hint{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:var(--ok-bg);color:var(--ok-ink);font-size:14px;font-weight:700}
 .hint-reps{background:var(--warn-bg);color:var(--warn-ink);font-weight:400}
@@ -2547,6 +2548,14 @@ function iniciarApp(perfil) {
   /* carga por lado (uma anilha de cada lado, ou um halter em cada mão): para comparar, o app soma os dois lados */
   const kgTot = (e) => (e && Number.isFinite(e.kg) ? (e.lado ? e.kg * 2 : e.kg) : null);
   const ladoTxt = (e) => (e && e.lado ? ' por lado' : '');
+  const somaTxt = (kg) => fmtKg(kg) + ' kg de cada lado = ' + fmtKg(kg * 2) + ' kg no total';
+  /* por lado com carga digitada: mostra a conta, para não ter dúvida do que foi marcado */
+  function ladoSoma(box) {
+    const el = $('.lado-soma', box); if (!el) return;
+    const kg = parseFloat(($('[data-log="kg"]', box).value || '').replace(',', '.'));
+    const on = box.dataset.lado === '1' && Number.isFinite(kg) && kg > 0;
+    el.hidden = !on; el.textContent = on ? somaTxt(kg) : '';
+  }
   function fmtEntry(e) {
     const reps = (e.reps || []).filter((r) => Number.isFinite(r));
     const kg = Number.isFinite(e.kg) ? fmtKg(e.kg) + ' kg' + ladoTxt(e) : 'sem carga';
@@ -2954,7 +2963,10 @@ function iniciarApp(perfil) {
     return '<div class="log" data-key="' + esc(key) + '" data-lado="' + (lado ? '1' : '0') + '">' +
       '<h4>Registro de hoje · ' + dshort(TODAY) + '</h4>' + hint +
       '<div class="kg-row"><label for="' + base + '-kg">Carga (kg)</label><input type="text" inputmode="decimal" maxlength="6" autocomplete="off" enterkeyhint="next" id="' + base + '-kg" data-log="kg" value="' + (Number.isFinite(e.kg) ? fmtKg(e.kg) : '') + '" placeholder="' + kgPh + '"' + (ro ? ' disabled' : '') + '>' +
-        '<button type="button" class="lado-tg" data-act="lado" aria-pressed="' + lado + '" aria-label="Carga anotada por lado: o app soma os dois lados"' + (ro ? ' disabled' : '') + '>por lado</button></div>' +
+        '<div class="lado-seg" role="group" aria-label="A carga anotada é">' +
+          '<button type="button" data-act="lado" data-v="0" aria-pressed="' + !lado + '"' + (ro ? ' disabled' : '') + '>total</button>' +
+          '<button type="button" data-act="lado" data-v="1" aria-pressed="' + lado + '"' + (ro ? ' disabled' : '') + '>por lado</button></div></div>' +
+      '<p class="lado-soma" aria-live="polite"' + (lado && Number.isFinite(e.kg) ? '' : ' hidden') + '>' + (lado && Number.isFinite(e.kg) ? somaTxt(e.kg) : '') + '</p>' +
       '<p class="reps-lab" id="' + base + '-rl">' + (isSec(rx) ? 'Segundos' : 'Repetições') + ' em cada série' + (goal ? '<span>meta: ' + esc(goal) + '</span>' : '') + '</p>' +
       '<div class="reps-row' + (need ? ' need' : '') + '" style="grid-template-columns:repeat(' + sets + ',minmax(0,1fr))" role="group" aria-labelledby="' + base + '-rl">' + reps + '</div>' +
       '<p class="saved" data-saved aria-live="polite">' + (ro ? 'Só para ver.' : flash ? esc(flash) : need ? (isSec(rx) ? 'Falta anotar os segundos de cada série.' : 'Falta anotar as repetições de cada série.') : noKg ? 'Faltou a carga. Se foi sem peso, pode deixar em branco.' : last ? 'Os números claros são do último treino.' : '') + '</p>' +
@@ -3760,12 +3772,14 @@ function iniciarApp(perfil) {
     }
     else if (act === 'move') moveEntry(a.dataset.from, a.dataset.to, a.dataset.d);
     else if (act === 'lado') {
-      /* por lado no registro de hoje: alterna e salva, se já tem carga anotada */
+      /* total ou por lado no registro de hoje: marca a opção e salva, se já tem carga anotada */
       const box = a.closest('.log');
       if (!box || sync.mode === 'cloud-ro') return;
-      const on = a.getAttribute('aria-pressed') !== 'true';
+      const on = a.dataset.v === '1';
+      if ((box.dataset.lado === '1') === on) return;
       box.dataset.lado = on ? '1' : '0';
-      a.setAttribute('aria-pressed', String(on));
+      $$('[data-act="lado"]', box).forEach((x) => x.setAttribute('aria-pressed', String((x.dataset.v === '1') === on)));
+      ladoSoma(box);
       if ($('[data-log="kg"]', box).value.trim()) scheduleSave(box);
     }
     else if (act === 'lado-hist') ladoAntigo(a.dataset.key, a.dataset.d);
@@ -3796,6 +3810,7 @@ function iniciarApp(perfil) {
     if (!inp) return;
     const clean = inp.dataset.log === 'rep' ? inp.value.replace(/\D/g, '') : inp.value.replace(/[^\d.,]/g, '');
     if (clean !== inp.value) inp.value = clean;
+    if (inp.dataset.log === 'kg') ladoSoma(inp.closest('.log'));
     scheduleSave(inp.closest('.log'));
   });
   document.addEventListener('focusout', (ev) => {
